@@ -30,8 +30,10 @@
     "ember-handlebars-brunch": "git://github.com/gcollazo/ember-handlebars-brunch.git#master"
   },
   "devDependencies": {
-    "karma": "*",
+    "karma": "~0.12.9",
     "karma-qunit": "*",
-    "karma-phantomjs-launcher": "~0.1.2"
+    "karma-phantomjs-launcher": "~0.1.2",
+    "coffee-script": "~1.7.1",
+    "phantomjs": "~1.9.7-3"
   }
 }
