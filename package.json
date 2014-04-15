@@ -1,26 +1,37 @@
 {
-  "author": "Your Name",
-  "name": "example-app",
-  "description": "Package description",
-  "version": "0.0.1",
-  "homepage": "",
+  "author": "Richard Tibbles",
+  "name": "psychocoffee",
+  "description": "Ember.js driven online psychological experiment platform",
+  "version": "1.2.0",
+  "homepage": "https://github.com/rtibbles/PsychoCoffee",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git://github.com/rtibbles/PsychoCoffee.git"
+  },
+  "engines": {
+    "node": "~0.6.10 || 0.8 || 0.9"
   },
   "scripts": {
+    "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
     "start": "brunch watch --server",
-    "test": "brunch test"
+    "build": "brunch build",
+    "build:production": "brunch build --production",
+    "update:ember": "node setup.js update:ember",
+    "update:skeleton": "node setup.js update:skeleton"
   },
   "dependencies": {
-    "javascript-brunch": ">= 1.0 < 1.8",
-    "coffee-script-brunch": ">= 1.0 < 1.8",
-    "css-brunch": ">= 1.0 < 1.8",
-    "handlebars-brunch": ">= 1.0 < 1.8",
-    "uglify-js-brunch": ">= 1.0 < 1.8",
-    "clean-css-brunch": ">= 1.0 < 1.8",
-    "auto-reload-brunch": ">= 1.0 < 1.8",
-    "less-brunch": "~1.7.1"
+    "javascript-brunch": "~1.7.0",
+    "coffee-script-brunch": "~1.7.0",
+    "css-brunch": "~1.7.0",
+    "less-brunch": "~1.7.0",
+    "uglify-js-brunch": "~1.7.0",
+    "clean-css-brunch": "~1.7.0",
+    "auto-reload-brunch": "~1.7.0",
+    "ember-handlebars-brunch": "git://github.com/gcollazo/ember-handlebars-brunch.git#master"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "karma": "*",
+    "karma-qunit": "*",
+    "karma-phantomjs-launcher": "~0.1.2"
+  }
 }
