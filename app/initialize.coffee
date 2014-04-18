@@ -4,6 +4,11 @@ window.App = require('config/app')
 require('config/router')
 require('config/store')
 
+App.ApplicationAdapter = DS.FixtureAdapter.extend()
+
+App.Router.reopen
+  location: 'auto'
+
 # Load all modules in order automagically. Ember likes things to work this
 # way so everything is in the App.* namespace.
 folderOrder = [
