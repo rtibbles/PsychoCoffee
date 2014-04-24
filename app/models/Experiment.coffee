@@ -1,7 +1,8 @@
 'use strict'
 
 module.exports = App.Experiment = DS.Model.extend
-  title: DS.attr('string')
+  title: DS.attr 'string'
+  trials: DS.hasMany 'trial'
 
 
 # Dummy data for testing
