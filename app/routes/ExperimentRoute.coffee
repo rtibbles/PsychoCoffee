@@ -1,6 +1,6 @@
 'use strict'
 
 module.exports = App.ExperimentRoute = Ember.Route.extend
-  model: ->
-    return ['red', 'yellow', 'blue']
+  model: (params) ->
+    return @store.find 'experiment', params.experiment_id
 
