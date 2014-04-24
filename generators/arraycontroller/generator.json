@@ -2,8 +2,8 @@
   "name": "arraycontroller",
   "files": [
     {
-      "from": "arraycontroller.js.hbs",
-      "to": "app/controllers/{{#camelize}}{{pluralName}}{{/camelize}}Controller.js"
+      "from": "arraycontroller.coffee.hbs",
+      "to": "app/controllers/{{#camelize}}{{pluralName}}{{/camelize}}Controller.coffee"
     }
   ],
   "dependencies": []
