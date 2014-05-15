@@ -12,7 +12,7 @@ App.Router.reopen
 # Load all modules in order automagically. Ember likes things to work this
 # way so everything is in the App.* namespace.
 folderOrder = [
-    'initializers', 'mixins', 'routes', 'models',
+    'utils', 'initializers', 'mixins', 'routes', 'models',
     'views', 'controllers', 'helpers',
     'templates', 'components'
   ]
