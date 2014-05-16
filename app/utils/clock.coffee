@@ -59,8 +59,12 @@ class Clock
                 @delayCache[id] = setTimeout wait, waitTime - diff
 
         @delayCache[id] = setTimeout wait, waitTime
+        return id
 
-    clearEvents: ->
+    clearEvent: (id) ->
+        clearTimeout(@delayCache[id])
+
+    clearAllEvents: ->
         _.each @delayCache, (value, key, list) -> clearTimeout(value)
 
 
