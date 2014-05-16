@@ -58,7 +58,10 @@ class Clock
                 delayedTime += waitTime
                 @delayCache[id] = setTimeout wait, waitTime - diff
 
-        delayCache[id] = setTimeout wait, waitTime
+        @delayCache[id] = setTimeout wait, waitTime
+
+    clearEvents: ->
+        _.each @delayCache, (value, key, list) -> clearTimeout(value)
 
 
 module.exports =
