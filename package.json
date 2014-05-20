@@ -33,7 +33,11 @@
     "karma": "~0.12.9",
     "karma-qunit": "*",
     "karma-phantomjs-launcher": "~0.1.2",
+    "karma-coffee-preprocessor": "~0.2.1",
     "coffee-script": "~1.7.1",
-    "phantomjs": "~1.9.7-3"
+    "phantomjs": "~1.9.7-3",
+    "karma-benchmark": "~0.4.0",
+    "karma-benchmark-reporter": "~0.1.0",
+    "benchmark": "~1.0.0"
   }
 }

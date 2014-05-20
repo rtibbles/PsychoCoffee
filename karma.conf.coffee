@@ -11,7 +11,7 @@ module.exports = (config) =>
 
 
     # frameworks to use
-    frameworks: ['qunit']
+    frameworks: ['qunit', 'benchmark']
 
 
     # list of files / patterns to load in the browser
@@ -19,7 +19,8 @@ module.exports = (config) =>
       'public/javascripts/vendor.js',
       'public/javascripts/app.js',
       'test/helpers.js',
-      'test/**/*_test.js'
+      'test/**/*_test.js',
+      'test/**/*_test.coffee'
     ],
 
 
@@ -31,7 +32,7 @@ module.exports = (config) =>
 
     # test results reporter to use
     # possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['progress']
+    reporters: ['progress']#, 'benchmark']
 
 
     # web server port
@@ -46,7 +47,7 @@ module.exports = (config) =>
     # possible values:
     # config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN ||
     # config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO
+    logLevel: config.LOG_DEBUG
 
 
     # enable / disable watching file and executing
@@ -66,9 +67,12 @@ module.exports = (config) =>
 
 
     # If browser does not capture in given timeout [ms], kill it
-    captureTimeout: 60000
+    captureTimeout: 600000000
 
 
     # Continuous Integration mode
     # if true, it capture browsers, run tests and exit
     singleRun: false
+
+    preprocessors:
+        '**/*.coffee': 'coffee'

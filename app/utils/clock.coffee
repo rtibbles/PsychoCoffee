@@ -1,6 +1,5 @@
 
 # Initialize performance.now to always return a time, regardless of browser.
-
 window.performance = window.performance or {}
 performance.now =
         performance.now    or
@@ -41,20 +40,20 @@ class Clock
     setStartTime: (time) ->
         @start = Number(time)
 
-    delayedTrigger: (object, delayedEvent, delay) ->
+    delayedTrigger: (callback, delay, power=2) ->
         start = @getTime()
-        id = start + delayedEvent
+        id = start + callback.toString()
         count = 1
-        waitTime = delay/Math.pow(2,count)
+        waitTime = delay/Math.pow(power,count)
         delayedTime = waitTime
 
-        wait = ->
+        wait = =>
             if @getElapsedTime(start) >= delay
-                object.trigger delayedEvent
+                callback()
             else
                 count++
-                diff = (delayedTime - @getElapsedTime(start))
-                waitTime = delay/Math.pow(2,count)
+                diff = (@getElapsedTime(start) - delayedTime)
+                waitTime = delay/Math.pow(power,count)
                 delayedTime += waitTime
                 @delayCache[id] = setTimeout wait, waitTime - diff
 

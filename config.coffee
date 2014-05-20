@@ -11,6 +11,7 @@ exports.config =
           'vendor/scripts/common/console-polyfill.js',
           'vendor/scripts/common/jquery.js',
           'vendor/scripts/common/handlebars.js',
+          'vendor/scripts/common/underscore.js',
           'vendor/scripts/development/ember.js',
           'vendor/scripts/development/ember-data.js'
         ]
@@ -37,6 +38,7 @@ exports.config =
               'vendor/scripts/common/console-polyfill.js',
               'vendor/scripts/common/jquery.js',
               'vendor/scripts/common/handlebars.js',
+              'vendor/scripts/common/underscore.js',
               'vendor/scripts/production/ember.js',
               'vendor/scripts/production/ember-data.js'
             ]

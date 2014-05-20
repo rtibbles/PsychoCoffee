@@ -3,5 +3,9 @@
 clock = require("utils/clock")
 
 module.exports = App.ExperimentController = Ember.ObjectController.extend
-
-    clock: new clock.Clock()
+    init: ->
+        @._super()
+        @set 'clock', new clock.Clock()
+        @refreshTime()
+    refreshTime: ->
+        @set 'time', @clock.getTime()
