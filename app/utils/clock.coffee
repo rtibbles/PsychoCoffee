@@ -1,13 +1,6 @@
 
 # Initialize performance.now to always return a time, regardless of browser.
 window.performance = window.performance or {}
-performance.now =
-        performance.now    or
-        performance.mozNow    or
-        performance.msNow     or
-        performance.oNow      or
-        performance.webkitNow or
-        -> return new Date().getTime()
 
 performance.type =
     if performance.now or
@@ -19,10 +12,19 @@ performance.type =
     else
         "date"
 
+performance.now =
+        performance.now    or
+        performance.mozNow    or
+        performance.msNow     or
+        performance.oNow      or
+        performance.webkitNow or
+        -> return new Date().getTime()
+
 class Clock
     constructor: ->
         # Set time that clock was initialized
         @reset()
+        console.log "Using clock type:", performance.type
         @delayCache = {}
 
     reset: ->
@@ -49,7 +51,7 @@ class Clock
 
         wait = =>
             if @getElapsedTime(start) >= delay
-                callback()
+                callback(@getElapsedTime(start) - delay)
             else
                 count++
                 diff = (@getElapsedTime(start) - delayedTime)
