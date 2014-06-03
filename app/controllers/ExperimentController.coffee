@@ -16,12 +16,12 @@ module.exports = App.ExperimentController = Ember.ObjectController.extend
         test = 0
         delay = 0
         tests = 
-            single_exp: [1, 2]
-            single_bal: [1, 1]
-            double_exp: [2, 2]
-            double_bal: [2, 1]
-            triple_exp: [3, 2]
-            triple_bal: [3, 1]
+            single_emb: [1, "emb"]
+            single_bal: [1, "bal"]
+            double_exp: [2, "emb"]
+            double_bal: [2, "bal"]
+            triple_exp: [3, "emb"]
+            triple_bal: [3, "bal"]
         delays =
             0: 10
             1: 20
@@ -33,7 +33,7 @@ module.exports = App.ExperimentController = Ember.ObjectController.extend
             7: 2000
             8: 3000
             9: 5000
-        behaviour = (power, callback) ->
+        behaviour = (delay_func, callback) ->
             if count > 10
                 for id in clock.delayCache
                     clock.clearEvent(clock.delayCache[id])
@@ -45,7 +45,7 @@ module.exports = App.ExperimentController = Ember.ObjectController.extend
                     return null
             delay = delays[count % 10]
             test_name = Object.keys(tests)[test]
-            clock.delayedTrigger(((diff) -> callback(test_name, delay, diff)), delay, power)
+            clock.delayedTrigger(((diff) -> callback(test_name, delay, diff)), delay, delay_func)
             count += 1
         report = (test_name, delay, diff) ->
             console.log test_name + " , " + delay + " , " + diff

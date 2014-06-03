@@ -42,24 +42,26 @@ class Clock
     setStartTime: (time) ->
         @start = Number(time)
 
-    delayedTrigger: (callback, delay, power=2) ->
+    delayedTrigger: (callback, delay, delay_func) ->
+        if delay_func == "emb" then timeOut = Ember.run.later else timeOut = setTimeout
         start = @getTime()
         id = start + callback.toString()
         count = 1
-        waitTime = delay/Math.pow(power,count)
+        waitTime = delay #Math.min(10, delay)
         delayedTime = waitTime
 
         wait = =>
-            if @getElapsedTime(start) >= delay
-                callback(@getElapsedTime(start) - delay)
+            remaining = @getElapsedTime(start) - delay
+            if remaining >= 0
+                callback(remaining)
             else
                 count++
-                diff = (@getElapsedTime(start) - delayedTime)
-                waitTime = delay/Math.pow(power,count)
+                diff = (remaining + delay - delayedTime)
+                waitTime = Math.min(10, remaining)
                 delayedTime += waitTime
-                @delayCache[id] = setTimeout wait, waitTime - diff
+                @delayCache[id] = timeOut wait, waitTime - diff
 
-        @delayCache[id] = setTimeout wait, waitTime
+        @delayCache[id] = timeOut wait, waitTime
         return id
 
     clearEvent: (id) ->
