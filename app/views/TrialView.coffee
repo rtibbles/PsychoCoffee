@@ -1,5 +1,5 @@
 'use strict'
 
-module.exports = App.TrialView = Ember.View.extend
+module.exports = class TrialView extends Backbone.View
   templateName: 'Trial'
 

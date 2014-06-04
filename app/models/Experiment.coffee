@@ -1,15 +1,16 @@
 'use strict'
 
-module.exports = App.Experiment = DS.Model.extend
-  title: DS.attr 'string'
-  trials: DS.hasMany 'trial'
+module.exports = class ExperimentModel extends Backbone.Model
+    # title: DS.attr 'string'
+    # trials: DS.hasMany 'trial'
 
 
 # Dummy data for testing
-App.Experiment.FIXTURES = [
+ExperimentModel.Data = [
     {
      id: 1
      title: 'Stroop'
+     trials: [1]
     },
     {
      id: 2

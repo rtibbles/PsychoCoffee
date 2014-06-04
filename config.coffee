@@ -12,8 +12,7 @@ exports.config =
           'vendor/scripts/common/jquery.js',
           'vendor/scripts/common/handlebars.js',
           'vendor/scripts/common/underscore.js',
-          'vendor/scripts/development/ember.js',
-          'vendor/scripts/development/ember-data.js'
+          'vendor/scripts/development/backbone.js'
         ]
     stylesheets: 
       joinTo: 
@@ -39,8 +38,7 @@ exports.config =
               'vendor/scripts/common/jquery.js',
               'vendor/scripts/common/handlebars.js',
               'vendor/scripts/common/underscore.js',
-              'vendor/scripts/production/ember.js',
-              'vendor/scripts/production/ember-data.js'
+              'vendor/scripts/production/backbone-min.js'
             ]
       optimize: true
       sourceMaps: false

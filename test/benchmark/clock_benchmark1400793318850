@@ -1,0 +1,23 @@
+Transitioned into 'index'
+single_exp , 10 , 47
+single_exp , 20 , 0
+single_exp , 50 , 7
+single_exp , 100 , 7
+single_exp , 250 , 4
+single_exp , 500 , 5
+single_exp , 1000 , 4
+single_exp , 2000 , 4
+single_exp , 3000 , 8
+single_exp , 5000 , 0
+single_exp , 10 , 0
+single_bal , 10 , 0
+single_bal , 20 , 0
+single_bal , 50 , 0
+single_bal , 100 , 0
+single_bal , 250 , 0
+single_bal , 500 , 0
+single_bal , 1000 , 0
+single_bal , 2000 , 1
+single_bal , 3000 , 1
+single_bal , 5000 , 4
+single_bal , 10 , 0

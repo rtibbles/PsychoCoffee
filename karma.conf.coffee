@@ -18,7 +18,7 @@ module.exports = (config) =>
     files: [
       'public/javascripts/vendor.js',
       'public/javascripts/app.js',
-      'test/helpers.js',
+      'test/helpers.coffee',
       'test/**/*_test.js',
       'test/**/*_test.coffee'
     ],

@@ -1,20 +1,10 @@
 'use strict'
+App = require './app/app'
 
-window.App = require('config/app')
-require('config/router')
-require('config/store')
-
-App.ApplicationAdapter = DS.FixtureAdapter.extend()
-
-App.Router.reopen
-  location: 'auto'
-
-# Load all modules in order automagically. Ember likes things to work this
-# way so everything is in the App.* namespace.
+# Load all modules in order automagically.
 folderOrder = [
-    'utils', 'initializers', 'mixins', 'routes', 'models',
-    'views', 'controllers', 'helpers',
-    'templates', 'components'
+    'utils', 'routes', 'models',
+    'views', 'templates'
   ]
 
 folderOrder.forEach (folder) ->
@@ -22,3 +12,7 @@ folderOrder.forEach (folder) ->
     return new RegExp('^' + folder + '/').test module
   .forEach (module) ->
     require(module)
+
+$ ->
+  App.initialize()
+  Backbone.history.start()
