@@ -12,7 +12,8 @@ exports.config =
           'vendor/scripts/common/jquery.js',
           'vendor/scripts/common/handlebars.js',
           'vendor/scripts/common/underscore.js',
-          'vendor/scripts/development/backbone.js'
+          'vendor/scripts/development/backbone.js',
+          'vendor/scripts/common/backbone-relational.js'
         ]
     stylesheets: 
       joinTo: 
@@ -38,7 +39,8 @@ exports.config =
               'vendor/scripts/common/jquery.js',
               'vendor/scripts/common/handlebars.js',
               'vendor/scripts/common/underscore.js',
-              'vendor/scripts/production/backbone-min.js'
+              'vendor/scripts/production/backbone-min.js',
+              'vendor/scripts/common/backbone-relational.js'
             ]
       optimize: true
       sourceMaps: false
