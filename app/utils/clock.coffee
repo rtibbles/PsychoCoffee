@@ -24,6 +24,7 @@ class Clock
     constructor: ->
         # Set time that clock was initialized
         @reset()
+        @clock_type = performance.type
         console.log "Using clock type:", performance.type
         @delayCache = {}
 

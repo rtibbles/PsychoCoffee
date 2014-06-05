@@ -1,5 +1,6 @@
 'use strict'
 App = require './app/app'
+nestedImport = require './utils/nestedImport'
 
 # Load all modules in order automagically.
 folderOrder = [
@@ -7,11 +8,7 @@ folderOrder = [
     'views', 'templates'
   ]
 
-folderOrder.forEach (folder) ->
-  window.require.list().filter (module) ->
-    return new RegExp('^' + folder + '/').test module
-  .forEach (module) ->
-    require(module)
+folderOrder.forEach nestedImport
 
 $ ->
   App.initialize()

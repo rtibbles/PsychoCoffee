@@ -2,7 +2,7 @@
 
 module.exports = class TrialObjectView extends Backbone.View
     elementViewType: ->
-        elementType = this.get('context.model').constructor.toString()
+        elementType = @model.getClassName()
         # For this to work, any models subclassed from TrialObject must be named
         # ModelName, and the associated View must be named ModelNameView
 
