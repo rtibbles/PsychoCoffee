@@ -1,6 +1,6 @@
 'use strict'
 
-TrialObjectModel = require("../TrialObject")
+TrialObjectModel = require("../../TrialObjectModel")
 
 module.exports = class VisualTrialObjectModel extends TrialObjectModel
     # x: DS.attr 'number'
@@ -8,3 +8,6 @@ module.exports = class VisualTrialObjectModel extends TrialObjectModel
     # width: DS.attr 'number'
     # height: DS.attr 'number'
     # opacity: DS.attr 'number'
+
+# Required for Backbone Relational models extended using Coffeescript syntax
+VisualTrialObjectModel.setup()

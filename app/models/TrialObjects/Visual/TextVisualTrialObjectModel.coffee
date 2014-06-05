@@ -1,6 +1,6 @@
 'use strict'
 
-VisualTrialObjectModel = require("./VisualTrialObject")
+VisualTrialObjectModel = require("./VisualTrialObjectModel")
 
 module.exports = class TextVisualTrialObjectModel extends VisualTrialObjectModel
     # text: DS.attr 'string'
@@ -27,3 +27,6 @@ TextVisualTrialObjectModel.Data = [
      opacity: 0.5
     }
 ]
+
+# Required for Backbone Relational models extended using Coffeescript syntax
+TextVisualTrialObjectModel.setup()
