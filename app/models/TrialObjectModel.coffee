@@ -3,7 +3,8 @@
 nestedImport = require '../utils/nestedImport'
 Model = require './Model'
 subModels = {}
-subModels[modulename.toLowerCase()] = modulename for modulename in nestedImport('models/TrialObjects')
+for modulename in nestedImport('models/TrialObjects')
+    subModels[modulename.toLowerCase()] = modulename
 
 module.exports = class TrialObjectModel extends Model
     subModelTypes: subModels

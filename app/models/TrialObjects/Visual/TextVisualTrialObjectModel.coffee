@@ -29,4 +29,4 @@ TextVisualTrialObjectModel.Data = [
 ]
 
 # Required for Backbone Relational models extended using Coffeescript syntax
-TextVisualTrialObjectModel.setup()
+# TextVisualTrialObjectModel.setup()

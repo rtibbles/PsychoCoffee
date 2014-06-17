@@ -3,6 +3,6 @@ module.exports = (folder) ->
     window.require.list().filter (module) ->
         return new RegExp('^' + folder + '/').test module
     .forEach (module) ->
-        modulesExported.push module.split("/").slice(-1)
+        modulesExported.push module.split("/").slice(-1)[0]
         require module
     return modulesExported

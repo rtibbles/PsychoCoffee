@@ -10,4 +10,4 @@ module.exports = class VisualTrialObjectModel extends TrialObjectModel
     # opacity: DS.attr 'number'
 
 # Required for Backbone Relational models extended using Coffeescript syntax
-VisualTrialObjectModel.setup()
+# VisualTrialObjectModel.setup()
