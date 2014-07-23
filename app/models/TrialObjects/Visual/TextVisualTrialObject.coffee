@@ -1,14 +1,14 @@
 'use strict'
 
-VisualTrialObjectModel = require("./VisualTrialObjectModel")
+VisualTrialObject = require("./VisualTrialObject")
 
-module.exports = class TextVisualTrialObjectModel extends VisualTrialObjectModel
+class Model extends VisualTrialObject.Model
     # text: DS.attr 'string'
     # fontSize: DS.attr 'number'
     # fontFamily: DS.attr 'string'
     # fontStyle: DS.attr 'string'
 
-TextVisualTrialObjectModel.Data = [
+Model.Data = [
     {
      id: 1
      type: "TextVisualTrialObject"
@@ -28,5 +28,5 @@ TextVisualTrialObjectModel.Data = [
     }
 ]
 
-# Required for Backbone Relational models extended using Coffeescript syntax
-# TextVisualTrialObjectModel.setup()
+module.exports =
+    Model: Model

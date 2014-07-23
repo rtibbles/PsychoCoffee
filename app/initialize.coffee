@@ -11,5 +11,5 @@ folderOrder = [
 folderOrder.forEach nestedImport
 
 $ ->
-  App.initialize()
-  Backbone.history.start()
+    App.initialize()
+    Backbone.history.start()

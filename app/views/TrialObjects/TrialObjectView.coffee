@@ -11,4 +11,4 @@ module.exports = class TrialObjectView extends Backbone.View
         try
             App[elementView]
         catch error
-            throw "Unknown element type #{elementType}"
+            console.debug error, "Unknown element type #{elementType}"

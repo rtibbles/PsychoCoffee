@@ -1,13 +1,13 @@
 'use strict'
 
-Model = require('./Model')
-TrialModel = require('./TrialModel')
+Base = require('./Base')
+Trial = require('./Trial')
 
-module.exports = class ExperimentModel extends Model
+class Model extends Base.Model
     relations: [
         type: 'hasMany'
         key: 'trials'
-        relatedModel: "TrialModel"
+        relatedModel: "Trial.Model"
         reverseRelation:
             key: "experiment"
     ]
@@ -15,7 +15,7 @@ module.exports = class ExperimentModel extends Model
 
 
 # Dummy data for testing
-ExperimentModel.Data = [
+Model.Data = [
     {
      id: 1
      title: 'Stroop'
@@ -32,4 +32,11 @@ ExperimentModel.Data = [
 ]
 
 # Required for Backbone Relational models extended using Coffeescript syntax
-ExperimentModel.setup()
+Model.setup()
+
+class Collection extends Base.Collection
+
+
+module.exports =
+    Model: Model
+    Collection: Collection
