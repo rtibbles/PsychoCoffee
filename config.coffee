@@ -1,6 +1,6 @@
 exports.config =
   paths:
-    watched: ['app', 'envs', 'vendor', 'test']
+    watched: ['api', 'app', 'envs', 'vendor', 'test','server.coffee']
   files:
     javascripts: 
       joinTo: 
@@ -13,7 +13,8 @@ exports.config =
           'vendor/scripts/common/handlebars.js',
           'vendor/scripts/common/underscore.js',
           'vendor/scripts/development/backbone.js',
-          'vendor/scripts/common/backbone-relational.js'
+          'vendor/scripts/common/backbone-relational.js',
+          'vendor/scripts/common/backbone.dualstorage.amd.js'
         ]
     stylesheets: 
       joinTo: 
@@ -25,6 +26,14 @@ exports.config =
       root: 'templates'
       joinTo: 
         'javascripts/app.js': /^app/
+  plugins:
+    coffeelint:
+      options:
+        indentation:
+            value: 4
+  server:
+    path: 'server.coffee'
+    port: 3333
   overrides:
     # Production Settings
     production: 
@@ -40,10 +49,12 @@ exports.config =
               'vendor/scripts/common/handlebars.js',
               'vendor/scripts/common/underscore.js',
               'vendor/scripts/production/backbone-min.js',
-              'vendor/scripts/common/backbone-relational.js'
+              'vendor/scripts/common/backbone-relational.js',
+              'vendor/scripts/common/backbone.dualstorage.amd.js'
             ]
       optimize: true
       sourceMaps: false
       plugins: 
         autoReload: 
           enabled: false
+

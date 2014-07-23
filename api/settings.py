@@ -49,6 +49,8 @@ participants = {
 }
 
 SERVER_NAME = '127.0.0.1:5000'
+URL_PREFIX = 'api'
+
 DOMAIN = {
     'participants': participants,
 }
