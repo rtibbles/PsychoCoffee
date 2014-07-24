@@ -5,9 +5,9 @@ TrialEventLog = require('./TrialEventLog')
 
 class Model extends Base.Model
     relations: [
-        type: 'hasMany'
+        type: 'HasMany'
         key: 'trialeventlogs'
-        relatedModel: "TrialEventLog.Model"
+        relatedModel: TrialEventLog.Model
         includeInJSON: true
         reverseRelation:
             key: "trialdatahandler"

@@ -4,6 +4,8 @@ nestedModules = require '../utils/nestedModules'
 
 Base = require('./Base')
 
+console.log nestedModules('models/TrialObjects')
+
 subModels = {}
 for modulename in nestedModules('models/TrialObjects')
     subModels[modulename.toLowerCase()] = modulename + ".Model"

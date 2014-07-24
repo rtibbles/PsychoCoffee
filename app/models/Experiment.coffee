@@ -5,9 +5,9 @@ Trial = require('./Trial')
 
 class Model extends Base.Model
     relations: [
-        type: 'hasMany'
+        type: 'HasMany'
         key: 'trials'
-        relatedModel: "Trial.Model"
+        relatedModel: Trial.Model
         reverseRelation:
             key: "experiment"
     ]
@@ -15,18 +15,18 @@ class Model extends Base.Model
 
 
 # Dummy data for testing
-Model.Data = [
+Data = [
     {
-     id: 1
+     _id: 1
      title: 'Stroop'
-     trials: [1]
+     trials: [{_id: 1}]
     },
     {
-     id: 2
+     _id: 2
      title: '2AFC'
     },
     {
-     id: 3
+     _id: 3
      title: 'Other'
     }
 ]
@@ -40,3 +40,4 @@ class Collection extends Base.Collection
 module.exports =
     Model: Model
     Collection: Collection
+    Data: Data

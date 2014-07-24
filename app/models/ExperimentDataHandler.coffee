@@ -5,9 +5,9 @@ TrialDataHandler = require('./TrialDataHandler')
 
 class Model extends Base.Model
     relations: [
-        type: 'hasMany'
+        type: 'HasMany'
         key: 'trialdatahandlers'
-        relatedModel: "TrialDataHandler.Model"
+        relatedModel: TrialDataHandler.Model
         includeInJSON: true
         reverseRelation:
             key: "experimentdatahandler"
@@ -22,7 +22,9 @@ class Collection extends Base.Collection
         @urlBase + "experimentdatahandler"
 
     getOrCreateParticipantModel: (participant_id) ->
+        console.log participant_id
         model = @findWhere participant_id: participant_id
+        console.log model
         model or @create participant_id: participant_id
 
 module.exports =

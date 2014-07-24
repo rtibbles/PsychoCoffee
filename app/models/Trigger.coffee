@@ -5,13 +5,13 @@ TrialObject = require('./TrialObject')
 
 class Model extends Base.Model
     relations: [
-        type: 'hasOne'
+        type: 'HasOne'
         key: 'source'
-        relatedModel: "TrialObject.Model"
+        relatedModel: TrialObject.Model
     ,
         type: 'hasOne'
         key: 'target'
-        relatedModel: "TrialObject.Model"
+        relatedModel: TrialObject.Model
     ]
     # listenEvent: "string"
     # triggerEvent: "string"

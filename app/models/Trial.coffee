@@ -5,18 +5,18 @@ TrialObject = require("./TrialObject")
 
 class Model extends Base.Model
     relations: [
-        type: 'hasMany'
+        type: 'HasMany'
         key: 'trialObjects'
-        relatedModel: "TrialObject.Model"
+        relatedModel: TrialObject.Model
         reverseRelation:
             key: "trial"
     ]
     # width: DS.attr 'number'
     # height: DS.attr 'number'
 
-Model.Data = [
+Data = [
     {
-     id: 1
+     _id: 1
      experiment: 1
      width: 800
      height: 600
@@ -32,3 +32,4 @@ class Collection extends Base.Collection
 module.exports =
     Model: Model
     Collection: Collection
+    Data: Data
