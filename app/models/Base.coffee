@@ -1,7 +1,6 @@
 'use strict'
 
 class Model extends Backbone.RelationalModel
-    idAttribute: "_id"
 
 
 # Required for Backbone Relational models extended using Coffeescript syntax

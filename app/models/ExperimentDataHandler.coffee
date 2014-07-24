@@ -19,7 +19,7 @@ Model.setup()
 class Collection extends Base.Collection
     model: Model
     url: =>
-        @urlBase + "experimentdatahandler"
+        @urlBase + "experimentdatahandlers"
 
     getOrCreateParticipantModel: (participant_id) ->
         console.log participant_id
