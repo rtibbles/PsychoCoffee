@@ -6,12 +6,13 @@ module.exports = class View extends Backbone.View
         return
 
     getRenderData: ->
-        return
+        return @model.attributes
 
     render: =>
         # console.debug "Rendering #{@constructor.name}"
         @$el.html @template @getRenderData()
         @afterRender()
+        return @
 
     appendTo: (el) =>
         $(el).append(@el)

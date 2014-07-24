@@ -10,7 +10,6 @@ module.exports = class Router extends Backbone.Router
         @loadView new homeView
 
     experiment: (experiment) ->
-        console.log experiment
         @loadView new experimentView experiment: experiment
 
     loadView: (view) ->
