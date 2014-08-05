@@ -5,19 +5,29 @@ DataSource = require('loopback-datasource-juggler').DataSource
 
 module.exports = mountRestApi = (server) ->
     restApiRoot = server.get 'restApiRoot'
-    server.use restApiRoot, server.loopback.rest()
 
-    db = new DataSource 'mongodb'
-    
+    ds = loopback.createDataSource('memory')
+
+    # db = new DataSource
+    #     "connector": "mongodb",
+    #     "host": "localhost",
+    #     "port": 27017,
+    #     "username": "user",
+    #     "password": "user",
+    #     "database": "apitest",
+    #     "debug": true
+
     Model = loopback.Model
+
+    modelsToRegister = ["experimentdatahandler"]
 
     registeredModels = {}
 
     # Register models to data source
-    fs.readdirSync(__dirname + "/../../app/models/").forEach (modelFile) ->
-        modelName = modelFile.split(".")[0].toLowerCase()
+    modelsToRegister.forEach (modelName) ->
         if modelName
-            console.log modelName
-            registeredModels[modelName] = Model.extend modelName
-            registeredModels[modelName].attachTo db
+            registeredModels[modelName] = ds.createModel modelName
+            # registeredModels[modelName].attachTo db
             server.model registeredModels[modelName]
+
+    server.use restApiRoot, server.loopback.rest()

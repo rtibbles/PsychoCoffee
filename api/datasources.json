@@ -2,15 +2,5 @@
   "db": {
     "name": "db",
     "connector": "memory"
-  },
-  "mongodb_dev": {
-    "name": "mongodb",
-    "connector": "mongodb",
-    "host": "localhost",
-    "port": 27017,
-    "username": "user",
-    "password": "user",
-    "database": "apitest",
-    "debug": true
   }
 }
