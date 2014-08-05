@@ -7,7 +7,8 @@ class Model extends Backbone.RelationalModel
 Model.setup()
 
 class Collection extends Backbone.Collection
-    urlBase: "/api/"
+    url: "none"
+    local: true
 
 module.exports =
     Model: Model

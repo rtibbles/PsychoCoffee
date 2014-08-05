@@ -1,9 +1,9 @@
 'use strict'
 
-Base = require('./Base')
+APIBase = require('./APIBase')
 TrialDataHandler = require('./TrialDataHandler')
 
-class Model extends Base.Model
+class Model extends APIBase.Model
     relations: [
         type: 'HasMany'
         key: 'trialdatahandlers'
@@ -16,15 +16,13 @@ class Model extends Base.Model
 # Required for Backbone Relational models extended using Coffeescript syntax
 Model.setup()
 
-class Collection extends Base.Collection
+class Collection extends APIBase.Collection
     model: Model
     url: =>
         @urlBase + "experimentdatahandlers"
 
     getOrCreateParticipantModel: (participant_id) ->
-        console.log participant_id
         model = @findWhere participant_id: participant_id
-        console.log model
         model or @create participant_id: participant_id
 
 module.exports =
