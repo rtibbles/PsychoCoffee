@@ -3,14 +3,11 @@ experimentView = require("../views/ExperimentView")
 
 module.exports = class Router extends Backbone.Router
     routes:
-        'experiment/:experiment': 'experiment'
         '': 'home'
 
     home: ->
-        @loadView new homeView
-
-    experiment: (experiment) ->
-        @loadView new experimentView experiment: experiment
+        #@loadView new homeView
+        return true
 
     loadView: (view) ->
         if @view
