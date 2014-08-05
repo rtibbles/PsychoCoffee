@@ -20,55 +20,73 @@ performance.now =
         performance.webkitNow or
         -> return new Date().getTime()
 
+# Enable the passage of the 'this' object through the JavaScript timers
+ 
+__nativeST__ = window.setTimeout
+__nativeSI__ = window.setInterval
+ 
+window.setTimeout = (vCallback, nDelay, aArgs...) ->
+    oThis = this
+    if vCallback instanceof Function
+        callback = -> vCallback.apply(oThis, aArgs)
+    else
+        callback = vCallback
+    __nativeST__(callback, nDelay)
+ 
+window.setInterval = (vCallback, nDelay, aArgs...) ->
+    oThis = this
+    if vCallback instanceof Function
+        callback = -> vCallback.apply(oThis, aArgs)
+    else
+        callback = vCallback
+    __nativeSI__(callback, nDelay)
+
+
 class Clock
-    constructor: ->
+    constructor: (tick=20) ->
+        _.extend @, Backbone.Events
         # Set time that clock was initialized
         @reset()
+        @tick = tick
         @clock_type = performance.type
         console.log "Using clock type:", performance.type
-        @delayCache = {}
 
-    reset: ->
+    reset: =>
         @start = performance.now()
 
-    getTime: ->
+    getTime: =>
         performance.now() - @start
 
-    getElapsedTime: (time) ->
+    getElapsedTime: (time) =>
         @getTime() - time
 
     getAbsoluteTime: ->
         new Date().getTime()
 
-    setStartTime: (time) ->
+    setStartTime: (time) =>
         @start = Number(time)
 
-    delayedTrigger: (callback, delay, delay_func) ->
-        start = @getTime()
-        id = start + callback.toString()
-        count = 1
-        waitTime = delay #Math.min(10, delay)
-        delayedTime = waitTime
+    delayedTrigger: (delay, object, callback) =>
+        frames = delay/@tick
+        nearestFrame = Math.floor frames
+        timeoutDelay = @tick * (nearestFrame - frames)
+        if timeoutDelay >= 1
+            callback = -> setTimeout(callback, timeoutDelay)
+        object.listenToOnce(@, @count + nearestFrame, callback)
 
-        wait = =>
-            remaining = @getElapsedTime(start) - delay
-            if remaining >= 0
-                callback(remaining)
-            else
-                count++
-                diff = (remaining + delay - delayedTime)
-                waitTime = Math.min(10, remaining)
-                delayedTime += waitTime
-                @delayCache[id] = setTimeout wait, waitTime - diff
+    startTimer: =>
+        @count = 0
+        @timerStart = @getTime()
+        @ticktock()
 
-        @delayCache[id] = setTimeout wait, waitTime
-        return id
+    timerElapsed: =>
+        @getElapsedTime(@timerStart)
 
-    clearEvent: (id) ->
-        clearTimeout(@delayCache[id])
-
-    clearAllEvents: ->
-        _.each @delayCache, (value, key, list) -> clearTimeout(value)
+    ticktock: =>
+        @trigger(@count)
+        setTimeout(@ticktock, @tick + (@timerElapsed() - @count*@tick))
+        @count += 1
+        # console.log "Tick Tock!", @getTime() - @count*@tick
 
 
 module.exports =
