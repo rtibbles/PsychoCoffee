@@ -8,6 +8,7 @@ class Model extends Base.Model
         type: 'HasMany'
         key: 'trials'
         relatedModel: Trial.Model
+        collectionType: Trial.Collection
         reverseRelation:
             key: "experiment"
     ]
