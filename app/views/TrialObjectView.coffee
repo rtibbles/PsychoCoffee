@@ -1,14 +1,16 @@
 'use strict'
 
-module.exports = class TrialObjectView extends Backbone.View
+View = require './View'
+
+module.exports = class TrialObjectView extends View
     elementViewType: ->
-        elementType = @model.getClassName()
+        elementType = @model.get("subModelTypeAttribute")
         # For this to work, any models subclassed from TrialObject must be named
         # ModelName, and the associated View must be named ModelNameView
 
-        elementView = elementType.split(".")[1] += "View"
+        elementView = elementType + "View"
 
         try
-            App[elementView]
+            PsychoCoffee[elementView]
         catch error
             console.debug error, "Unknown element type #{elementType}"

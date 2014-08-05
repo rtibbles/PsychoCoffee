@@ -1,5 +1,13 @@
 'use strict'
 
-module.exports = class TrialView extends Backbone.View
-    templateName: 'Trial'
+View = require './View'
+Template = require 'templates/trial'
+
+module.exports = class TrialView extends View
+    template: Template
+
+    initialize: =>
+        super
+        @instantiateSubViews("trialObjects", "TrialObjectView")
+
 
