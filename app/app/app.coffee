@@ -1,7 +1,7 @@
 'use strict'
 
 # The application bootstrapper.
-App =
+PsychoCoffee =
     initialize: ->
         Router = require '../routes/router'
 
@@ -10,4 +10,4 @@ App =
         # Freeze the object
         Object.freeze? this
 
-module.exports = App
+module.exports = PsychoCoffee

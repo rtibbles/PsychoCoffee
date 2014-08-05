@@ -1,5 +1,5 @@
 'use strict'
-App = require './app/app'
+PsychoCoffee = window.PsychoCoffee = require './app/app'
 nestedImport = require './utils/nestedImport'
 
 # Load all modules in order automagically.
@@ -8,8 +8,8 @@ folderOrder = [
     'views', 'templates'
   ]
 
-folderOrder.forEach nestedImport
+folderOrder.forEach (folder) -> nestedImport folder, PsychoCoffee
 
 $ ->
-    App.initialize()
+    PsychoCoffee.initialize()
     Backbone.history.start()

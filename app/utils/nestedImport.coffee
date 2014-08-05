@@ -1,5 +1,5 @@
-module.exports = (folder) ->
+module.exports = (folder, app) ->
     window.require.list().filter (module) ->
         return new RegExp('^' + folder + '/').test module
     .forEach (module) ->
-        require module
+        app[module.split("/").slice(-1)[0]] = require module
