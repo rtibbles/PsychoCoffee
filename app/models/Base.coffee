@@ -3,9 +3,6 @@
 class Model extends Backbone.AssociatedModel
 
 
-# Required for Backbone Relational models extended using Coffeescript syntax
-# Model.setup()
-
 class Collection extends Backbone.Collection
     url: "none"
     local: true

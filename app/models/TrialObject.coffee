@@ -14,8 +14,6 @@ class Model extends Base.Model
         delay: 0
         duration: 5
 
-# Required for Backbone Relational models extended using Coffeescript syntax
-# Model.setup()
 
 class Collection extends Base.Collection
     model: (attrs, options) ->

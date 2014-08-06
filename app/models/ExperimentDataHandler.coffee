@@ -13,9 +13,6 @@ class Model extends APIBase.Model
         collectionType: TrialDataHandler.Collection
     ]
 
-# Required for Backbone Relational models extended using Coffeescript syntax
-# Model.setup()
-
 class Collection extends APIBase.Collection
     model: Model
     url: =>

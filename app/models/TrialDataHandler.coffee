@@ -13,9 +13,6 @@ class Model extends Base.Model
         relatedModel: TrialEventLog.Model
     ]
 
-# Required for Backbone Relational models extended using Coffeescript syntax
-# Model.setup()
-
 class Collection extends Base.Collection
     model: Model
 

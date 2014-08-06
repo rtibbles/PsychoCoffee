@@ -16,10 +16,6 @@ class Model extends Base.Model
     # listenEvent: "string"
     # triggerEvent: "string"
 
-
-# Required for Backbone Relational models extended using Coffeescript syntax
-# Model.setup()
-
 class Collection extends Base.Collection
     model: Model
 
