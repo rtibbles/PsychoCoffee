@@ -10,6 +10,7 @@ exports.config =
         before: [
           'vendor/scripts/common/console-polyfill.js',
           'vendor/scripts/common/jquery.js',
+          'vendor/scripts/common/jquery.ajax-progress.js',
           'vendor/scripts/common/handlebars.js',
           'vendor/scripts/common/underscore.js',
           'vendor/scripts/development/backbone.js',
@@ -46,6 +47,7 @@ exports.config =
             before: [
               'vendor/scripts/common/console-polyfill.js',
               'vendor/scripts/common/jquery.js',
+              'vendor/scripts/common/jquery.ajax-progress.js',
               'vendor/scripts/common/handlebars.js',
               'vendor/scripts/common/underscore.js',
               'vendor/scripts/production/backbone-min.js',
