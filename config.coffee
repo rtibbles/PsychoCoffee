@@ -13,7 +13,7 @@ exports.config =
           'vendor/scripts/common/handlebars.js',
           'vendor/scripts/common/underscore.js',
           'vendor/scripts/development/backbone.js',
-          'vendor/scripts/common/backbone-relational.js',
+          'vendor/scripts/common/backbone-associations-min.js',
           'vendor/scripts/common/backbone.dualstorage.amd.js'
         ]
     stylesheets: 
@@ -49,7 +49,7 @@ exports.config =
               'vendor/scripts/common/handlebars.js',
               'vendor/scripts/common/underscore.js',
               'vendor/scripts/production/backbone-min.js',
-              'vendor/scripts/common/backbone-relational.js',
+              'vendor/scripts/common/backbone-associations-min.js',
               'vendor/scripts/common/backbone.dualstorage.amd.js'
             ]
       optimize: true
