@@ -24,7 +24,7 @@ performance.now =
  
 __nativeST__ = window.setTimeout
 __nativeSI__ = window.setInterval
- 
+
 window.setTimeout = (vCallback, nDelay, aArgs...) ->
     oThis = this
     if vCallback instanceof Function
@@ -41,15 +41,49 @@ window.setInterval = (vCallback, nDelay, aArgs...) ->
         callback = vCallback
     __nativeSI__(callback, nDelay)
 
+# http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+# http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+ 
+# requestAnimationFrame polyfill by Erik Möller
+# fixes from Paul Irish and Tino Zijdel
+ 
+lastTime = 0
+vendors = ['ms', 'moz', 'webkit', 'o']
+for vendor in vendors
+    if window.requestAnimationFrame
+        window.AnimationFrameType = "RequestAnimationFrame"
+        break
+    window.requestAnimationFrame = window[vendor + 'RequestAnimationFrame']
+    window.cancelAnimationFrame =
+        window[vendor + 'CancelAnimationFrame'] or
+        window[vendors + 'CancelRequestAnimationFrame']
+
+
+if not window.requestAnimationFrame
+    window.AnimationFrameType = "SetTimeout"
+    window.requestAnimationFrame = (callback, element) ->
+        currTime = performance.now()
+        timeToCall = Math.max(0, 16 - (currTime - lastTime))
+        id = window.setTimeout(
+            -> callback(currTime + timeToCall),
+            timeToCall
+            )
+        lastTime = currTime + timeToCall
+        return id
+
+if not window.cancelAnimationFrame
+    window.cancelAnimationFrame = (id) ->
+        clearTimeout(id)
 
 class Clock
-    constructor: (tick=20) ->
+    constructor: (framerate=60) ->
         _.extend @, Backbone.Events
         # Set time that clock was initialized
         @reset()
-        @tick = tick
-        @clock_type = performance.type
-        console.log "Using clock type:", performance.type
+        @tick = 1000/framerate
+        @timingType = performance.type
+        @animationFrameType = window.AnimationFrameType
+        console.log "Using clock type:", @timingType
 
     reset: =>
         @start = performance.now()
@@ -72,21 +106,40 @@ class Clock
         timeoutDelay = @tick * (nearestFrame - frames)
         if timeoutDelay >= 1
             callback = -> setTimeout(callback, timeoutDelay)
-        object.listenToOnce(@, @count + nearestFrame, callback)
+        object.listenToOnce(@, @frame + nearestFrame, callback)
 
     startTimer: =>
-        @count = 0
+        @frame = 0
         @timerStart = @getTime()
         @ticktock()
+
+    pauseTimer: =>
+        @pauseTimestamp = @getTime()
+        @stopTimer()
+        if window.confirm("Do you really want to stop the experiment?")
+            window.close()
+        else
+            @resumeTimer(@pauseTimestamp)
+
+    resumeTimer: (timestamp) =>
+        @start += @getTime() - timestamp
+        @ticktock()
+
+    stopTimer: =>
+        clearTimeout @timer
 
     timerElapsed: =>
         @getElapsedTime(@timerStart)
 
     ticktock: =>
-        @trigger(@count)
-        setTimeout(@ticktock, @tick + (@timerElapsed() - @count*@tick))
-        @count += 1
-        # console.log "Tick Tock!", @getTime() - @count*@tick
+        @timer = setTimeout(
+            @ticktock,
+            @tick - (@timerElapsed() - @frame*@tick)
+            )
+        @trigger(@frame)
+        console.log "Tick Tock!", @timerElapsed() - @frame*@tick
+        @frame += 1
+        if @frame > 100 then @stopTimer()
 
 
 module.exports =
