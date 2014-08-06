@@ -4,33 +4,24 @@ Base = require('./Base')
 TrialObject = require("./TrialObject")
 
 class Model extends Base.Model
-    relations: [
-        type: 'HasMany'
-        key: 'trialObjects'
-        relatedModel: TrialObject.Model
-        collectionType: TrialObject.Collection
-        reverseRelation:
-            key: "trial"
-    ]
-    # width: DS.attr 'number'
-    # height: DS.attr 'number'
+    defaults:
+        width: 640
+        height: 480
+        title: "Trial"
+        trialObjects: []
 
-Data = [
-    {
-     _id: 1
-     experiment: 1
-     width: 800
-     height: 600
-     trialobjects: [1]
-    }
-]
+    relations: [
+        type: Backbone.Many
+        key: 'trialObjects'
+        collectionType: TrialObject.Collection
+    ]
 
 # Required for Backbone Relational models extended using Coffeescript syntax
-Model.setup()
+# Model.setup()
 
 class Collection extends Base.Collection
+    model: Model
 
 module.exports =
     Model: Model
     Collection: Collection
-    Data: Data

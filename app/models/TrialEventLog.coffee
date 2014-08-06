@@ -6,9 +6,10 @@ class Model extends Base.Model
 
 
 # Required for Backbone Relational models extended using Coffeescript syntax
-Model.setup()
+# Model.setup()
 
 class Collection extends Base.Collection
+    model: Model
 
 module.exports =
     Model: Model

@@ -6,17 +6,25 @@ Base = require('./Base')
 
 subModels = {}
 for modulename in nestedModules('models/TrialObjects')
-    subModels[modulename.toLowerCase()] = modulename + ".Model"
+    subModels[modulename] = modulename + ".Model"
 
 class Model extends Base.Model
     subModelTypes: subModels
-    # delay: DS.attr 'number'
-    # duration: DS.attr 'number'
+    defaults: ->
+        delay: 0
+        duration: 5
 
 # Required for Backbone Relational models extended using Coffeescript syntax
-Model.setup()
+# Model.setup()
 
 class Collection extends Base.Collection
+    model: (attrs, options) ->
+        try
+            modelType = attrs["subModelTypeAttribute"]
+            model = PsychoCoffee[modelType]["Model"]
+        catch error
+            model = Model
+        new model(attrs, options)
 
 
 module.exports =

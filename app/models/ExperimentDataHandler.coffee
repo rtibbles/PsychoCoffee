@@ -4,17 +4,17 @@ APIBase = require('./APIBase')
 TrialDataHandler = require('./TrialDataHandler')
 
 class Model extends APIBase.Model
+    defaults:
+        trialdatahandlers: []
+
     relations: [
-        type: 'HasMany'
+        type: Backbone.Many
         key: 'trialdatahandlers'
-        relatedModel: TrialDataHandler.Model
-        includeInJSON: true
-        reverseRelation:
-            key: "experimentdatahandler"
+        collectionType: TrialDataHandler.Collection
     ]
 
 # Required for Backbone Relational models extended using Coffeescript syntax
-Model.setup()
+# Model.setup()
 
 class Collection extends APIBase.Collection
     model: Model

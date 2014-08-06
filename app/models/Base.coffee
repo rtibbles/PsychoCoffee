@@ -1,14 +1,15 @@
 'use strict'
 
-class Model extends Backbone.RelationalModel
+class Model extends Backbone.AssociatedModel
 
 
 # Required for Backbone Relational models extended using Coffeescript syntax
-Model.setup()
+# Model.setup()
 
 class Collection extends Backbone.Collection
     url: "none"
     local: true
+    model: Model
 
 module.exports =
     Model: Model

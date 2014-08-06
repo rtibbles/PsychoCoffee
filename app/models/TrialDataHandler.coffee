@@ -4,19 +4,20 @@ Base = require('./Base')
 TrialEventLog = require('./TrialEventLog')
 
 class Model extends Base.Model
+    defaults:
+        trialeventlogs: []
+
     relations: [
-        type: 'HasMany'
+        type: Backbone.Many
         key: 'trialeventlogs'
         relatedModel: TrialEventLog.Model
-        includeInJSON: true
-        reverseRelation:
-            key: "trialdatahandler"
     ]
 
 # Required for Backbone Relational models extended using Coffeescript syntax
-Model.setup()
+# Model.setup()
 
 class Collection extends Base.Collection
+    model: Model
 
 module.exports =
     Model: Model
