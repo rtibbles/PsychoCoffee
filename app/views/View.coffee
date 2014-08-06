@@ -23,9 +23,10 @@ module.exports = class View extends Backbone.View
     appendTo: (el) =>
         $(el).append(@el)
 
-    instantiateSubViews: (key, viewType) =>
+    instantiateSubViews: (key, viewType, viewFunction) =>
         @subViews = {}
         for model in @model.get(key).models
+            if viewFunction then viewType = viewFunction(model)
             @subViews[model.id] = new PsychoCoffee[viewType]
                 model: model
                 clock: @clock
