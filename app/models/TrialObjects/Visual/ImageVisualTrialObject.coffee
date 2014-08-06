@@ -3,9 +3,14 @@
 VisualTrialObject = require("../VisualTrialObject")
 
 class Model extends VisualTrialObject.Model
+
+    fileKey: "image"
+    object: Image
+    objectFileKey: "src"
+
     defaults: ->
         _.extend
-            imageFile: "/images/test.png"
+            file: "/images/test.png"
         ,
             super
 
