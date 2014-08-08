@@ -1,6 +1,7 @@
 'use strict'
 PsychoCoffee = window.PsychoCoffee = require './app/app'
 nestedImport = require './utils/nestedImport'
+createjs.FlashPlugin.swfPath = "/widgets/SoundJS/"
 
 # Load all modules in order automagically.
 folderOrder = [

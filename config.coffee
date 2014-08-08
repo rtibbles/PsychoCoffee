@@ -15,7 +15,10 @@ exports.config =
           'vendor/scripts/common/underscore.js',
           'vendor/scripts/development/backbone.js',
           'vendor/scripts/common/backbone-associations-min.js',
-          'vendor/scripts/common/backbone.dualstorage.amd.js'
+          'vendor/scripts/common/backbone.dualstorage.amd.js',
+          'vendor/scripts/common/preloadjs-0.4.1.min.js',
+          'vendor/scripts/common/soundjs-0.5.2.min.js',
+          'vendor/scripts/common/flashplugin-0.5.2.min.js'
         ]
     stylesheets: 
       joinTo: 
@@ -52,7 +55,10 @@ exports.config =
               'vendor/scripts/common/underscore.js',
               'vendor/scripts/production/backbone-min.js',
               'vendor/scripts/common/backbone-associations-min.js',
-              'vendor/scripts/common/backbone.dualstorage.amd.js'
+              'vendor/scripts/common/backbone.dualstorage.amd.js',
+              'vendor/scripts/common/preloadjs-0.4.1.min.js',
+              'vendor/scripts/common/soundjs-0.5.2.min.js',
+              'vendor/scripts/common/flashplugin-0.5.2.min.js'
             ]
       optimize: true
       sourceMaps: false
