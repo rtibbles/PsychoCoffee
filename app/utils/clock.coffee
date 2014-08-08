@@ -81,6 +81,7 @@ class Clock
         # Set time that clock was initialized
         @reset()
         @tick = 1000/framerate
+        @frame = 0
         @timingType = performance.type
         @animationFrameType = window.AnimationFrameType
         console.log "Using clock type:", @timingType
@@ -109,7 +110,6 @@ class Clock
         object.listenToOnce(@, @frame + nearestFrame, callback)
 
     startTimer: =>
-        @frame = 0
         @timerStart = @getTime()
         @ticktock()
 
@@ -127,6 +127,7 @@ class Clock
 
     stopTimer: =>
         clearTimeout @timer
+        @frame = 0
 
     timerElapsed: =>
         @getElapsedTime(@timerStart)
@@ -137,9 +138,9 @@ class Clock
             @tick - (@timerElapsed() - @frame*@tick)
             )
         @trigger(@frame)
-        console.log "Tick Tock!", @timerElapsed() - @frame*@tick
+        # console.log "Tick Tock!", @timerElapsed() - @frame*@tick
         @frame += 1
-        if @frame > 100 then @stopTimer()
+        # if @frame > 100 then @stopTimer()
 
 
 module.exports =

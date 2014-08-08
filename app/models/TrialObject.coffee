@@ -11,10 +11,9 @@ for modulename in nestedModules('models/TrialObjects')
 class Model extends Base.Model
     subModelTypes: subModels
 
-
     defaults: ->
         delay: 0
-        duration: 5
+        duration: 5000
 
 class Collection extends Base.Collection
     model: (attrs, options) ->
