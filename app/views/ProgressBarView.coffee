@@ -7,35 +7,26 @@ module.exports = class ProgressBarView extends View
     id: 'progressBar'
     template: template
 
-    initialize: (options) ->
+    initialize: (options) =>
         super
-        @deferreds = options.deferreds
+        @queue = options.queue
         @complete = options.complete
-        @overallFraction = 0
-        @progressCache = {}
-        for model in @deferreds
-            @bindProgressComplete(model)
+        @queue.on "progress", @progress
+        @queue.on "complete", @finish
 
-    bindProgressComplete: (model) =>
-        @listenTo model, "fileProgress", @progress
+    progress: (data) =>
+        @setProgressBar data.progress
 
-    progress: (data) ->
-        oldFraction = @progressCache[data.model.id] or 0
-        @progressCache[data.model.id] = data.fraction
-        @overallFraction =
-            @overallFraction + (data.fraction - oldFraction)/@deferreds.length
-        @setProgressBar @overallFraction
-        if data.fraction == 1 then @stopListening data.model
-        if @overallFraction == 1
-            @$el.animate(
-                opacity: 0
-            ,
-                1000
-            ,
-                "swing"
-            ,
-                @close
-                )
+    finish: =>
+        @$el.animate(
+            opacity: 0
+        ,
+            1000
+        ,
+            "swing"
+        ,
+            @close
+            )
 
     close: =>
         @complete()

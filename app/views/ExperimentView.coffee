@@ -32,14 +32,15 @@ module.exports = class ExperimentView extends View
         @trialView = trialView
         @trialView.render()
         @trialView.appendTo("#trials")
-        # @trialView.startTrial()
+        @trialView.startTrial()
 
     preLoadExperiment: ->
-        loadingModels = _.flatten(
-            value.preLoadTrial() for key, value of @subViews)
+        queue = new createjs.LoadQueue true
+        for key, view of @subViews
+            view.preLoadTrial(queue)
         progressBarView = new ProgressBarView
             el: "#messages"
-            deferreds: loadingModels
+            queue: queue
             complete: @startExperiment
         progressBarView.render()
         

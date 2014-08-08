@@ -4,21 +4,18 @@ View = require './View'
 
 module.exports = class TrialObjectView extends View
 
-    preLoadTrialObject: ->
+    attach: (endpoints) ->
+        return
+
+    preLoadTrialObject: (queue) =>
         if @model.get("file")
-            @model.preloadFile()
-            return @model
-        else
-            return null
+            queue.loadFile(@model.get("file"))
+            queue.on "fileload", @postFileLoad
 
-    elementViewType: ->
-        elementType = @model.get("subModelTypeAttribute")
-        # For this to work, any models subclassed from TrialObject must be named
-        # ModelName, and the associated View must be named ModelNameView
+    postFileLoad: (data) =>
+        if data.item.src == @model.get("file")
+            @object = data.result
+            @render()
 
-        elementView = elementType + "View"
-
-        try
-            PsychoCoffee[elementView]
-        catch error
-            console.debug error, "Unknown element type #{elementType}"
+    render: =>
+        @$el.html @object

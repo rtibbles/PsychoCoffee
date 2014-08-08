@@ -9,13 +9,13 @@ module.exports = class TrialView extends View
     initialize: =>
         super
         @instantiateSubViews("trialObjects",
-            "TrialObjectView", @elementViewType)
+            "TrialObjectView", @trialObjectViewType)
 
-    preLoadTrial: =>
-        allModels = (value.preLoadTrialObject() for key, value of @subViews)
-        loadingModels = (model for model in allModels when model)
+    preLoadTrial: (queue) =>
+        for key, view of @subViews
+            view.preLoadTrialObject(queue)
 
-    elementViewType: (model) ->
+    trialObjectViewType: (model) ->
         elementType = model.get("subModelTypeAttribute")
 
         # For this to work, any models subclassed from TrialObject must be named
@@ -28,3 +28,12 @@ module.exports = class TrialView extends View
             elementView
         catch error
             console.debug error, "Unknown element type #{elementType}"
+
+    startTrial: ->
+        @createStage()
+        for key, view of @subViews
+            view.attach stage: @stage, hidden: @$("#trial-hidden")
+
+    createStage: ->
+        @model.set container: "trial-draw"
+        @stage = new Kinetic.Stage @model.attributes
