@@ -16,8 +16,8 @@ module.exports = (config) =>
 
     # list of files / patterns to load in the browser
     files: [
-      'public/javascripts/vendor.js',
-      'public/javascripts/app.js',
+      'public/js/vendor.js',
+      'public/js/app.js',
       'test/helpers.coffee',
       'test/**/*_test.js',
       'test/**/*_test.coffee'

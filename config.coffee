@@ -4,8 +4,8 @@ exports.config =
   files:
     javascripts: 
       joinTo: 
-        'javascripts/app.js': /^(app|envs\/development)/,
-        'javascripts/vendor.js': /^(vendor\/scripts\/(common|development)|vendor\\scripts\\(common|development))/
+        'js/app.js': /^(app|envs\/development)/,
+        'js/vendor.js': /^(vendor\/scripts\/(common|development)|vendor\\scripts\\(common|development))/
       order: 
         before: [
           'vendor/scripts/common/console-polyfill.js',
@@ -26,7 +26,7 @@ exports.config =
       precompile: true
       root: 'templates'
       joinTo: 
-        'javascripts/app.js': /^app/
+        'js/app.js': /^app/
   plugins:
     coffeelint:
       options:
@@ -41,8 +41,8 @@ exports.config =
       files: 
         javascripts: 
           joinTo: 
-            'javascripts/app.js': /^(app|envs\/production)/,
-            'javascripts/vendor.js': /^(vendor\/scripts\/(common|production)|vendor\\scripts\\(common|production))/
+            'js/app.js': /^(app|envs\/production)/,
+            'js/vendor.js': /^(vendor\/scripts\/(common|production)|vendor\\scripts\\(common|production))/
           order: 
             before: [
               'vendor/scripts/common/console-polyfill.js',
