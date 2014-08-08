@@ -19,12 +19,9 @@ module.exports = class ProgressBarView extends View
 
     finish: =>
         @$el.animate(
-            opacity: 0
-        ,
-            1000
-        ,
-            "swing"
-        ,
+            opacity: 0,
+            1000,
+            "swing",
             @close
             )
 
@@ -35,9 +32,6 @@ module.exports = class ProgressBarView extends View
     setProgressBar: (fraction) ->
         progressBarWidth = fraction * @$el.find("#progressBar").width()
         @$el.find("#indicator").animate(
-            width: progressBarWidth
-        ,
-            100
-            ).html(
-            Math.round(fraction * 100) + "%&nbsp;"
-            )
+            width: progressBarWidth,
+            100).html(
+            Math.round(fraction * 100) + "%&nbsp;")
