@@ -5,8 +5,6 @@ module.exports = class View extends Backbone.View
     initialize: (options) =>
         super
         @clock = options.clock
-        if @clock
-            console.log "Rendering #{@constructor.name} - #{@clock.getTime()}ms"
 
     template: ->
         return
@@ -15,7 +13,7 @@ module.exports = class View extends Backbone.View
         return @model?.attributes or {}
 
     render: =>
-        # console.debug "Rendering #{@constructor.name}"
+        console.debug "Rendering #{@constructor.name}"
         @$el.html @template @getRenderData()
         @afterRender()
         return @

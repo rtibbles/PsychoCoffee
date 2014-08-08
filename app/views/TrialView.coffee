@@ -6,7 +6,7 @@ Template = require 'templates/trial'
 module.exports = class TrialView extends View
     template: Template
 
-    initialize: =>
+    initialize: (options) =>
         super
         @instantiateSubViews("trialObjects",
             "TrialObjectView", @trialObjectViewType)
@@ -30,10 +30,11 @@ module.exports = class TrialView extends View
             console.debug error, "Unknown element type #{elementType}"
 
     startTrial: ->
-        @createStage()
+        @createCanvas()
         for key, view of @subViews
-            view.attach stage: @stage, hidden: @$("#trial-hidden")
+            view.attach canvas: @canvas, hidden: @$("#trial-hidden")
+            view.registerEvents()
+        @clock.startTimer()
 
-    createStage: ->
-        @model.set container: "trial-draw"
-        @stage = new Kinetic.Stage @model.attributes
+    createCanvas: =>
+        @canvas = new fabric.StaticCanvas "trial-canvas"

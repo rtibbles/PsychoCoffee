@@ -9,7 +9,6 @@ class Model extends VisualTrialObject.Model
             fontSize: 24
             fontFamily: "arial"
             fontStyle: "normal"
-        ,
             super
 
 module.exports =
