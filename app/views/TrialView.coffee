@@ -38,3 +38,12 @@ module.exports = class TrialView extends View
 
     createCanvas: =>
         @canvas = new fabric.StaticCanvas "trial-canvas"
+        # @canvas.on "object:added", @canvasPerformanceTracking
+        # @canvas.on "object:removed", @canvasPerformanceTracking
+
+    canvasPerformanceTracking: (options) =>
+        now = @clock.timerElapsed()
+        @canvas.on "after:render", =>
+            console.log @clock.timerElapsed() - now,
+                "ms between object added/removed and render completion"
+            @canvas.off("after:render")
