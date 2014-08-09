@@ -31,6 +31,7 @@ module.exports = class ExperimentView extends View
             if @blockView.close then @blockView.close() else @blockView.remove()
         @blockdatamodel = @datamodel.get("blockdatahandlers").at(block) or
             @datamodel.get("blockdatahandlers").create()
+        @datamodel.save()
         @blockView = blockView
         @blockView.datamodel = @blockdatamodel
         @blockView.render()

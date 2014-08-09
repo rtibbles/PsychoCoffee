@@ -39,10 +39,11 @@ class Model extends Base.Model
     returnParameters: ->
         @get("parameterSet").returnTrialParameters @get("numberOfTrials")
 
-    returnTrialProperties: ->
+    returnTrialProperties: (clone=false) ->
         attributes = {}
         for key in @trialProperties
             attributes[key] = @get(key)
+        if clone then attributes["trialObjects"] = @get "trialObjects"
         return attributes
 
 class Collection extends Base.Collection
