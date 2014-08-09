@@ -2,7 +2,14 @@ $(function(){
 window.experiment = new PsychoCoffee.Experiment.Model({title: "Test Experiment"});
 
 window.trial = experiment.get("blocks").create({
-    title: "Instructions"
+    title: "Instructions",
+    parameterSet: {
+        parameters: {
+            stuff: [1,2,3,4,5,6,7,8,9,10],
+            others: ["Sometimes","I", "like", "to", "play", "games", "with", "my", "work", "Just sometimes."]
+        }
+    },
+    timeout: 5000
 });
 
 experiment.get("blocks").at(0).get("trialObjects").create({
@@ -18,6 +25,10 @@ experiment.get("blocks").at(0).get("trialObjects").create({
     width: 100,
     height: 100,
     opacity: 0.5,
+    parameterizedAttributes: {
+        delay: "stuff",
+        text: "others"
+    }
 });
 
 window.block = experiment.get("blocks").at(0).get("trialObjects").create({
@@ -30,7 +41,7 @@ window.block = experiment.get("blocks").at(0).get("trialObjects").create({
 experiment.get("blocks").at(0).get("trialObjects").create({
     subModelTypeAttribute: "AudioTrialObject",
     duration: 8000,
-    delay: 3000,
+    delay: 0,
     file: "/sounds/test.mp3"
 });
 
