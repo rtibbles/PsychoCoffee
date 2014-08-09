@@ -19,7 +19,8 @@ exports.config =
           'vendor/scripts/common/preloadjs-0.4.1.min.js',
           'vendor/scripts/common/soundjs-0.5.2.min.js',
           'vendor/scripts/common/flashplugin-0.5.2.min.js',
-          'vendor/scripts/common/fabric.min.js'
+          'vendor/scripts/common/fabric.min.js',
+          'vendor/scripts/common/seedrandom.min.js'
         ]
     stylesheets: 
       joinTo: 
@@ -60,7 +61,8 @@ exports.config =
               'vendor/scripts/common/preloadjs-0.4.1.min.js',
               'vendor/scripts/common/soundjs-0.5.2.min.js',
               'vendor/scripts/common/flashplugin-0.5.2.min.js',
-              'vendor/scripts/common/fabric.min.js'
+              'vendor/scripts/common/fabric.min.js',
+              'vendor/scripts/common/seedrandom.min.js'
             ]
       optimize: true
       sourceMaps: false
