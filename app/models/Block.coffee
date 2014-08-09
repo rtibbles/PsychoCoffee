@@ -11,13 +11,15 @@ class Model extends Base.Model
         title: ""
         width: 640
         height: 480
+        timeout: 1000
         parameterSet: {}
         trialObjects: []
 
     trialProperties: [
+        "title"
         "width"
         "height"
-        "trialObjects"
+        "timeout"
     ]
 
     relations: [

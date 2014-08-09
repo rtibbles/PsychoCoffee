@@ -36,10 +36,12 @@ module.exports = class TrialView extends View
             view.registerEvents()
             @listenTo view, "change", @addToClockChangeEvents
             @listenTo view, "change", @canvasPerformanceTracking
+        @registerTimeout()
         @clock.startTimer()
 
     addToClockChangeEvents: (event) ->
         @clock.changeEvents.push event
+
     createCanvas: =>
         @canvas = new fabric.StaticCanvas "trial-canvas"
         @clock.canvas = @canvas
@@ -50,3 +52,13 @@ module.exports = class TrialView extends View
             console.log @clock.timerElapsed() - now,
                 "ms between object added/removed and render completion"
             @canvas.off("after:render")
+
+    registerTimeout: =>
+        if @model.get "timeout"
+            @clock.delayedTrigger @model.get("timeout"), @, @endTrial
+
+    endTrial: ->
+        delete @canvas
+        delete @clock.canvas
+        @remove()
+        @trigger "trialEnded"
