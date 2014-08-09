@@ -7,7 +7,6 @@ class Model extends Base.Model
     defaults:
         width: 640
         height: 480
-        title: "Trial"
         trialObjects: []
 
     relations: [

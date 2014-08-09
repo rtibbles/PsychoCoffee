@@ -19,25 +19,27 @@ module.exports = class ExperimentView extends View
         @datacollection = new ExperimentDataHandler.Collection
         @datacollection.fetch().then =>
             @datamodel = @datacollection.getOrCreateParticipantModel(1)
-            @instantiateSubViews("trials", "TrialView")
+            @instantiateSubViews("blocks", "BlockView")
             @preLoadExperiment()
 
     refreshTime: =>
         @time = @clock.getTime()
 
-    showTrial: (trial) =>
-        trialView = @subViews[trial.get("id")]
-        if @trialView
-            if @trialView.close then @trialView.close() else @trialView.remove()
-        @trialView = trialView
-        @trialView.render()
-        @trialView.appendTo("#trials")
-        @trialView.startTrial()
+    startBlock: (block) =>
+        blockView = @subViews[block.get("id")]
+        if @blockView
+            if @blockView.close then @blockView.close() else @blockView.remove()
+        @blockdatamodel = @datamodel.get("blockdatahandlers").at(block) or
+            @datamodel.get("blockdatahandlers").create()
+        @blockView = blockView
+        @blockView.datamodel = @blockdatamodel
+        @blockView.render()
+        @blockView.startBlock()
 
     preLoadExperiment: ->
         queue = new createjs.LoadQueue true
         for key, view of @subViews
-            view.preLoadTrial(queue)
+            view.preLoadBlock(queue)
         progressBarView = new ProgressBarView
             queue: queue
             complete: @startExperiment
@@ -46,5 +48,5 @@ module.exports = class ExperimentView extends View
         
 
     startExperiment: =>
-        currentTrial = @model.get("trials").at(@datamodel.get("trial") or 0)
-        @showTrial currentTrial
+        currentBlock = @model.get("blocks").at(@datamodel.get("block") or 0)
+        @startBlock currentBlock

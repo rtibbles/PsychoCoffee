@@ -1,17 +1,17 @@
 'use strict'
 
 Base = require('./Base')
-Trial = require('./Trial')
+Block = require('./Block')
 
 class Model extends Base.Model
     defaults:
-        trials: []
+        blocks: []
         title: "Experiment"
 
     relations: [
         type: Backbone.Many
-        key: 'trials'
-        collectionType: Trial.Collection
+        key: 'blocks'
+        collectionType: Block.Collection
     ]
 
 class Collection extends Base.Collection

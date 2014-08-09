@@ -1,16 +1,16 @@
 'use strict'
 
 APIBase = require('./APIBase')
-TrialDataHandler = require('./TrialDataHandler')
+BlockDataHandler = require('./BlockDataHandler')
 
 class Model extends APIBase.Model
     defaults:
-        trialdatahandlers: []
+        blockdatahandlers: []
 
     relations: [
         type: Backbone.Many
-        key: 'trialdatahandlers'
-        collectionType: TrialDataHandler.Collection
+        key: 'blockdatahandlers'
+        collectionType: BlockDataHandler.Collection
     ]
 
 class Collection extends APIBase.Collection

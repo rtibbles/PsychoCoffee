@@ -10,7 +10,7 @@ class Model extends Base.Model
     relations: [
         type: Backbone.Many
         key: 'trialeventlogs'
-        relatedModel: TrialEventLog.Model
+        collectionType: TrialEventLog.Collection
     ]
 
 class Collection extends Base.Collection

@@ -1,11 +1,11 @@
 $(function(){
 window.experiment = new PsychoCoffee.Experiment.Model({title: "Test Experiment"});
 
-window.trial = experiment.get("trials").create({
+window.trial = experiment.get("blocks").create({
     title: "Instructions"
 });
 
-experiment.get("trials").at(0).get("trialObjects").create({
+experiment.get("blocks").at(0).get("trialObjects").create({
     subModelTypeAttribute: "TextVisualTrialObject",
     text: "You will now hear some sentences.\nSome will be completely audible, others will be difficult to make out.\nFor each sentence, identify whether which emotion they most sound like.",
     duration: 10000,
@@ -20,14 +20,14 @@ experiment.get("trials").at(0).get("trialObjects").create({
     opacity: 0.5,
 });
 
-experiment.get("trials").at(0).get("trialObjects").create({
+window.block = experiment.get("blocks").at(0).get("trialObjects").create({
     subModelTypeAttribute: "ImageVisualTrialObject",
     duration: 3000,
     delay: 3000,
     file: "/images/test.png"
 });
 
-experiment.get("trials").at(0).get("trialObjects").create({
+experiment.get("blocks").at(0).get("trialObjects").create({
     subModelTypeAttribute: "AudioTrialObject",
     duration: 8000,
     delay: 3000,
