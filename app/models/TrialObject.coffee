@@ -14,6 +14,17 @@ class Model extends Base.Model
     defaults: ->
         delay: 0
         duration: 5000
+        parameterizedAttributes: {}
+
+    parameterizedTrial: (parameters) ->
+        attributes = _.clone @attributes
+        for attribute, parameterName of @get "parameterizedAttributes"
+            attributes[attribute] = parameters[parameterName]
+        return attributes
+
+    setParameter: (attribute, parameter) ->
+        @set "parameterizedAttributes",
+            @get("parameterizedAttributes")[attribute] = parameter
 
 class Collection extends Base.Collection
     model: (attrs, options) ->
