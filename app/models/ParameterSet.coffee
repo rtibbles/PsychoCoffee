@@ -34,14 +34,22 @@ class Model extends Base.Model
 
     fixedList: (trials_wanted) ->
         length = 0
-        parameters = {}
+        parameterSet = []
+        parameterList = []
         for key, value of @get "parameters"
-            parameters[key] = Random.seeded_shuffle value,
-                "TODO - insert a reference to participant ID here!"
-            if trials_wanted?
-                parameters[key] = parameters[key][0...trials_wanted]
-            length = parameters[key].length
-        return [length, parameters]
+            parameterList.push key
+            length = value.length
+        for i in [0...length]
+            parameters =
+                _.object parameterList,
+                    (@get("parameters")[parameter][i] \
+                        for parameter in parameterList)
+            parameterSet.push parameters
+        parameterSet = Random.seeded_shuffle parameterSet,
+            "TODO - insert a reference to participant ID here!"
+        if trials_wanted?
+            parameterSet = parameterSet[0...trials_wanted]
+        return [length, parameterSet]
 
     randomList: (trials_wanted) ->
         return {}
