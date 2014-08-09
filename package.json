@@ -1,7 +1,7 @@
 {
   "author": "Richard Tibbles",
   "name": "psychocoffee",
-  "description": "Ember.js driven online psychological experiment platform",
+  "description": "Online psychological experiment platform",
   "version": "1.2.0",
   "homepage": "https://github.com/rtibbles/PsychoCoffee",
   "repository": {
