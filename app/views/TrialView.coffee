@@ -58,6 +58,7 @@ module.exports = class TrialView extends View
             @clock.delayedTrigger @model.get("timeout"), @, @endTrial
 
     endTrial: ->
+        @clock.stopTimer()
         delete @canvas
         delete @clock.canvas
         @remove()

@@ -45,8 +45,9 @@ class Model extends Base.Model
                     (@get("parameters")[parameter][i] \
                         for parameter in parameterList)
             parameterSet.push parameters
-        parameterSet = Random.seeded_shuffle parameterSet,
-            "TODO - insert a reference to participant ID here!"
+        if @get "randomized"
+            parameterSet = Random.seeded_shuffle parameterSet,
+                "TODO - insert a reference to participant ID here!"
         if trials_wanted?
             parameterSet = parameterSet[0...trials_wanted]
         return [length, parameterSet]
