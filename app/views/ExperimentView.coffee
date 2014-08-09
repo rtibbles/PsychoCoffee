@@ -39,9 +39,9 @@ module.exports = class ExperimentView extends View
         for key, view of @subViews
             view.preLoadTrial(queue)
         progressBarView = new ProgressBarView
-            el: "#messages"
             queue: queue
             complete: @startExperiment
+        progressBarView.appendTo("#messages")
         progressBarView.render()
         
 

@@ -4,7 +4,6 @@ template = require '../templates/progressbar'
 View = require './View'
 
 module.exports = class ProgressBarView extends View
-    id: 'progressBar'
     template: template
 
     initialize: (options) =>
