@@ -82,6 +82,7 @@ class Clock
         @reset()
         @tick = 1000/framerate
         @frame = 0
+        @changeEvents = []
         @timingType = performance.type
         @animationFrameType = window.AnimationFrameType
         console.log "Using clock type:", @timingType
@@ -141,6 +142,8 @@ class Clock
         # console.log "Tick Tock!", @timerElapsed() - @frame*@tick
         @frame += 1
         # if @frame > 100 then @stopTimer()
+        if @changeEvents.length then @canvas?.renderAll()
+        @changeEvents = []
 
 
 module.exports =

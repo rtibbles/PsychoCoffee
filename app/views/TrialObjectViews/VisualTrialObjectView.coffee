@@ -6,9 +6,13 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
 
     attach: (endpoints) ->
         @canvas = endpoints.canvas
+        @canvas.add @object
+        @deactivate()
 
     activate: ->
-        @canvas.add @object
+        @object.setVisible true
+        @trigger "change", @clock.timerElapsed()
 
     deactivate: ->
-        @canvas.remove @object
+        @object.setVisible false
+        @trigger "change", @clock.timerElapsed()

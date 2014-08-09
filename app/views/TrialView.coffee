@@ -34,15 +34,18 @@ module.exports = class TrialView extends View
         for key, view of @subViews
             view.attach canvas: @canvas, hidden: @$("#trial-hidden")
             view.registerEvents()
+            @listenTo view, "change", @addToClockChangeEvents
+            @listenTo view, "change", @canvasPerformanceTracking
         @clock.startTimer()
 
+    addToClockChangeEvents: (event) ->
+        @clock.changeEvents.push event
     createCanvas: =>
         @canvas = new fabric.StaticCanvas "trial-canvas"
-        # @canvas.on "object:added", @canvasPerformanceTracking
-        # @canvas.on "object:removed", @canvasPerformanceTracking
+        @clock.canvas = @canvas
 
     canvasPerformanceTracking: (options) =>
-        now = @clock.timerElapsed()
+        now = options
         @canvas.on "after:render", =>
             console.log @clock.timerElapsed() - now,
                 "ms between object added/removed and render completion"
