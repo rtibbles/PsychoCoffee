@@ -39,7 +39,12 @@ module.exports = class BlockView extends View
         trialView = @subViews[trial.get("id")]
         if @trialView
             if @trialView.close then @trialView.close() else @trialView.remove()
+        @trialdatamodel =
+            @datamodel.get("trialdatalogs").at(@datamodel.get("trial")) or
+            @datamodel.get("trialdatalogs").create()
+        @datamodel.save()
         @trialView = trialView
+        @trialView.datamodel = @trialdatamodel
         @trialView.render()
         @trialView.appendTo("#trials")
         @listenToOnce @trialView, "trialEnded", @nextTrial

@@ -39,9 +39,15 @@ module.exports = class TrialView extends View
             @listenTo view, "change", @canvasPerformanceTracking
         @registerTimeout()
         @clock.startTimer()
+        @datamodel.addEvent @createLog type: "trial_start"
 
     addToClockChangeEvents: (event) ->
         @clock.changeEvents.push event
+
+    createLog: (event) ->
+        _.extend event,
+            experiment_time: @clock.getTime()
+            trial_time: @clock.timerElapsed()
 
     createCanvas: =>
         @canvas = new fabric.StaticCanvas "trial-canvas"
@@ -62,5 +68,6 @@ module.exports = class TrialView extends View
         @clock.stopTimer()
         delete @canvas
         delete @clock.canvas
+        @stopListening()
         @remove()
         @trigger "trialEnded"
