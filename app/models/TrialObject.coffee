@@ -2,6 +2,7 @@
 
 nestedModules = require '../utils/nestedModules'
 
+
 Base = require('./Base')
 
 subModels = {}
@@ -29,7 +30,9 @@ class Model extends Base.Model
 class Collection extends Base.Collection
     model: (attrs, options) ->
         try
-            modelType = attrs["subModelTypeAttribute"]
+            modelType = attrs["subModelTypeAttribute"] or
+                PsychoCoffee.trialObjectTypeKeys[attrs["type"]]
+
             model = PsychoCoffee[modelType]["Model"]
         catch error
             model = Model

@@ -13,7 +13,7 @@ window.trial = experiment.get("blocks").create({
 });
 
 experiment.get("blocks").at(0).get("trialObjects").create({
-    subModelTypeAttribute: "TextVisualTrialObject",
+    type: "text",
     text: "You will now hear some sentences.\nSome will be completely audible, others will be difficult to make out.\nFor each sentence, identify whether which emotion they most sound like.",
     duration: 10000,
     delay: 0,

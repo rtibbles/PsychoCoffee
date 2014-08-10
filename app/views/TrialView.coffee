@@ -16,7 +16,8 @@ module.exports = class TrialView extends View
             view.preLoadTrialObject(queue)
 
     trialObjectViewType: (model) ->
-        elementType = model.get("subModelTypeAttribute")
+        elementType = model.get("subModelTypeAttribute") or
+            PsychoCoffee.trialObjectTypeKeys[model.get("type")]
 
         # For this to work, any models subclassed from TrialObject must be named
         # ModelName, and the associated View must be named ModelNameView
