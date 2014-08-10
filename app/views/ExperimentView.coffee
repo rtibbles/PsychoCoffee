@@ -19,6 +19,9 @@ module.exports = class ExperimentView extends View
         @datacollection = new ExperimentDataHandler.Collection
         @datacollection.fetch().then =>
             @datamodel = @datacollection.getOrCreateParticipantModel(1)
+            @listenTo @datamodel, "change", @datamodel.save
+            @listenTo @datamodel, "add", @datamodel.save
+            @listenTo @datamodel, "remove", @datamodel.save
             @instantiateSubViews("blocks", "BlockView")
             @preLoadExperiment()
 

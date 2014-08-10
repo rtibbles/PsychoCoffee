@@ -4,6 +4,13 @@ APIBase = require('./APIBase')
 BlockDataHandler = require('./BlockDataHandler')
 
 class Model extends APIBase.Model
+
+    initialize: =>
+        super
+        @listenTo @get("blockdatahandlers"), "change", => @trigger "change"
+        @listenTo @get("blockdatahandlers"), "add", => @trigger "change"
+        @listenTo @get("blockdatahandlers"), "remove", => @trigger "change"
+
     defaults:
         blockdatahandlers: []
 

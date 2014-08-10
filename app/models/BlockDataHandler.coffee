@@ -1,16 +1,23 @@
 'use strict'
 
 Base = require('./Base')
-TrialEventLog = require('./TrialEventLog')
+TrialDataLog = require('./TrialDataLog')
 
 class Model extends Base.Model
+
+    initialize: =>
+        super
+        @listenTo @get("trialdatalogs"), "change", => @trigger "change"
+        @listenTo @get("trialdatalogs"), "add", => @trigger "change"
+        @listenTo @get("trialdatalogs"), "remove", => @trigger "change"
+
     defaults:
-        trialeventlogs: []
+        trialdatalogs: []
 
     relations: [
         type: Backbone.Many
-        key: 'trialeventlogs'
-        collectionType: TrialEventLog.Collection
+        key: 'trialdatalogs'
+        collectionType: TrialDataLog.Collection
     ]
 
 class Collection extends Base.Collection
