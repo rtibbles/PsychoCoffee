@@ -1,15 +1,9 @@
 'use strict'
 
-Base = require('./Base')
+NestedAPIBase = require('./NestedAPIBase')
 TrialEventLog = require('./TrialEventLog')
 
-class Model extends Base.Model
-
-    initialize: =>
-        super
-        @listenTo @get("trialeventlogs"), "change", => @trigger "change"
-        @listenTo @get("trialeventlogs"), "add", => @trigger "change"
-        @listenTo @get("trialeventlogs"), "remove", => @trigger "change"
+class Model extends NestedAPIBase.Model
 
     defaults:
         trialeventlogs: []
@@ -23,7 +17,7 @@ class Model extends Base.Model
     addEvent: (event) ->
         @get("trialeventlogs").create event
 
-class Collection extends Base.Collection
+class Collection extends NestedAPIBase.Collection
     model: Model
 
 module.exports =

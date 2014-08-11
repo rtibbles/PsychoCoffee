@@ -1,11 +1,11 @@
 'use strict'
 
-Base = require('./Base')
+NestedAPIBase = require('./NestedAPIBase')
 
-class Model extends Base.Model
+class Model extends NestedAPIBase.Model
 
 
-class Collection extends Base.Collection
+class Collection extends NestedAPIBase.Collection
     model: Model
 
 module.exports =
