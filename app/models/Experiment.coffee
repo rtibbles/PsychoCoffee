@@ -7,6 +7,11 @@ class Model extends Base.Model
     defaults:
         blocks: []
         title: "Experiment"
+        # This attribute determines the time intervals between
+        # saves to the API for experimental data.
+        # Larger save intervals will give better performance,
+        # But increase risk of data loss.
+        saveInterval: 10000
 
     relations: [
         type: Backbone.Many

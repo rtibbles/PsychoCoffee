@@ -1,15 +1,12 @@
 'use strict'
 
-APIBase = require('./APIBase')
-BlockDataHandler = require('./BlockDataHandler')
+APIBase = require './APIBase'
+BlockDataHandler = require './BlockDataHandler'
 
 class Model extends APIBase.Model
 
-    initialize: =>
-        super
-        @listenTo @get("blockdatahandlers"), "change", => @trigger "change"
-        @listenTo @get("blockdatahandlers"), "add", => @trigger "change"
-        @listenTo @get("blockdatahandlers"), "remove", => @trigger "change"
+    initialize: ->
+        @lastSync = 0
 
     defaults:
         blockdatahandlers: []
@@ -20,14 +17,32 @@ class Model extends APIBase.Model
         collectionType: BlockDataHandler.Collection
     ]
 
+    sync: (method, model, options) =>
+        syncNow = => @syncNow(method,model,options)
+        delayTime = @lastSync + @get("saveInterval") - performance.now()
+        if delayTime <= 0
+            @syncNow()
+        else
+            if not @syncCache
+                @syncCache = setTimeout syncNow, delayTime
+
+    syncNow: (method, model, options) =>
+        @lastSync = performance.now()
+        clearTimeout(@syncCache)
+        delete @syncCache
+        Backbone.sync(method, model, options)
+        
+
 class Collection extends APIBase.Collection
     model: Model
     url: =>
         @urlBase + "experimentdatahandlers"
 
-    getOrCreateParticipantModel: (participant_id) ->
+    getOrCreateParticipantModel: (participant_id, saveInterval) ->
         model = @findWhere participant_id: participant_id
-        model or @create participant_id: participant_id
+        model or @create
+            participant_id: participant_id
+            saveInterval: saveInterval
 
 module.exports =
     Model: Model
