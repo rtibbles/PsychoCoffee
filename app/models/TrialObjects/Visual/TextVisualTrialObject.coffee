@@ -11,6 +11,9 @@ class Model extends VisualTrialObject.Model
             fontStyle: "normal"
             super
 
+    name: ->
+        @get("name") or @get("text")
+
 module.exports =
     Model: Model
     Type: "text"

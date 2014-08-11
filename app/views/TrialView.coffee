@@ -36,25 +36,29 @@ module.exports = class TrialView extends View
             view.attach canvas: @canvas, hidden: @$("#trial-hidden")
             view.registerEvents()
             @listenTo view, "change", @addToClockChangeEvents
-            @listenTo view, "change", @canvasPerformanceTracking
+            # @listenTo view, "change", @canvasPerformanceTracking
         @registerTimeout()
         @clock.startTimer()
-        @datamodel.addEvent @createLog type: "trial_start"
+        @createLog type: "trial_start"
 
     addToClockChangeEvents: (event) ->
         @clock.changeEvents.push event
+        @createLog event
+
 
     createLog: (event) ->
-        _.extend event,
-            experiment_time: @clock.getTime()
-            trial_time: @clock.timerElapsed()
+        @datamodel.addEvent(
+            _.extend event,
+                experiment_time: @clock.getTime()
+                log_time: @clock.timerElapsed()
+                )
 
     createCanvas: =>
         @canvas = new fabric.StaticCanvas "trial-canvas"
         @clock.canvas = @canvas
 
     canvasPerformanceTracking: (options) =>
-        now = options
+        now = options.event_time
         @canvas.on "after:render", =>
             console.log @clock.timerElapsed() - now,
                 "ms between object added/removed and render completion"
@@ -66,8 +70,8 @@ module.exports = class TrialView extends View
 
     endTrial: ->
         @clock.stopTimer()
-        delete @canvas
         delete @clock.canvas
+        delete @canvas
         @stopListening()
         @remove()
         @trigger "trialEnded"

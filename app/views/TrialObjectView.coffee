@@ -13,8 +13,9 @@ module.exports = class TrialObjectView extends View
 
     preLoadTrialObject: (queue) =>
         if @model.get("file")
-            @object_id = @model.id
-            queue.loadFile id: @object_id, src: @model.get("file")
+            @object_id = @model.get("file")
+            if not queue.getItem(@object_id)
+                queue.loadFile src: @object_id
             queue.on "fileload", @postFileLoad
 
     postFileLoad: (data) =>
@@ -25,6 +26,19 @@ module.exports = class TrialObjectView extends View
     render: =>
         console.debug "Rendering #{@constructor.name}"
         @$el.html @file_object
+
+    logEvent: (event_type) =>
+        @trigger "change",
+            event_time: @clock.timerElapsed()
+            object: @model.name()
+            event_type: event_type
+            details: @logDetails()
+
+    logDetails: ->
+        if PsychoCoffee.DEBUG
+            @model.attributes
+        else
+            @model.get("type") or @model.get("subModelTypeAttribute")
 
     activate: ->
         return
