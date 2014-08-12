@@ -1,5 +1,5 @@
 $(function(){
-window.localStorage.clear()
+window.localStorage.clear();
 
 window.experiment = new PsychoCoffee.Experiment.Model({title: "Test Experiment"});
 
@@ -30,14 +30,28 @@ experiment.get("blocks").at(0).get("trialObjects").create({
     parameterizedAttributes: {
         delay: "stuff",
         text: "others"
-    }
+    },
+    triggers: [
+        {
+            eventName: "keypress",
+            objectName: "keyboard",
+            callback: "deactivate"
+        }
+    ]
 });
 
 window.block = experiment.get("blocks").at(0).get("trialObjects").create({
     subModelTypeAttribute: "ImageVisualTrialObject",
     duration: 3000,
     delay: 3000,
-    file: "/images/test.png"
+    file: "/images/test.png",
+    triggers: [
+        {
+            eventName: "keypress",
+            objectName: "keyboard",
+            callback: "deactivate"
+        }
+    ]
 });
 
 // experiment.get("blocks").at(0).get("trialObjects").create({
@@ -50,7 +64,8 @@ window.block = experiment.get("blocks").at(0).get("trialObjects").create({
 experiment.get("blocks").at(0).get("trialObjects").create({
     subModelTypeAttribute: "KeyboardTrialObject",
     duration: 3000,
-    delay: 3000
+    delay: 3000,
+    name: "keyboard"
 });
 
 experimentView = new PsychoCoffee.ExperimentView({model: experiment});

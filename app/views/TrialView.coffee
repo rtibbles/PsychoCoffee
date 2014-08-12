@@ -10,6 +10,7 @@ module.exports = class TrialView extends View
         super
         @instantiateSubViews("trialObjects",
             "TrialObjectView", @trialObjectViewType)
+        @subViewList = _.values(@subViews)
 
     preLoadTrial: (queue) =>
         for key, view of @subViews
@@ -32,10 +33,10 @@ module.exports = class TrialView extends View
 
     startTrial: ->
         @createCanvas()
-        for key, view of @subViews
+        for view in @subViewList
             view.attach canvas: @canvas, hidden: @$("#trial-hidden")
             view.datamodel = @datamodel
-            view.registerEvents()
+            view.registerEvents(@subViewList)
         @registerTimeout()
         @clock.startTimer()
         @logEvent "trial_start"

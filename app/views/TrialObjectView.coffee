@@ -52,8 +52,18 @@ module.exports = class TrialObjectView extends View
     deactivate: ->
         return
 
-    registerEvents: =>
+    modelSet: (attr, value) ->
+        @model.set attr, value
+
+    registerEvents: (siblingViews) =>
         @clock.delayedTrigger @model.get("delay"), @, @activate
         @clock.delayedTrigger(
             @model.get("delay") + @model.get("duration"),
             @, @deactivate)
+        for trigger in (@model.get("triggers") or [])
+            view = _.find(siblingViews, (sibling) ->
+                sibling.name == trigger.objectName
+                )
+            @listenTo view, trigger.eventName, =>
+                console.log "Triggering", trigger.eventName
+                @[trigger.callback](trigger.arguments or {})

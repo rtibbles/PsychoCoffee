@@ -16,6 +16,16 @@ class Model extends Base.Model
         delay: 0
         duration: 5000
         parameterizedAttributes: {}
+        ###
+        Triggers are objects of the form -
+        { eventName: "change", objectName: "firstImage",
+        callback: "firstImageMethod", arguments: {size: 17}}
+        The trigger will be registered to listen to this event
+        on the other trial object, and will invoke this callback
+        with these arguments. An optional argument of "once" can be
+        set to true to use listenToOnce instead of listenTo.
+        ###
+        triggers: []
 
     parameterizedTrial: (parameters) ->
         attributes = _.clone @attributes
