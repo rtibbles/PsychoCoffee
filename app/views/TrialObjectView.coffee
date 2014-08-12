@@ -27,12 +27,18 @@ module.exports = class TrialObjectView extends View
         console.debug "Rendering #{@constructor.name}"
         @$el.html @file_object
 
-    logEvent: (event_type) =>
-        @trigger "change",
-            event_time: @clock.timerElapsed()
-            object: @model.name()
-            event_type: event_type
-            details: @logDetails()
+    logEvent: (event_type, options={}) =>
+        @datamodel.addEvent(
+            _.extend options,
+                experiment_time: @clock.getTime()
+                event_time: @clock.timerElapsed()
+                object: @model.name()
+                event_type: event_type
+                details: @logDetails()
+                )
+
+    addToClockChangeEvents: (event) ->
+        @clock.changeEvents.push event
 
     logDetails: ->
         if PsychoCoffee.DEBUG

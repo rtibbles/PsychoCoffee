@@ -34,24 +34,11 @@ module.exports = class TrialView extends View
         @createCanvas()
         for key, view of @subViews
             view.attach canvas: @canvas, hidden: @$("#trial-hidden")
+            view.datamodel = @datamodel
             view.registerEvents()
-            @listenTo view, "change", @addToClockChangeEvents
-            # @listenTo view, "change", @canvasPerformanceTracking
         @registerTimeout()
         @clock.startTimer()
-        @createLog type: "trial_start"
-
-    addToClockChangeEvents: (event) ->
-        @clock.changeEvents.push event
-        @createLog event
-
-
-    createLog: (event) ->
-        @datamodel.addEvent(
-            _.extend event,
-                experiment_time: @clock.getTime()
-                log_time: @clock.timerElapsed()
-                )
+        @logEvent "trial_start"
 
     createCanvas: =>
         @canvas = new fabric.StaticCanvas "trial-canvas"
@@ -64,11 +51,22 @@ module.exports = class TrialView extends View
                 "ms between object added/removed and render completion"
             @canvas.off("after:render")
 
+    logEvent: (event_type, options={}) =>
+        @datamodel.logEvent(
+            event_type
+            @clock
+            _.extend options,
+                object: @model.name()
+                )
+
     registerTimeout: =>
         if @model.get "timeout"
             @clock.delayedTrigger @model.get("timeout"), @, @endTrial
 
     endTrial: ->
+        for key, view of @subViews
+            view.deactivate()
+            view.remove()
         @clock.stopTimer()
         delete @clock.canvas
         delete @canvas
