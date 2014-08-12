@@ -2,6 +2,7 @@
 
 APIBase = require './APIBase'
 BlockDataHandler = require './BlockDataHandler'
+Diff = require 'utils/diff'
 
 class Model extends APIBase.Model
 
@@ -18,6 +19,7 @@ class Model extends APIBase.Model
     ]
 
     sync: (method, model, options) =>
+        # console.log @changedAttributes()
         syncNow = => @syncNow(method,model,options)
         delayTime = @lastSync + @get("saveInterval") - performance.now()
         if delayTime <= 0
@@ -27,10 +29,23 @@ class Model extends APIBase.Model
                 @syncCache = setTimeout syncNow, delayTime
 
     syncNow: (method, model, options) =>
+        if not _.isEmpty(@serverState)
+            attrs = Diff.Diff @serverState, model.toJSON()
+            console.log attrs
+            options.method = 'patch'
+            options.success = =>
+                @serverState = @toJSON()
+        else
+            options.success = (data) =>
+                @set(data)
+                @serverState = @toJSON()
         @lastSync = performance.now()
         clearTimeout(@syncCache)
         delete @syncCache
-        Backbone.sync(method, model, options)
+        try
+            Backbone.sync(method, model, options)
+        catch e
+            console.debug e, method, model, options
         
 
 class Collection extends APIBase.Collection

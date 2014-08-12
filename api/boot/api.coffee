@@ -30,4 +30,29 @@ module.exports = mountRestApi = (server) ->
             # registeredModels[modelName].attachTo db
             server.model registeredModels[modelName]
 
+    registeredModels["experimentdatahandler"].patch = (id, diff, cb) ->
+        console.log id
+        console.log diff
+        cb(null, true)
+
+    registeredModels["experimentdatahandler"].remoteMethod(
+        "patch"
+        accepts: [
+            arg: 'id'
+            type: 'any'
+            description: 'Model id'
+            required: true
+            http:
+                source: 'path'
+        ,
+            arg: 'diff'
+            type: 'object'
+            decription: "Model diff"
+            http:
+                source: 'body'
+            ]
+        returns: {arg: 'patched', type: 'boolean'}
+        http: {verb: 'patch', path: '/:id'}
+        )
+
     server.use restApiRoot, server.loopback.rest()
