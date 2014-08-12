@@ -1,4 +1,6 @@
 $(function(){
+window.localStorage.clear()
+
 window.experiment = new PsychoCoffee.Experiment.Model({title: "Test Experiment"});
 
 window.trial = experiment.get("blocks").create({
@@ -38,11 +40,17 @@ window.block = experiment.get("blocks").at(0).get("trialObjects").create({
     file: "/images/test.png"
 });
 
+// experiment.get("blocks").at(0).get("trialObjects").create({
+//     subModelTypeAttribute: "AudioTrialObject",
+//     duration: 8000,
+//     delay: 0,
+//     file: "/sounds/test.mp3"
+// });
+
 experiment.get("blocks").at(0).get("trialObjects").create({
-    subModelTypeAttribute: "AudioTrialObject",
-    duration: 8000,
-    delay: 0,
-    file: "/sounds/test.mp3"
+    subModelTypeAttribute: "KeyboardTrialObject",
+    duration: 3000,
+    delay: 3000
 });
 
 experimentView = new PsychoCoffee.ExperimentView({model: experiment});
