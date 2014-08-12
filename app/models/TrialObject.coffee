@@ -17,9 +17,6 @@ class Model extends Base.Model
         duration: 5000
         parameterizedAttributes: {}
 
-    name: ->
-        @get("name") or @id
-
     parameterizedTrial: (parameters) ->
         attributes = _.clone @attributes
         for attribute, parameterName of @get "parameterizedAttributes"

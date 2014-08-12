@@ -1,7 +1,8 @@
 'use strict'
 
 class Model extends Backbone.AssociatedModel
-
+    name: ->
+        @get("name") or @id
 
 class Collection extends Backbone.Collection
     url: "none"
