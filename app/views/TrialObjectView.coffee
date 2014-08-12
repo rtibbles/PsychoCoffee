@@ -7,6 +7,8 @@ module.exports = class TrialObjectView extends View
     initialize: ->
         super
         if not @model.get "file" then @render()
+        @active = false
+        @name = @model.name()
 
     attach: (endpoints) ->
         return
@@ -28,12 +30,11 @@ module.exports = class TrialObjectView extends View
         @$el.html @file_object
 
     logEvent: (event_type, options={}) =>
-        @datamodel.addEvent(
+        @datamodel.logEvent(
+            event_type
+            @clock
             _.extend options,
-                experiment_time: @clock.getTime()
-                event_time: @clock.timerElapsed()
                 object: @model.name()
-                event_type: event_type
                 details: @logDetails()
                 )
 
@@ -47,10 +48,16 @@ module.exports = class TrialObjectView extends View
             @model.get("type") or @model.get("subModelTypeAttribute")
 
     activate: ->
-        return
+        if not @active
+            @trigger "activated"
+            @logEvent("activated")
+            @active = true
 
     deactivate: ->
-        return
+        if @active
+            @trigger "deactivated"
+            @logEvent("deactivated")
+            @active = false
 
     modelSet: (attr, value) ->
         @model.set attr, value

@@ -13,11 +13,11 @@ module.exports = class AudioTrialObjectView extends TrialObjectView
 
     activate: ->
         @object.play()
-        @logEvent("activated")
+        super()
 
     deactivate: ->
         @object.stop()
-        @logEvent("deactivated")
+        super()
 
     render: =>
         @object = createjs.Sound.createInstance @object_id

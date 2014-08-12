@@ -12,9 +12,9 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
     activate: ->
         @object.setVisible true
         @addToClockChangeEvents("activated")
-        @logEvent("activated")
+        super()
 
     deactivate: ->
         @object.setVisible false
         @addToClockChangeEvents("deactivated")
-        @logEvent("deactivated")
+        super()

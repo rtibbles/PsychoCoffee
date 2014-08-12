@@ -14,11 +14,11 @@ module.exports = class KeyboardTrialObjectView extends TrialObjectView
 
     activate: =>
         @object.keydown @keyPressed
-        @logEvent("activated")
+        super()
 
     deactivate: ->
         @object.unbind "keydown", @keyPressed
-        @logEvent("deactivated")
+        super()
 
     keyPressed: (event) =>
         if _.has(@keyCodeCache, event.keyCode)
