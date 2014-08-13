@@ -1,5 +1,7 @@
-# _ = require 'underscore'
-
+if typeof(window) == 'undefined'
+    _ = require "underscore"
+else
+    _ = window._
 
 diff = (master, update) ->
     if not master then return update
@@ -30,12 +32,19 @@ merge = (master, update) ->
                 if _.isArray(update[name])
                     for i in [0...update[name].length]
                         update_node = update[name][i]
-                        master_node = _.find(master[name], (item) ->
-                            item.id==update_node.id)
-                        master_node = merge(master_node, update_node)
+                        if _.isObject(update_node)
+                            master_node = _.find(master[name], (item) ->
+                                item.id==update_node.id)
+                            if master_node
+                                master_node = merge(master_node, update_node)
+                            else
+                                master[name].push update_node
+                        else
+                            master[name].push update_node
                 else
                     master[name] = merge(master[name], update[name])
             else
+                console.log name, master[name], update[name]
                 master[name] = update[name]
         else
             master[name] = update[name]
