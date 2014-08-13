@@ -1,3 +1,6 @@
+# _ = require 'underscore'
+
+
 diff = (master, update) ->
     if not master then return update
     ret = {}
@@ -7,7 +10,7 @@ diff = (master, update) ->
                 if _.isArray(update[name])
                     ret[name] = []
                     for i in [0...update[name].length]
-                        array_diff = diff(master[name][i]?, update[name][i])
+                        array_diff = diff(master[name][i], update[name][i])
                         if not _.isEmpty(array_diff)
                             ret[name].push(array_diff)
                     if ret[name].length == 0 then delete ret[name]
@@ -19,5 +22,26 @@ diff = (master, update) ->
                 ret[name] = update[name]
     return ret
 
+merge = (master, update) ->
+    if not master then return update
+    for name, value of update
+        if name of master
+            if _.isObject(update[name])
+                if _.isArray(update[name])
+                    for i in [0...update[name].length]
+                        update_node = update[name][i]
+                        master_node = _.find(master[name], (item) ->
+                            item.id==update_node.id)
+                        master_node = merge(master_node, update_node)
+                else
+                    master[name] = merge(master[name], update[name])
+            else
+                master[name] = update[name]
+        else
+            master[name] = update[name]
+    return master
+
+
 module.exports =
     Diff: diff
+    Merge: merge
