@@ -19,7 +19,6 @@ class Model extends APIBase.Model
     ]
 
     sync: (method, model, options) =>
-        # console.log @changedAttributes()
         syncNow = => @syncNow(method,model,options)
         delayTime = @lastSync + @get("saveInterval") - performance.now()
         if delayTime <= 0
@@ -30,8 +29,7 @@ class Model extends APIBase.Model
 
     syncNow: (method, model, options) =>
         if not _.isEmpty(@serverState)
-            attrs = Diff.Diff @serverState, model.toJSON()
-            console.log attrs
+            options.attrs = Diff.Diff(@serverState, model.toJSON())
             options.method = 'patch'
             options.success = =>
                 @serverState = @toJSON()
