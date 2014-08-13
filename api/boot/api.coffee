@@ -1,7 +1,7 @@
 fs = require 'fs'
 loopback = require 'loopback'
 DataSource = require('loopback-datasource-juggler').DataSource
-
+DiffTools = require '../../app/utils/diff'
 
 module.exports = mountRestApi = (server) ->
     restApiRoot = server.get 'restApiRoot'
@@ -17,25 +17,22 @@ module.exports = mountRestApi = (server) ->
     #     "database": "apitest",
     #     "debug": true
 
-    Model = loopback.Model
-
-    modelsToRegister = ["experimentdatahandler"]
-
-    registeredModels = {}
-
     # Register models to data source
-    modelsToRegister.forEach (modelName) ->
-        if modelName
-            registeredModels[modelName] = ds.createModel modelName
-            # registeredModels[modelName].attachTo db
-            server.model registeredModels[modelName]
+    experimentdatahandler = loopback.createModel "experimentdatahandler"
+    experimentdatahandler.attachTo ds
+    server.model experimentdatahandler
 
-    registeredModels["experimentdatahandler"].patch = (id, diff, cb) ->
-        console.log id
-        console.log diff
-        cb(null, true)
+    experimentdatahandler.patch = (id, diff, callback) ->
+        experimentdatahandler.findById id, (err, model) ->
+            DiffTools.Merge(model, diff)
+            console.log model.blockdatahandlers[0].trialdatalogs[0].trialeventlogs
+            model.save (err, modeldata) ->
+                if err
+                    callback(null, false)
+                else
+                    callback(null, true)
 
-    registeredModels["experimentdatahandler"].remoteMethod(
+    experimentdatahandler.remoteMethod(
         "patch"
         accepts: [
             arg: 'id'

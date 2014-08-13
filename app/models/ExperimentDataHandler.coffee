@@ -31,8 +31,9 @@ class Model extends APIBase.Model
         if not _.isEmpty(@serverState)
             options.attrs = Diff.Diff(@serverState, model.toJSON())
             options.method = 'patch'
-            options.success = =>
-                @serverState = @toJSON()
+            options.success = (saved) =>
+                if saved
+                    @serverState = @toJSON()
         else
             options.success = (data) =>
                 @set(data)
