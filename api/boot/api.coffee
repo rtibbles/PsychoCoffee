@@ -2,24 +2,18 @@ fs = require 'fs'
 loopback = require 'loopback'
 DataSource = require('loopback-datasource-juggler').DataSource
 DiffTools = require '../../app/utils/diff'
+database = require '../datasource'
 
 module.exports = mountRestApi = (server) ->
     restApiRoot = server.get 'restApiRoot'
 
-    ds = loopback.createDataSource('memory')
+    # ds = loopback.createDataSource('memory')
 
-    # db = new DataSource
-    #     "connector": "mongodb",
-    #     "host": "localhost",
-    #     "port": 27017,
-    #     "username": "user",
-    #     "password": "user",
-    #     "database": "apitest",
-    #     "debug": true
+    db = new DataSource database.config
 
     # Register models to data source
     experimentdatahandler = loopback.createModel "experimentdatahandler"
-    experimentdatahandler.attachTo ds
+    experimentdatahandler.attachTo db
     server.model experimentdatahandler
 
     experimentdatahandler.patch = (id, diff, callback) ->

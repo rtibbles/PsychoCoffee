@@ -3,6 +3,8 @@ if typeof(window) == 'undefined'
 else
     _ = window._
 
+id_attr = "id"
+
 diff = (master, update) ->
     if not master then return update
     ret = {}
@@ -20,7 +22,8 @@ diff = (master, update) ->
                     diff = diff(master[name], update[name])
                     if not _.isEmpty(diff)
                         ret[name] = diff
-            else if not _.isEqual(master[name], update[name])
+            else if not _.isEqual(master[name], update[name]) or
+                    name == id_attr
                 ret[name] = update[name]
     return ret
 

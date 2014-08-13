@@ -33,3 +33,5 @@ bower_components/
 design/
 
 testing_output/
+
+api/datasource.coffee
