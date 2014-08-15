@@ -6,6 +6,8 @@ Experiment = require '../models/Experiment'
 ExperimentDataHandler = require '../models/ExperimentDataHandler'
 Template = require 'templates/experiment'
 ProgressBarView = require './ProgressBarView'
+stringHash = require 'utils/stringHash'
+fingerprint = require 'utils/fingerprint'
 
 module.exports = class ExperimentView extends View
     template: Template
