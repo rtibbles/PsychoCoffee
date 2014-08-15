@@ -19,6 +19,9 @@ class Model extends Base.Model
         collectionType: Block.Collection
     ]
 
+    createBlock: (options) ->
+        @.get("blocks").create(options)
+
 class Collection extends Base.Collection
     model: Model
 

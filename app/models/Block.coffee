@@ -46,6 +46,9 @@ class Model extends Base.Model
         if clone then attributes["trialObjects"] = @get "trialObjects"
         return attributes
 
+    createTrialObject: (options) ->
+        @.get("trialObjects").create(options)
+
 class Collection extends Base.Collection
     model: Model
 

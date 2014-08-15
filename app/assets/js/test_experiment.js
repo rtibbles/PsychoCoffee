@@ -1,9 +1,9 @@
 $(function(){
 window.localStorage.clear();
 
-window.experiment = new PsychoCoffee.Experiment.Model({title: "Test Experiment"});
+experiment = new PsychoCoffee.Experiment.Model({title: "Test Experiment"});
 
-window.trial = experiment.get("blocks").create({
+block1 = experiment.createBlock({
     title: "Instructions",
     parameterSet: {
         parameters: {
@@ -14,7 +14,7 @@ window.trial = experiment.get("blocks").create({
     timeout: 5000
 });
 
-experiment.get("blocks").at(0).get("trialObjects").create({
+block1.createTrialObject({
     type: "text",
     text: "You will now hear some sentences.\nSome will be completely audible, others will be difficult to make out.\nFor each sentence, identify whether which emotion they most sound like.",
     duration: 10000,
@@ -40,7 +40,7 @@ experiment.get("blocks").at(0).get("trialObjects").create({
     ]
 });
 
-window.block = experiment.get("blocks").at(0).get("trialObjects").create({
+block1.createTrialObject({
     subModelTypeAttribute: "ImageVisualTrialObject",
     duration: 3000,
     delay: 3000,
@@ -54,14 +54,14 @@ window.block = experiment.get("blocks").at(0).get("trialObjects").create({
     ]
 });
 
-// experiment.get("blocks").at(0).get("trialObjects").create({
+// block1.createTrialObject({
 //     subModelTypeAttribute: "AudioTrialObject",
 //     duration: 8000,
 //     delay: 0,
 //     file: "/sounds/test.mp3"
 // });
 
-experiment.get("blocks").at(0).get("trialObjects").create({
+block1.createTrialObject({
     subModelTypeAttribute: "KeyboardTrialObject",
     duration: 3000,
     delay: 3000,
@@ -70,5 +70,4 @@ experiment.get("blocks").at(0).get("trialObjects").create({
 
 experimentView = new PsychoCoffee.ExperimentView({model: experiment});
 
-// setTimeout(experimentView.clock.startTimer,5000);
 });
