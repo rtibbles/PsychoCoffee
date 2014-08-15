@@ -8,6 +8,7 @@ class Model extends APIBase.Model
 
     initialize: ->
         @lastSync = 0
+        @serverState = @toJSON()
 
     defaults:
         blockdatahandlers: []
@@ -28,7 +29,7 @@ class Model extends APIBase.Model
                 @syncCache = setTimeout syncNow, delayTime
 
     syncNow: (method, model, options) =>
-        if not _.isEmpty(@serverState)
+        if not @isNew()
             options.attrs = Diff.Diff(@serverState, model.toJSON())
             options.method = 'patch'
             options.success = (saved) =>
