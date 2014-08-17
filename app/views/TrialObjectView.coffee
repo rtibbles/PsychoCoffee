@@ -52,6 +52,10 @@ module.exports = class TrialObjectView extends View
             @trigger "activated"
             @logEvent("activated")
             @active = true
+            if @model.get("duration")
+                @clock.delayedTrigger(
+                    @model.get("duration"),
+                    @, @deactivate)
 
     deactivate: ->
         if @active
@@ -63,10 +67,8 @@ module.exports = class TrialObjectView extends View
         @model.set attr, value
 
     registerEvents: (siblingViews) =>
-        @clock.delayedTrigger @model.get("delay"), @, @activate
-        @clock.delayedTrigger(
-            @model.get("delay") + @model.get("duration"),
-            @, @deactivate)
+        if @model.get("startWithTrial")
+            @clock.delayedTrigger @model.get("delay"), @, @activate
         for trigger in (@model.get("triggers") or [])
             view = _.find(siblingViews, (sibling) ->
                 sibling.name == trigger.objectName

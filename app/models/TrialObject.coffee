@@ -15,6 +15,7 @@ class Model extends Base.Model
     defaults: ->
         delay: 0
         duration: 5000
+        startWithTrial: true
         parameterizedAttributes: {}
         ###
         Triggers are objects of the form -
