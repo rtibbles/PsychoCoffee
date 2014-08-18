@@ -7,15 +7,28 @@ block1 = experiment.createBlock({
     title: "Instructions",
     parameterSet:{
         trialParameters: [
-        {
-            parameterName: "stuff",
-            parameters: [1,2,3,4,5,6,7,8,9,10]
-        },
-        {
-            parameterName: "others",
-            parameters: ["Sometimes","I", "like", "to", "play", "games", "with", "my", "work", "Just sometimes."]
-        }
-    ]},
+            {
+                parameterName: "stuff",
+                parameters: [1,2,3,4,5,6,7,8,9,10],
+                parameterizedAttributes: {
+                    parameters: "blockDelays"
+                }
+            },
+            {
+                parameterName: "others",
+                parameters: ["Sometimes","I", "like", "to", "play", "games", "with", "my", "work", "Just sometimes."]
+            }
+        ],
+
+        blockParameters: [
+            {
+                parameterName: "blockDelays",
+                parameters: [[1,2,3,4,5,6,7,8,9,10], [100,200,300,400,500,600,700,800,900,1000]],
+                randomized: true
+            }
+        ]
+
+    },
     timeout: 10000
 });
 

@@ -30,7 +30,7 @@ class Model extends Base.Model
         for model in @get("blockParameters").models
             # Block Parameters are intended to be constant across a block
             blockParameterSet[model.get("parameterName")] =
-                model.returnParameterList(1, experimentParameterSet)
+                model.returnParameterList(1, experimentParameterSet)[0]
 
         # Collect trial parameters
         parameterSet = {}
@@ -59,7 +59,7 @@ class Model extends Base.Model
         for key, value of experimentParameterSet
             parameterList = []
             for i in [0...min_length]
-                parameterList.push.apply parameterList, value
+                parameterList.push value
             parameterSet[key] = parameterList
             parameterNameList.push key
 
@@ -68,7 +68,7 @@ class Model extends Base.Model
         for key, value of blockParameterSet
             parameterList = []
             for i in [0...min_length]
-                parameterList.push.apply parameterList, value
+                parameterList.push value
             parameterSet[key] = parameterList
             parameterNameList.push key
 

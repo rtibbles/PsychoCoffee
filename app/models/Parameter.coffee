@@ -36,7 +36,9 @@ class Model extends Base.Model
     returnParameterList: (trials_wanted=null, injectedParameters={}) ->
         for attribute, name of @get "parameterizedAttributes"
             if name of injectedParameters
+                console.log "Injecting!"
                 @set attribute, injectedParameters[name]
+                console.log @get attribute
         switch @get "type"
             when "fixedList" then return @fixedList(trials_wanted)
             when "generatedList" then return @generatedList(trials_wanted)
