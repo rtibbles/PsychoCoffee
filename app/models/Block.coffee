@@ -3,7 +3,7 @@
 Base = require './Base'
 Trial = require './Trial'
 TrialObject = require './TrialObject'
-ParameterSet = require './ParameterSet'
+BlockParameterSet = require './BlockParameterSet'
 
 class Model extends Base.Model
     defaults:
@@ -33,7 +33,7 @@ class Model extends Base.Model
     ,
         type: Backbone.One
         key: 'parameterSet'
-        relatedModel: ParameterSet.Model
+        relatedModel: BlockParameterSet.Model
     ]
 
     returnParameters: ->
@@ -47,7 +47,7 @@ class Model extends Base.Model
         return attributes
 
     createTrialObject: (options) ->
-        @.get("trialObjects").create(options)
+        @get("trialObjects").create(options)
 
 class Collection extends Base.Collection
     model: Model

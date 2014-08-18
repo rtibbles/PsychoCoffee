@@ -31,7 +31,12 @@ class Model extends Base.Model
     parameterizedTrial: (parameters) ->
         attributes = _.clone @attributes
         for attribute, parameterName of @get "parameterizedAttributes"
-            attributes[attribute] = parameters[parameterName]
+            if parameterName of parameters
+                # This allows parameters to be undefined without breaking
+                # the experiment - can be used to dynamically parameterize
+                # trials, e.g. by having them parameterized in some
+                # conditions but not others
+                attributes[attribute] = parameters[parameterName]
         return attributes
 
     setParameter: (attribute, parameter) ->

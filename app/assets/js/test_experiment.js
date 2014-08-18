@@ -5,13 +5,18 @@ experiment = new PsychoCoffee.Experiment.Model({title: "Test Experiment"});
 
 block1 = experiment.createBlock({
     title: "Instructions",
-    parameterSet: {
-        parameters: {
-            stuff: [1,2,3,4,5,6,7,8,9,10],
-            others: ["Sometimes","I", "like", "to", "play", "games", "with", "my", "work", "Just sometimes."]
+    parameterSet:{
+        trialParameters: [
+        {
+            parameterName: "stuff",
+            parameters: [1,2,3,4,5,6,7,8,9,10]
+        },
+        {
+            parameterName: "others",
+            parameters: ["Sometimes","I", "like", "to", "play", "games", "with", "my", "work", "Just sometimes."]
         }
-    },
-    timeout: 5000
+    ]},
+    timeout: 10000
 });
 
 block1.createTrialObject({
