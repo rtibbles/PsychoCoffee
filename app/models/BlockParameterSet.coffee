@@ -29,8 +29,11 @@ class Model extends Base.Model
         # Collect block parameters to inject into trialParameters at generation
         for model in @get("blockParameters").models
             # Block Parameters are intended to be constant across a block
+            # Block Parameters are always randomized.
             blockParameterSet[model.get("parameterName")] =
-                model.returnParameterList(1, experimentParameterSet)[0]
+                Random.seeded_shuffle(
+                    model.returnParameterList(null, experimentParameterSet)
+                    "TODO - insert a reference to participant ID here!")[0]
 
         # Collect trial parameters
         parameterSet = {}
