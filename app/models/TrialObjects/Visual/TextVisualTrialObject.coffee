@@ -22,6 +22,10 @@ class Model extends VisualTrialObject.Model
                     name: "fontStyle"
                     default: "normal"
                     type: "string"
+                ,
+                    name: "backgroundColor"
+                    default: "#FFFFFF"
+                    type: "hex-colour"
             ])
 
     name: ->
