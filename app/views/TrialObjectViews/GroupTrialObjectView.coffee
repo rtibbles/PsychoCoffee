@@ -8,26 +8,28 @@ module.exports = class GroupTrialObjectView extends TrialObjectView
         super
         @instantiateSubViews("trialObjects",
             "TrialObjectView", @trialObjectViewType)
-        @subViewList = _.values(@subViews)
+        @registerSubViewSubViews()
 
     preLoadTrialObject: (queue) =>
-        for view in @subViews
+        for view in @subViewList
             view.preLoadTrialObject(queue)
 
     attach: (endpoints) ->
-        for view in @subViews
+        for view in @subViewList
             view.attach(endpoints)
 
     activate: ->
-        for view in @subViews
+        for view in @subViewList
             view.activate()
         super()
 
     deactivate: ->
-        for view in @subViews
+        for view in @subViewList
             view.deactivate()
         super()
 
+    render: ->
+        return
 
     # Repeats code from TrialView - not DRY at all!
     trialObjectViewType: (model) ->

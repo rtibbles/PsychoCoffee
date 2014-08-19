@@ -10,7 +10,7 @@ module.exports = class TrialView extends View
         super
         @instantiateSubViews("trialObjects",
             "TrialObjectView", @trialObjectViewType)
-        @subViewList = _.values(@subViews)
+        @registerSubViewSubViews()
 
     preLoadTrial: (queue) =>
         for key, view of @subViews

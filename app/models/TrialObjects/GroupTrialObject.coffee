@@ -19,6 +19,12 @@ are assumed to be parameters for the children.
 TrialObject = require("../TrialObject")
 
 class Model extends TrialObject.Model
+
+
+    defaults: ->
+        _.extend
+            trialObjects: []
+            super
     
     relations: [
         type: Backbone.Many
@@ -38,7 +44,10 @@ class Model extends TrialObject.Model
                     localParameters[key] = value
             trialObjects.push model.parameterizedTrial(localParameters)
         attributes.trialObjects = trialObjects
+        return attributes
 
+    createTrialObject: (options) ->
+        @get("trialObjects").create(options)
 
 module.exports =
     Model: Model
