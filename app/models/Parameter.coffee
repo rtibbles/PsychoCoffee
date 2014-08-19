@@ -6,7 +6,7 @@ Random = require 'utils/random'
 class Model extends Base.Model
 
     ###
-    Parameter attributes can be of three basic types:
+    Parameter attributes can be of three basic returnTypes:
     
     fixedList       equivalent to a CSV or spreadsheet of parameters.
                     Each attribute defined in this way has an equal
@@ -27,7 +27,7 @@ class Model extends Base.Model
     ###
 
     defaults:
-        type: "fixedList"
+        returnType: "fixedList"
         randomized: false
         parameterName: "Untitled Parameter"
         parameters: []
@@ -39,11 +39,11 @@ class Model extends Base.Model
                 console.log "Injecting!"
                 @set attribute, injectedParameters[name]
                 console.log @get attribute
-        switch @get "type"
+        switch @get "returnType"
             when "fixedList" then return @fixedList(trials_wanted)
             when "generatedList" then return @generatedList(trials_wanted)
             when "generatorFn" then return @generatorFn(trials_wanted)
-            else console.log "ParameterSet type undefined!"
+            else console.log "ParameterSet returnType undefined!"
 
     fixedList: (trials_wanted) ->
         parameterList = @get "parameters"

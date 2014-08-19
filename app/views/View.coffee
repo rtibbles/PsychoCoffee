@@ -28,6 +28,12 @@ module.exports = class View extends Backbone.View
             @subViews[model.id] = new PsychoCoffee[viewType]
                 model: model
                 clock: @clock
+        @registerSubViewSubViews()
+
+    registerSubViewSubViews: ->
+        for subView in @subViews
+            for key, value in subView.subViews
+                @subViews[key] = value
 
     afterRender: ->
         return
