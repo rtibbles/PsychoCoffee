@@ -43,7 +43,9 @@ module.exports = class TrialView extends View
         @logEvent "trial_start"
 
     createCanvas: =>
-        @canvas = new fabric.StaticCanvas "trial-canvas"
+        @canvas = new fabric.Canvas "trial-canvas"
+        @canvas.selection = false
+        @canvas.hoverCursor = 'default'
         @clock.canvas = @canvas
 
     canvasPerformanceTracking: (options) =>

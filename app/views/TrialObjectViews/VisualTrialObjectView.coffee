@@ -10,11 +10,17 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
         @canvas.add @object
 
     activate: ->
+        @object.hasControls = false
+        @object.hasBorders = false
+        @object.lockMovementX = @object.lockMovementY = true
         @object.setVisible true
         @addToClockChangeEvents("activated")
+        @object.on "mousedown", =>
+            @trigger "click"
         super()
 
     deactivate: ->
         @object.setVisible false
         @addToClockChangeEvents("deactivated")
+        @object.off "mousedown"
         super()
