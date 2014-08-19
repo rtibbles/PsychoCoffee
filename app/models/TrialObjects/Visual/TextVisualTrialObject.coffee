@@ -5,11 +5,24 @@ VisualTrialObject = require("../VisualTrialObject")
 class Model extends VisualTrialObject.Model
     defaults: ->
         _.extend
-            text: "hello"
-            fontSize: 24
-            fontFamily: "arial"
-            fontStyle: "normal"
+            text: ""
             super
+
+    objectOptions: ->
+        super().concat(
+            [
+                    name: "fontSize"
+                    default: 24
+                    type: "number"
+                ,
+                    name: "fontFamily"
+                    default: "arial"
+                    type: "string"
+                ,
+                    name: "fontStyle"
+                    default: "normal"
+                    type: "string"
+            ])
 
     name: ->
         @get("name") or @get("text")

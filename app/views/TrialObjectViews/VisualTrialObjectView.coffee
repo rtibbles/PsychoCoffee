@@ -15,8 +15,9 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
         @object.lockMovementX = @object.lockMovementY = true
         @object.setVisible true
         @addToClockChangeEvents("activated")
-        @object.on "mousedown", =>
+        @object.on "mousedown", (event) =>
             @trigger "click"
+            @logEvent "click"
         super()
 
     deactivate: ->
