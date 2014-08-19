@@ -73,6 +73,6 @@ module.exports = class TrialObjectView extends View
             view = _.find(siblingViews, (sibling) ->
                 sibling.name == trigger.objectName
                 )
-            @listenTo view, trigger.eventName, =>
+            @listenTo view, trigger.eventName, (options) =>
                 console.log "Triggering", trigger.eventName
-                @[trigger.callback](trigger.arguments or {})
+                @[trigger.callback](_.extend(options, trigger.arguments or {}))

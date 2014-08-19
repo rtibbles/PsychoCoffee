@@ -22,8 +22,9 @@ module.exports = class KeyboardTrialObjectView extends TrialObjectView
 
     keyPressed: (event) =>
         if _.has(@keyCodeCache, event.keyCode)
-            @trigger "keypress"
-            @logEvent "keypress", key: @keyCodeCache[event.keyCode]
+            key = @keyCodeCache[event.keyCode]
+            @trigger "keypress", key: key, shiftKey: event.shiftKey
+            @logEvent "keypress", key: key
 
     render: ->
         return

@@ -2,7 +2,11 @@ keys = {
     "backspace" : 8
     "tab" : 9
     "enter" : 13
+    "shift": 16
+    "ctrl": 17
+    "alt": 18
     "escape" : 27
+    "space": 32
     "page_up" : 33
     "page_down" : 34
     "end" : 35
@@ -86,5 +90,59 @@ keys = {
     "'" : 222
 }
 
+delete_text = (text) ->
+    text.slice 0, -1
+
+dummy = (text) ->
+    text
+
+keysToText = {
+    "backspace": delete_text
+    "tab" : "\t"
+    "enter" : "\n"
+    "delete" : delete_text
+    "space": " "
+    "shift": dummy
+    "ctrl": dummy
+    "alt": dummy
+    "escape" : dummy
+    "page_up" : dummy
+    "page_down" : dummy
+    "end" : dummy
+    "home" : dummy
+    "insert" : dummy
+    "numpad0" : dummy
+    "numpad1" : dummy
+    "numpad2" : dummy
+    "numpad3" : dummy
+    "numpad4" : dummy
+    "numpad5" : dummy
+    "numpad6" : dummy
+    "numpad7" : dummy
+    "numpad8" : dummy
+    "numpad9" : dummy
+    "numpad*" : dummy
+    "numpad+" : dummy
+    "numpad-" : dummy
+    "numpad." : dummy
+    "numpad/" : dummy
+    "f1" : dummy
+    "f2" : dummy
+    "f3" : dummy
+    "f4" : dummy
+    "f5" : dummy
+    "f6" : dummy
+    "f7" : dummy
+    "f8" : dummy
+    "f9" : dummy
+    "f10" : dummy
+    "f11" : dummy
+    "f12" : dummy
+    "num_lock" : dummy
+    "scroll_lock" : dummy
+}
+
+
 module.exports =
     Keys: keys
+    KeysToText: keysToText
