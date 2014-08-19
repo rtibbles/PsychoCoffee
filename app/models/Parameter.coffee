@@ -24,9 +24,13 @@ class Model extends Base.Model
                     same length as number of parameters), function to change
                     input values by (either single function or array of
                     functions), and number of trials wanted.
+
+    Further, Parameter Attributes can have additional methods based on their
+    dataType, for example, an Array dataType is allowed to be shuffled.
     ###
 
     defaults:
+        dataType: ""
         returnType: "fixedList"
         randomized: false
         parameterName: "Untitled Parameter"
@@ -40,10 +44,14 @@ class Model extends Base.Model
                 @set attribute, injectedParameters[name]
                 console.log @get attribute
         switch @get "returnType"
-            when "fixedList" then return @fixedList(trials_wanted)
-            when "generatedList" then return @generatedList(trials_wanted)
-            when "generatorFn" then return @generatorFn(trials_wanted)
+            when "fixedList" then data = @fixedList(trials_wanted)
+            when "generatedList" then data = @generatedList(trials_wanted)
+            when "generatorFn" then data = @generatorFn(trials_wanted)
             else console.log "ParameterSet returnType undefined!"
+        if @get("dataType") == "array"
+            if @get "shuffled"
+                data = @shuffleListArrays(data)
+        return data
 
     fixedList: (trials_wanted) ->
         parameterList = @get "parameters"
@@ -76,6 +84,13 @@ class Model extends Base.Model
 
     generatorFn: (trials_wanted) ->
         return {}
+
+    shuffleListArrays: (list) ->
+        console.log list
+        for item, index in list
+            list[index] = Random.seeded_shuffle item,
+                "TODO - insert a reference to participant ID here!" + index
+        return list
 
 class Collection extends Base.Collection
     model: Model
