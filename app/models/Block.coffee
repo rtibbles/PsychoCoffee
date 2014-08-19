@@ -20,6 +20,7 @@ class Model extends Base.Model
         "width"
         "height"
         "timeout"
+        "triggers"
     ]
 
     relations: [

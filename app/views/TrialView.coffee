@@ -37,6 +37,7 @@ module.exports = class TrialView extends View
             view.attach canvas: @canvas, hidden: @$("#trial-hidden")
             view.datamodel = @datamodel
             view.registerEvents(@subViewList)
+        @registerEvents()
         @registerTimeout()
         @clock.startTimer()
         @logEvent "trial_start"
@@ -65,6 +66,7 @@ module.exports = class TrialView extends View
             @clock.delayedTrigger @model.get("timeout"), @, @endTrial
 
     endTrial: ->
+        @logEvent "trial_end"
         for key, view of @subViews
             view.deactivate()
             view.remove()
@@ -74,3 +76,11 @@ module.exports = class TrialView extends View
         @stopListening()
         @remove()
         @trigger "trialEnded"
+
+    registerEvents: =>
+        for trigger in (@model.get("triggers") or [])
+            view = _.find(@subViews, (subView) ->
+                subView.name == trigger.objectName
+                )
+            @listenTo view, trigger.eventName, =>
+                @[trigger.callback](trigger.arguments or {})
