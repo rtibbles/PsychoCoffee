@@ -3,10 +3,14 @@
 VisualTrialObject = require("../VisualTrialObject")
 
 class Model extends VisualTrialObject.Model
-    defaults: ->
-        _.extend
-            text: ""
-            super
+
+
+    requiredParameters: ->
+        [
+            name: "text"
+            default: ""
+            type: "string"
+        ]
 
     objectOptions: ->
         super().concat(
@@ -24,7 +28,7 @@ class Model extends VisualTrialObject.Model
                     type: "string"
                 ,
                     name: "backgroundColor"
-                    default: "#FFFFFF"
+                    default: ""
                     type: "hex-colour"
             ])
 

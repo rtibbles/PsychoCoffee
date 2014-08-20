@@ -5,8 +5,13 @@ Keys = require "utils/keys"
 
 module.exports = class TextVisualTrialObjectView extends VisualTrialObjectView
 
+    object_type:
+        fabric.Text
+
     render: ->
-        @object = new fabric.Text @model.get("text"), @model.returnOptions()
+        @object = new @object_type @model.returnRequired()[0],
+            @model.returnOptions()
+        console.log @object
 
     addText: (options) ->
         if "text" of options

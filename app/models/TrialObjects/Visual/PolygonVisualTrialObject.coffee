@@ -6,15 +6,12 @@ class Model extends VisualTrialObject.Model
 
     requiredParameters: ->
         [
-            name: "file"
-            default: ""
-            type: "file"
-            extensions: ["png", "jpg", "gif"]
+            name: "points"
+            default: []
+            type: "array"
+            embedded-type: fabric.Point
         ]
-
-    name: ->
-        @get("name") or @get("file")
 
 module.exports =
     Model: Model
-    Type: "image"
+    Type: "text"

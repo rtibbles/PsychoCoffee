@@ -25,3 +25,6 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
         @addToClockChangeEvents("deactivated")
         @object.off "mousedown"
         super()
+
+    render: ->
+        @object = new @object_type @model.returnOptions()
