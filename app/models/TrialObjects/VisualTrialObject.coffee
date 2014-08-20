@@ -6,7 +6,8 @@ class Model extends TrialObject.Model
     defaults: ->
         defaults = {}
         for option in @objectOptions()
-            defaults[option.name] = option.default
+            if option.default?
+                defaults[option.name] = option.default
         for parameter in @requiredParameters()
             defaults[parameter.name] = parameter.default
         _.extend defaults, super
@@ -25,6 +26,9 @@ class Model extends TrialObject.Model
             name: "fill"
             default: "#000000"
             type: "hex-colour"
+        ,
+            name: "height"
+            type: "number"
         ,
             name: "left"
             default: 0
@@ -47,6 +51,9 @@ class Model extends TrialObject.Model
             name: "top"
             default: 0
             type: "number"
+        ,
+            name: "width"
+            type: "number"
         ]
 
     returnRequired: ->
@@ -58,7 +65,8 @@ class Model extends TrialObject.Model
     returnOptions: ->
         options = {}
         for option in @objectOptions()
-            options[option.name] = @get option.name
+            if @get(option.name)?
+                options[option.name] = @get option.name
         return options
 
 module.exports =

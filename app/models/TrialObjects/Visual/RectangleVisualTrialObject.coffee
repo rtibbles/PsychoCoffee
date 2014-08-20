@@ -7,15 +7,15 @@ class Model extends VisualTrialObject.Model
     objectOptions: ->
         super().concat(
             [
-                    name: "ry"
-                    default: 24
+                    name: "rx"
+                    default: 1
                     type: "number"
                 ,
                     name: "ry"
-                    default: 24
+                    default: 1
                     type: "number"
             ])
 
 module.exports =
     Model: Model
-    Type: "ellipse"
+    Type: "rectangle"

@@ -51,3 +51,4 @@ class Model extends TrialObject.Model
 
 module.exports =
     Model: Model
+    Type: "group"
