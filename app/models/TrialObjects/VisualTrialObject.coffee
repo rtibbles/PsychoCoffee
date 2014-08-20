@@ -23,7 +23,7 @@ class Model extends TrialObject.Model
             type: "number"
         ,
             name: "fill"
-            default: ""
+            default: "#000000"
             type: "hex-colour"
         ,
             name: "height"
