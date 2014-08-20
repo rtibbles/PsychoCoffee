@@ -26,16 +26,12 @@ class Model extends TrialObject.Model
             default: "#000000"
             type: "hex-colour"
         ,
-            name: "height"
-            default: 0
-            type: "number"
-        ,
             name: "left"
             default: 0
             type: "number"
         ,
             name: "opacity"
-            default: 0
+            default: 1
             type: "number"
         ,
             name: "originX"
@@ -49,10 +45,6 @@ class Model extends TrialObject.Model
             options: ["center", "left", "right"]
         ,
             name: "top"
-            default: 0
-            type: "number"
-        ,
-            name: "width"
             default: 0
             type: "number"
         ]

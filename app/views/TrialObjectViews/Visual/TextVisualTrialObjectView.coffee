@@ -11,7 +11,6 @@ module.exports = class TextVisualTrialObjectView extends VisualTrialObjectView
     render: ->
         @object = new @object_type @model.returnRequired()[0],
             @model.returnOptions()
-        console.log @object
 
     addText: (options) ->
         if "text" of options

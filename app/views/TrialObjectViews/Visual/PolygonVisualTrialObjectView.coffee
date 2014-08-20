@@ -9,5 +9,5 @@ module.exports =
             fabric.Polygon
 
         render: ->
-            @object = new @object_type @model.returnRequired(),
+            @object = new @object_type @model.returnRequired()[0],
                 @model.returnOptions()
