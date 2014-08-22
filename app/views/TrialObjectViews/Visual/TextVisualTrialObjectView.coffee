@@ -9,8 +9,10 @@ module.exports = class TextVisualTrialObjectView extends VisualTrialObjectView
         fabric.Text
 
     render: ->
-        @object = new @object_type @model.returnRequired()[0],
-            @model.returnOptions()
+        if not @object
+            @object = new @object_type @model.returnRequired()[0],
+                @model.returnOptions()
+        super
 
     addText: (options) ->
         if "text" of options
@@ -21,6 +23,6 @@ module.exports = class TextVisualTrialObjectView extends VisualTrialObjectView
                 console.log "True"
                 text = text.toUpperCase()
         if text instanceof Function
-            @object.setText text(@object.getText())
+            @model.set("text", text(@model.get("text")))
         else
-            @object.setText @object.getText() + text
+            @model.set("text", @model.get("text") + text)

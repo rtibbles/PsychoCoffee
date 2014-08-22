@@ -69,5 +69,12 @@ class Model extends TrialObject.Model
                 options[option.name] = @get option.name
         return options
 
+    allParameters: ->
+        parameters = {}
+        for parameter in @objectOptions().concat @requiredParameters()
+            if @get(parameter.name)?
+                parameters[parameter.name] = @get parameter.name
+        return parameters
+
 module.exports =
     Model: Model

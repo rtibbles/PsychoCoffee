@@ -52,6 +52,7 @@ module.exports = class TrialObjectView extends View
             @trigger "activated"
             @logEvent("activated")
             @active = true
+            @listenTo @model, "change", @render
             if @model.get("duration")
                 @clock.delayedTrigger(
                     @model.get("duration"),
@@ -62,9 +63,7 @@ module.exports = class TrialObjectView extends View
             @trigger "deactivated"
             @logEvent("deactivated")
             @active = false
-
-    modelSet: (attr, value) ->
-        @model.set attr, value
+            @stopListening @model, "change", @render
 
     registerEvents: (siblingViews) =>
         if @model.get("startWithTrial")

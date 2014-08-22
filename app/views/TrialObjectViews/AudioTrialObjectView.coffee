@@ -20,6 +20,7 @@ module.exports = class AudioTrialObjectView extends TrialObjectView
         super()
 
     render: =>
-        @object = createjs.Sound.createInstance @object_id
+        if not @object
+            @object = createjs.Sound.createInstance @object_id
     # @object.on "succeeded", => console.log @clock.timerElapsed(), "playing"
     # @object.on "complete", => console.log @clock.timerElapsed(), "stopping"

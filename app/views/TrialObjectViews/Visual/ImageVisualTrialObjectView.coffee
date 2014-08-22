@@ -5,4 +5,6 @@ VisualTrialObjectView = require '../VisualTrialObjectView'
 module.exports = class ImageVisualTrialObjectView extends VisualTrialObjectView
 
     render: ->
-        @object = new fabric.Image @file_object, @model.returnOptions()
+        if not @object
+            @object = new fabric.Image @file_object, @model.returnOptions()
+        super

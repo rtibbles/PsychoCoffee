@@ -27,4 +27,7 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
         super()
 
     render: ->
-        @object = new @object_type @model.returnOptions()
+        if not @object
+            @object = new @object_type()
+        @object.set @model.allParameters()
+        @addToClockChangeEvents("change")
