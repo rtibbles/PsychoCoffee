@@ -51,9 +51,15 @@ module.exports = class TrialView extends View
         @canvas.selection = false
         @canvas.hoverCursor = 'default'
         @clock.canvas = @canvas
-        $(".trial-elements").click (event) =>
-            target = @canvas.findTarget event
-            target.trigger("mousedown")
+        if not Modernizr.pointerevents
+            for eventType in [
+                "mousedown"
+                "mouseup"
+             ]
+                @$("#trial-elements")[eventType]((event) =>
+                    target = @canvas.findTarget event
+                    target.trigger(eventType)
+                    )
 
     canvasPerformanceTracking: (options) =>
         now = options.event_time
