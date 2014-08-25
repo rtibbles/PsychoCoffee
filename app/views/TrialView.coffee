@@ -33,8 +33,12 @@ module.exports = class TrialView extends View
 
     startTrial: ->
         @createCanvas()
+        endpoints =
+            canvas: @canvas
+            hidden: @$("#trial-hidden")
+            elements: @$("#trial-elements")
         for view in @subViewList
-            view.attach canvas: @canvas, hidden: @$("#trial-hidden")
+            view.attach endpoints
             view.datamodel = @datamodel
             view.registerEvents(@subViewList)
         @registerEvents()
@@ -47,6 +51,9 @@ module.exports = class TrialView extends View
         @canvas.selection = false
         @canvas.hoverCursor = 'default'
         @clock.canvas = @canvas
+        $(".trial-elements").click (event) =>
+            target = @canvas.findTarget event
+            target.trigger("mousedown")
 
     canvasPerformanceTracking: (options) =>
         now = options.event_time
