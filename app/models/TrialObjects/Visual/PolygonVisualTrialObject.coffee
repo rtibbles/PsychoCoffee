@@ -9,7 +9,7 @@ class Model extends VisualTrialObject.Model
             name: "points"
             default: []
             type: "array"
-            embedded-type: fabric.Point
+            embedded_type: fabric.Point
         ]
 
 module.exports =

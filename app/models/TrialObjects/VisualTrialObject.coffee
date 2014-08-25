@@ -3,22 +3,9 @@
 TrialObject = require("../TrialObject")
 
 class Model extends TrialObject.Model
-    defaults: ->
-        defaults = {}
-        for option in @objectOptions()
-            if option.default?
-                defaults[option.name] = option.default
-        for parameter in @requiredParameters()
-            defaults[parameter.name] = parameter.default
-        _.extend defaults, super
-
-    requiredParameters: ->
-        # Lists all parameters needed to initialize object
-        # Assumes listed in order that they appear in args
-        []
 
     objectOptions: ->
-        [
+        super().concat([
             name: "angle"
             default: 0
             type: "number"
@@ -54,27 +41,7 @@ class Model extends TrialObject.Model
         ,
             name: "width"
             type: "number"
-        ]
-
-    returnRequired: ->
-        required = []
-        for parameter in @requiredParameters()
-            required.push @get(parameter.name)
-        return required
-
-    returnOptions: ->
-        options = {}
-        for option in @objectOptions()
-            if @get(option.name)?
-                options[option.name] = @get option.name
-        return options
-
-    allParameters: ->
-        parameters = {}
-        for parameter in @objectOptions().concat @requiredParameters()
-            if @get(parameter.name)?
-                parameters[parameter.name] = @get parameter.name
-        return parameters
+        ])
 
 module.exports =
     Model: Model
