@@ -17,9 +17,10 @@ class Model extends TrialObject.Model
             name: "height"
             type: "number"
         ,
-            name: "left"
+            name: "x"
             default: 0
             type: "number"
+            alias: "left"
         ,
             name: "opacity"
             default: 1
@@ -33,11 +34,12 @@ class Model extends TrialObject.Model
             name: "originY"
             default: "center"
             type: "options"
-            options: ["center", "left", "right"]
+            options: ["center", "top", "bottom"]
         ,
-            name: "top"
+            name: "y"
             default: 0
             type: "number"
+            alias: "top"
         ,
             name: "width"
             type: "number"

@@ -92,7 +92,8 @@ class Model extends Base.Model
         parameters = {}
         for parameter in @objectOptions().concat @requiredParameters()
             if @get(parameter.name)?
-                parameters[parameter.name] = @get parameter.name
+                parameters[parameter.alias or
+                    parameter.name] = @get parameter.name
         return parameters
 
 

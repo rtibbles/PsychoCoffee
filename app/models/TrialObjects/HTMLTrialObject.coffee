@@ -5,11 +5,11 @@ TrialObject = require("../TrialObject")
 class Model extends TrialObject.Model
 
     objectOptions: ->
-        [
+        super().concat([
             name: "height"
             type: "number"
         ,
-            name: "left"
+            name: "x"
             default: 0
             type: "number"
         ,
@@ -21,15 +21,15 @@ class Model extends TrialObject.Model
             name: "originY"
             default: "center"
             type: "options"
-            options: ["center", "left", "right"]
+            options: ["center", "top", "bottom"]
         ,
-            name: "top"
+            name: "y"
             default: 0
             type: "number"
         ,
             name: "width"
             type: "number"
-        ]
+        ])
 
 module.exports =
     Model: Model
