@@ -1,15 +1,15 @@
 'use strict'
 
-Base = require('./Base')
+random = require 'utils/random'
 
-class Model extends Base.Model
+class Model extends Backbone.AssociatedModel
 
     save: =>
-        super
+        @set "id", random.guid()
         for model in @collection.parents
             model.save()
 
-class Collection extends Base.Collection
+class Collection extends Backbone.Collection
 
     model: Model
 

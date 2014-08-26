@@ -16,5 +16,22 @@ seeded_shuffle = (source_array, seed) ->
 
     return array
 
+guid = (seed=null) ->
+    random = seed or Math.random
+    _p8 = (s) ->
+        p = (Math.random().toString(16)+"000000000").substr(2,8)
+        return if s then "-" + p.substr(0,4) + "-" + p.substr(4,4) else p
+    return _p8() + _p8(true) + _p8(true) + _p8()
+
+seededguid = ->
+    guid(seed=PsychoCoffee.GUIDrandom)
+
+seedGUID = (seed) ->
+    if PsychoCoffee
+        PsychoCoffee.GUIDrandom = new Math.seedrandom seed
+
 module.exports =
     seeded_shuffle: seeded_shuffle
+    guid: guid
+    seededguid: seededguid
+    seedGUID: seedGUID
