@@ -25,7 +25,11 @@ diff = (master, update) ->
             else if not _.isEqual(master[name], update[name]) or
                     name == id_attr
                 ret[name] = update[name]
-    return ret
+    keys = Object.keys(ret)
+    if keys.length==1 and keys[0]==id_attr
+        return {}
+    else
+        return ret
 
 merge = (master, update) ->
     if not master then return update
