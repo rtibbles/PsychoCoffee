@@ -22,8 +22,6 @@ api app
 # Example:
 #   app.use(loopback.static(path.resolve(__dirname', '../client')));
 
-console.log app.models().length
-
 app.use loopback.static path.join __dirname, 'public'
 
 # Requests that get this far won't be handled

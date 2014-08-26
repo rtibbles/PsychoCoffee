@@ -19,7 +19,6 @@ module.exports = mountRestApi = (server) ->
     experimentdatahandler.patch = (id, diff, callback) ->
         experimentdatahandler.findById id, (err, model) ->
             DiffTools.Merge(model, diff)
-            console.log model.blockdatahandlers[0].trialdatalogs[0].trialeventlogs
             model.save (err, modeldata) ->
                 if err
                     callback(null, false)
