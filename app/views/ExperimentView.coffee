@@ -8,20 +8,25 @@ Template = require 'templates/experiment'
 ProgressBarView = require './ProgressBarView'
 stringHash = require 'utils/stringHash'
 fingerprint = require 'utils/fingerprint'
+random = require 'utils/random'
 
 module.exports = class ExperimentView extends View
     template: Template
 
     initialize: =>
         super
+        @user_id = stringHash(fingerprint())
+        random.seedGUID fingerprint()
         @clock = new clock.Clock()
         @refreshTime()
         @render()
         @appendTo("#app")
         @datacollection = new ExperimentDataHandler.Collection
-        @datacollection.fetch().then =>
-            @datamodel = @datacollection.getOrCreateParticipantModel(1,
-                @model.get("saveInterval"))
+            experiment_identifier: @model.get("identifier")
+            participant_id: @user_id
+        @datacollection.filterFetch().then =>
+            @datamodel = @datacollection.getOrCreateParticipantModel(@user_id,
+                @model)
             @instantiateSubViews("blocks", "BlockView")
             @preLoadExperiment()
 
