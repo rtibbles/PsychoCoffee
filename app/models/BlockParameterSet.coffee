@@ -21,7 +21,9 @@ class Model extends Base.Model
         collectionType: Parameter.Collection
     ]
 
-    returnTrialParameters: (trials_wanted=null, experimentParameterSet={}) ->
+    returnTrialParameters: (user_id="",\
+                            trials_wanted=null,\
+                            experimentParameterSet={}) ->
         parameterObjectList = []
         parameterNameList = []
         blockParameterSet = {}
@@ -32,13 +34,16 @@ class Model extends Base.Model
             # Block Parameters are always randomized.
             blockParameterSet[model.get("parameterName")] =
                 Random.seeded_shuffle(
-                    model.returnParameterList(null, experimentParameterSet)
-                    PsychoCoffee.user_id + "blockParameterSet" + @id)[0]
+                    model.returnParameterList(user_id
+                        null
+                        experimentParameterSet)
+                    user_id + "blockParameterSet" + @id)[0]
 
         # Collect trial parameters
         parameterSet = {}
         for model in @get("trialParameters").models
             parameterList = model.returnParameterList(
+                user_id
                 trials_wanted
                 blockParameterSet)
             parameterSet[model.get("parameterName")] = parameterList
@@ -83,7 +88,7 @@ class Model extends Base.Model
             parameterObjectList.push parameters
         if @get "randomized"
             parameterObjectList = Random.seeded_shuffle parameterSet,
-                PsychoCoffee.user_id + "parameterObjectList" + @id
+                user_id + "parameterObjectList" + @id
         return [min_length, parameterObjectList]
 
 class Collection extends Base.Collection

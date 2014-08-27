@@ -8,14 +8,13 @@ Template = require 'templates/experiment'
 ProgressBarView = require './ProgressBarView'
 stringHash = require 'utils/stringHash'
 fingerprint = require 'utils/fingerprint'
-random = require 'utils/random'
 
 module.exports = class ExperimentView extends HandlerView
     template: Template
 
     initialize: =>
         super
-        PsychoCoffee.user_id = @user_id = stringHash(fingerprint())
+        @user_id = stringHash(fingerprint())
         @clock = new clock.Clock()
         @refreshTime()
         @render()

@@ -3,6 +3,8 @@
 Base = require('./Base')
 Block = require('./Block')
 fingerprint = require 'utils/fingerprint'
+random = require 'utils/random'
+ExperimentParameterSet = require './ExperimentParameterSet'
 
 class Model extends Base.Model
 
@@ -23,7 +25,12 @@ class Model extends Base.Model
         type: Backbone.Many
         key: 'blocks'
         collectionType: Block.Collection
+    ,
+        type: Backbone.One
+        key: 'parameterSet'
+        relatedModel: ExperimentParameterSet.Model
     ]
+
 
     createBlock: (options) ->
         @.get("blocks").create(options)

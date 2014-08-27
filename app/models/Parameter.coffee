@@ -37,34 +37,39 @@ class Model extends Base.Model
         parameters: []
         parameterizedAttributes: {}
 
-    returnParameterList: (trials_wanted=null, injectedParameters={}) ->
+    returnParameterList: (user_id="",\
+                            trials_wanted=null,\
+                            injectedParameters={}) ->
         for attribute, name of @get "parameterizedAttributes"
             if name of injectedParameters
                 console.log "Injecting!"
                 @set attribute, injectedParameters[name]
                 console.log @get attribute
         switch @get "returnType"
-            when "fixedList" then data = @fixedList(trials_wanted)
-            when "generatedList" then data = @generatedList(trials_wanted)
-            when "generatorFn" then data = @generatorFn(trials_wanted)
+            when "fixedList"
+                data = @fixedList(user_id, trials_wanted)
+            when "generatedList"
+                data = @generatedList(user_id, trials_wanted)
+            when "generatorFn"
+                data = @generatorFn(user_id, trials_wanted)
             else console.log "ParameterSet returnType undefined!"
         if @get("dataType") == "array"
             if @get "shuffled"
-                data = @shuffleListArrays(data)
+                data = @shuffleListArrays(user_id, data)
         return data
 
-    fixedList: (trials_wanted) ->
+    fixedList: (user_id, trials_wanted) ->
         parameterList = @get "parameters"
         if parameterList.length < trials_wanted
             console.warn "Trials wanted exceeds fixedList length"
         if @get "randomized"
             parameterList = Random.seeded_shuffle parameterList,
-                PsychoCoffee.user_id + "fixedList" + @id
+                user_id + "fixedList" + @id
         if trials_wanted?
             parameterList = parameterList[0...trials_wanted]
         return parameterList
 
-    generatedList: (trials_wanted) ->
+    generatedList: (user_id, trials_wanted) ->
         parameterList = []
         wholelists = Math.floor trials_wanted/@get("parameters").length
         extra_count = trials_wanted % @get("parameters").length
@@ -72,24 +77,24 @@ class Model extends Base.Model
             parameterList.push.apply parameterList, @get("parameters")
         if @get "randomized"
             extras = Random.seeded_shuffle @get("parameters"),
-                PsychoCoffee.user_id + "generatedListExtras" + @id
+                user_id + "generatedListExtras" + @id
             extras = extras[0...extra_count]
             parameterList.push.apply parameterList, extras
             parameterList = Random.seeded_shuffle parameterList,
-                PsychoCoffee.user_id + "generatedList" + @id
+                user_id + "generatedList" + @id
         else
             parameterList.push.apply parameterList,
                 @get("parameters")[0...extra_count]
         return parameterList
 
-    generatorFn: (trials_wanted) ->
+    generatorFn: (user_id, trials_wanted) ->
         return {}
 
-    shuffleListArrays: (list) ->
+    shuffleListArrays: (user_id, list) ->
         console.log list
         for item, index in list
             list[index] = Random.seeded_shuffle item,
-                PsychoCoffee.user_id + "shuffleListArrays" + @id + index
+                user_id + "shuffleListArrays" + @id + index
         return list
 
 class Collection extends Base.Collection
