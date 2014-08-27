@@ -8,6 +8,7 @@ exports.config =
         'js/vendor.js': /^(vendor\/scripts\/(common|development)|vendor\\scripts\\(common|development))/
       order: 
         before: [
+          'vendor/scripts/common/es5-shim.min.js',
           'vendor/scripts/common/modernizr.min.js',
           'vendor/scripts/common/console-polyfill.js',
           'vendor/scripts/common/jquery.js',
@@ -52,6 +53,7 @@ exports.config =
             'js/vendor.js': /^(vendor\/scripts\/(common|production)|vendor\\scripts\\(common|production))/
           order: 
             before: [
+              'vendor/scripts/common/es5-shim.min.js',
               'vendor/scripts/common/modernizr.min.js',
               'vendor/scripts/common/console-polyfill.js',
               'vendor/scripts/common/jquery.js',
