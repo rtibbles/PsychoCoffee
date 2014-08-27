@@ -38,11 +38,11 @@ module.exports = class ExperimentView extends HandlerView
         queue = new createjs.LoadQueue true
         for key, view of @subViews
             view.preLoadBlock(queue)
-        progressBarView = new ProgressBarView
+        @progressBarView = new ProgressBarView
             queue: queue
             complete: @startExperiment
-        progressBarView.appendTo("#messages")
-        progressBarView.render()
+        @progressBarView.appendTo("#messages")
+        @progressBarView.render()
         
     startExperiment: =>
         date_time = new Date().getTime()

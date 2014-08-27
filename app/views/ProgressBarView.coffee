@@ -24,6 +24,12 @@ module.exports = class ProgressBarView extends View
             @close
             )
 
+    render: ->
+        super
+        if @queue._numItems == 0
+            @setProgressBar 1
+            @finish()
+
     close: =>
         @complete()
         @remove()
