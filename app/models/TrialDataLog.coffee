@@ -1,7 +1,7 @@
 'use strict'
 
 NestedAPIBase = require('./NestedAPIBase')
-TrialEventLog = require('./TrialEventLog')
+EventLog = require('./EventLog')
 
 class Model extends NestedAPIBase.Model
 
@@ -11,7 +11,7 @@ class Model extends NestedAPIBase.Model
     relations: [
         type: Backbone.Many
         key: 'trialeventlogs'
-        collectionType: TrialEventLog.Collection
+        collectionType: EventLog.Collection
     ]
 
     logEvent: (event_type, clock, options={}) =>

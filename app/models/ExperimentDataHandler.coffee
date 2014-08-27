@@ -3,6 +3,7 @@
 APIBase = require './APIBase'
 BlockDataHandler = require './BlockDataHandler'
 Diff = require 'utils/diff'
+EventLog = require('./EventLog')
 
 class Model extends APIBase.Model
 
@@ -12,12 +13,27 @@ class Model extends APIBase.Model
 
     defaults:
         blockdatahandlers: []
+        experimenteventlogs: []
 
     relations: [
         type: Backbone.Many
         key: 'blockdatahandlers'
         collectionType: BlockDataHandler.Collection
+    ,
+        type: Backbone.Many
+        key: 'experimenteventlogs'
+        collectionType: EventLog.Collection
     ]
+
+    logEvent: (event_type, clock, options={}) =>
+        @addEvent(
+            _.extend options,
+                experiment_time: clock.getTime()
+                event_type: event_type
+                )
+
+    addEvent: (event) ->
+        @get("experimenteventlogs").create event
 
     sync: (method, model, options={}) =>
         if model?
@@ -63,6 +79,7 @@ class Collection extends APIBase.Collection
         model = @findWhere
             participant_id: participant_id
             experiment_identifier: experiment_model.get("identifier")
+        console.log model?.get("start_time")?
         model or @create
             participant_id: participant_id
             saveInterval: experiment_model.get("saveInterval")
