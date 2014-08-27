@@ -8,13 +8,25 @@ Template = require 'templates/experiment'
 ProgressBarView = require './ProgressBarView'
 stringHash = require 'utils/stringHash'
 fingerprint = require 'utils/fingerprint'
+urlParse = require 'utils/urlParse'
 
 module.exports = class ExperimentView extends HandlerView
     template: Template
 
     initialize: =>
         super
-        @user_id = stringHash(fingerprint())
+        @urlParams = urlParse.decodeGetParams(window.location)
+        # This sets the User ID depending on the way that the experiment
+        # is being run, also collects other relevant information for
+        # different subject pool conditions.
+        switch @model.get("subjectPool")
+            when "AMT"
+                @user_id = @urlParams.workerId
+                @assignment_id = @urlParams.assignmentId
+                @turkSubmitTo = @urlParams.turkSubmitTo
+                @hitId = @urlParams.hitId
+            else
+                @user_id = stringHash(fingerprint())
         @clock = new clock.Clock()
         @refreshTime()
         @render()
@@ -27,6 +39,11 @@ module.exports = class ExperimentView extends HandlerView
                 @model)
             @datamodel.set("parameters", @datamodel.get("parameters") or
                 @model.returnParameters(@user_id))
+            if @model.get("subjectPool") == "AMT"
+                @datamodel.set
+                    assignment_id: @assignment_id
+                    turkSubmitTo: @turkSubmitTo
+                    hitId: @hitId
             @instantiateSubViews(
                 "blocks"
                 "BlockView"
