@@ -15,8 +15,7 @@ module.exports = class ExperimentView extends HandlerView
 
     initialize: =>
         super
-        @user_id = stringHash(fingerprint())
-        random.seedGUID fingerprint()
+        PsychoCoffee.user_id = @user_id = stringHash(fingerprint())
         @clock = new clock.Clock()
         @refreshTime()
         @render()

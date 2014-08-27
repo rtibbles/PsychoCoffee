@@ -2,8 +2,14 @@
 
 Base = require('./Base')
 Block = require('./Block')
+fingerprint = require 'utils/fingerprint'
 
 class Model extends Base.Model
+
+    initialize: ->
+        super
+        random.seedGUID fingerprint()
+
     defaults:
         blocks: []
         title: "Experiment"
