@@ -8,16 +8,19 @@ module.exports = class BlockView extends HandlerView
         super
         @generateTrialModels()
         @instantiateSubViews("trials",
-            "TrialView", @trialObjectViewType)
+            "TrialView", null)
 
     generateTrialModels: ->
-        [trialListLength, parameterSet] = @model.returnParameters()
-        if not trialListLength
+        [@parameters, @trialListLength, @parameterSet] =
+            @model.returnParameters(@user_id, @injectedParameters)
+        if not @trialListLength
             @model.get("trials").create @model.returnTrialProperties(true)
         else
-            for parameters in parameterSet
+            for parameters in @parameterSet
                 trial =
-                    @model.get("trials").create @model.returnTrialProperties()
+                    @model.get("trials").create @model.returnTrialProperties(
+                        false, parameters)
+                trial.set "parameters", parameters
                 trial.get("trialObjects").add(
                     (model.parameterizedTrial(parameters) \
                     for model in @model.get("trialObjects").models)
@@ -35,13 +38,14 @@ module.exports = class BlockView extends HandlerView
             @datamodel.set "start_time", date_time
             @logEvent "block_start", date_time: date_time
         @datamodel.set "block_id", @model.id
+        @datamodel.set "parameters", @parameters
         @datamodel.set("trial", @datamodel.get("trial") or 0)
         currentTrial = @model.get("trials").at(@datamodel.get("trial"))
         @showTrial currentTrial
 
     showTrial: (trial) =>
         if not trial
-            @finishBlock()
+            @endBlock()
             return
         trialView = @subViews[trial.get("id")]
         if @trialView

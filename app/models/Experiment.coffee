@@ -20,6 +20,7 @@ class Model extends Base.Model
         # Larger save intervals will give better performance,
         # But increase risk of data loss.
         saveInterval: 10000
+        parameterSet: {}
 
     relations: [
         type: Backbone.Many
@@ -34,6 +35,9 @@ class Model extends Base.Model
 
     createBlock: (options) ->
         @.get("blocks").create(options)
+
+    returnParameters: (user_id) ->
+        @get("parameterSet").returnExperimentParameters user_id
 
 class Collection extends Base.Collection
     model: Model

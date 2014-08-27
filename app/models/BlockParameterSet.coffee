@@ -89,7 +89,7 @@ class Model extends Base.Model
         if @get "randomized"
             parameterObjectList = Random.seeded_shuffle parameterSet,
                 user_id + "parameterObjectList" + @id
-        return [min_length, parameterObjectList]
+        return [blockParameterSet, min_length, parameterObjectList]
 
 class Collection extends Base.Collection
     model: Model

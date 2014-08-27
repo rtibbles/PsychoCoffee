@@ -5,6 +5,8 @@ module.exports = class View extends Backbone.View
     initialize: (options) =>
         super
         @clock = options.clock
+        @user_id = options.user_id
+        @injectedParameters = options.parameters
 
     template: ->
         return
@@ -21,14 +23,16 @@ module.exports = class View extends Backbone.View
     appendTo: (el) =>
         $(el).append(@el)
 
-    instantiateSubViews: (key, viewType, viewFunction) =>
+    instantiateSubViews: (key, viewType, viewFunction, options={}) =>
         @subViews = {}
         for model in @model.get(key).models
-            if viewFunction then viewType = viewFunction(model)
-            @subViews[model.id] = new PsychoCoffee[viewType]
+            if viewFunction? then viewType = viewFunction(model)
+            options = _.extend(
+                options
                 model: model
                 clock: @clock
-                user_id: @user_id
+                user_id: @user_id)
+            @subViews[model.id] = new PsychoCoffee[viewType] options
         @subViewList = _.values(@subViews)
 
     registerSubViewSubViews: ->

@@ -37,13 +37,21 @@ class Model extends Base.Model
         relatedModel: BlockParameterSet.Model
     ]
 
-    returnParameters: ->
-        @get("parameterSet").returnTrialParameters @get("numberOfTrials")
+    returnParameters: (user_id, experimentParameters) ->
+        @get("parameterSet").returnTrialParameters(
+            user_id, @get("numberOfTrials"), experimentParameters)
 
-    returnTrialProperties: (clone=false) ->
+    returnTrialProperties: (clone=false, parameters={}) ->
         attributes = {}
         for key in @trialProperties
             attributes[key] = @get(key)
+        for attribute, parameterName of @get "parameterizedAttributes"
+            if parameterName of parameters
+                # This allows parameters to be undefined without breaking
+                # the experiment - can be used to dynamically parameterize
+                # trials, e.g. by having them parameterized in some
+                # conditions but not others
+                attributes[attribute] = parameters[parameterName]
         if clone then attributes["trialObjects"] = @get "trialObjects"
         return attributes
 

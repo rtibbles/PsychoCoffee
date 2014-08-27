@@ -25,8 +25,13 @@ module.exports = class ExperimentView extends HandlerView
         @datacollection.filterFetch().then =>
             @datamodel = @datacollection.getOrCreateParticipantModel(@user_id,
                 @model)
-            console.log @datamodel.get("start_time")?
-            @instantiateSubViews("blocks", "BlockView")
+            @datamodel.set("parameters", @datamodel.get("parameters") or
+                @model.returnParameters(@user_id))
+            @instantiateSubViews(
+                "blocks"
+                "BlockView"
+                null
+                parameters: @datamodel.get("parameters"))
             @preLoadExperiment()
 
     refreshTime: =>
