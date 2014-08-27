@@ -14,14 +14,18 @@ diff = (master, update) ->
                 if _.isArray(update[name])
                     ret[name] = []
                     for i in [0...update[name].length]
-                        array_diff = diff(master[name][i], update[name][i])
-                        if not _.isEmpty(array_diff)
-                            ret[name].push(array_diff)
+                        if _.isObject(update[name][i])
+                            array_diff = diff(master[name][i],
+                                update[name][i])
+                            if not _.isEmpty(array_diff)
+                                ret[name].push(array_diff)
+                        else
+                            ret[name].push(update[name][i])
                     if ret[name].length == 0 then delete ret[name]
                 else
-                    diff = diff(master[name], update[name])
-                    if not _.isEmpty(diff)
-                        ret[name] = diff
+                    obj_diff = diff(master[name], update[name])
+                    if not _.isEmpty(obj_diff)
+                        ret[name] = obj_diff
             else if not _.isEqual(master[name], update[name]) or
                     name == id_attr
                 ret[name] = update[name]
