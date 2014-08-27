@@ -1,8 +1,8 @@
 'use strict'
 
-View = require './View'
+HandlerView = require './HandlerView'
 
-module.exports = class BlockView extends View
+module.exports = class BlockView extends HandlerView
 
     initialize: (options) =>
         super
@@ -28,13 +28,20 @@ module.exports = class BlockView extends View
             view.preLoadTrial(queue)
 
     startBlock: ->
+        date_time = new Date().getTime()
+        if @datamodel.get("start_time")?
+            @logEvent "block_resume", date_time: date_time
+        else
+            @datamodel.set "start_time", date_time
+            @logEvent "block_start", date_time: date_time
+        @datamodel.set "block_id", @model.id
         @datamodel.set("trial", @datamodel.get("trial") or 0)
         currentTrial = @model.get("trials").at(@datamodel.get("trial"))
         @showTrial currentTrial
 
     showTrial: (trial) =>
         if not trial
-            console.log "Done, finito, finished!"
+            @finishBlock()
             return
         trialView = @subViews[trial.get("id")]
         if @trialView
@@ -54,3 +61,14 @@ module.exports = class BlockView extends View
         @datamodel.set("trial", @datamodel.get("trial") + 1)
         currentTrial = @model.get("trials").at(@datamodel.get("trial"))
         @showTrial currentTrial
+
+    endBlock: ->
+        date_time = new Date().getTime()
+        @logEvent "block_end", date_time: date_time
+        @datamodel.set "end_time", date_time
+        @datamodel.set "complete", true
+        for key, view of @subViews
+            view.remove()
+        @stopListening()
+        @remove()
+        @trigger "blockEnded"

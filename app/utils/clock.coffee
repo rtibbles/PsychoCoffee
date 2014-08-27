@@ -129,9 +129,13 @@ class Clock
     stopTimer: =>
         clearTimeout @timer
         @frame = 0
+        delete @timerStart
 
     timerElapsed: =>
-        @getElapsedTime(@timerStart)
+        if @timerStart?
+            @getElapsedTime(@timerStart)
+        else
+            0
 
     ticktock: =>
         @timer = setTimeout(

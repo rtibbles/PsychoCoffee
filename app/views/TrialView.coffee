@@ -1,9 +1,9 @@
 'use strict'
 
-View = require './View'
+HandlerView = require './HandlerView'
 Template = require 'templates/trial'
 
-module.exports = class TrialView extends View
+module.exports = class TrialView extends HandlerView
     template: Template
 
     initialize: (options) =>
@@ -32,6 +32,13 @@ module.exports = class TrialView extends View
             console.debug error, "Unknown element type #{elementType}"
 
     startTrial: ->
+        date_time = new Date().getTime()
+        if @datamodel.get("start_time")?
+            @logEvent "trial_resume", date_time: date_time
+        else
+            @datamodel.set "start_time", date_time
+            @logEvent "trial_start", date_time: date_time
+        @datamodel.set "trial_id", @model.id
         @createCanvas()
         endpoints =
             canvas: @canvas
@@ -44,7 +51,6 @@ module.exports = class TrialView extends View
         @registerEvents()
         @registerTimeout()
         @clock.startTimer()
-        @logEvent "trial_start"
 
     createCanvas: =>
         @canvas = new fabric.Canvas "trial-canvas"
@@ -68,20 +74,14 @@ module.exports = class TrialView extends View
                 "ms between object added/removed and render completion"
             @canvas.off("after:render")
 
-    logEvent: (event_type, options={}) =>
-        @datamodel.logEvent(
-            event_type
-            @clock
-            _.extend options,
-                object: @model.name()
-                )
-
     registerTimeout: =>
         if @model.get "timeout"
             @clock.delayedTrigger @model.get("timeout"), @, @endTrial
 
     endTrial: ->
-        @logEvent "trial_end"
+        date_time = new Date().getTime()
+        @logEvent "trial_end", date_time: date_time
+        @datamodel.set "end_time", date_time
         for key, view of @subViews
             view.deactivate()
             view.remove()
