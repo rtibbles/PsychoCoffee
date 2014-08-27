@@ -59,7 +59,7 @@ class Model extends Base.Model
             console.warn "Trials wanted exceeds fixedList length"
         if @get "randomized"
             parameterList = Random.seeded_shuffle parameterList,
-                "TODO - insert a reference to participant ID here!"
+                PsychoCoffee.user_id + "fixedList" + @id
         if trials_wanted?
             parameterList = parameterList[0...trials_wanted]
         return parameterList
@@ -72,11 +72,11 @@ class Model extends Base.Model
             parameterList.push.apply parameterList, @get("parameters")
         if @get "randomized"
             extras = Random.seeded_shuffle @get("parameters"),
-                "TODO - insert a reference to participant ID here!"
+                PsychoCoffee.user_id + "generatedListExtras" + @id
             extras = extras[0...extra_count]
             parameterList.push.apply parameterList, extras
             parameterList = Random.seeded_shuffle parameterList,
-                "TODO - insert a reference to participant ID here!"
+                PsychoCoffee.user_id + "generatedList" + @id
         else
             parameterList.push.apply parameterList,
                 @get("parameters")[0...extra_count]
@@ -89,7 +89,7 @@ class Model extends Base.Model
         console.log list
         for item, index in list
             list[index] = Random.seeded_shuffle item,
-                "TODO - insert a reference to participant ID here!" + index
+                PsychoCoffee.user_id + "shuffleListArrays" + @id + index
         return list
 
 class Collection extends Base.Collection

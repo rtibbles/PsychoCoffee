@@ -33,7 +33,7 @@ class Model extends Base.Model
             blockParameterSet[model.get("parameterName")] =
                 Random.seeded_shuffle(
                     model.returnParameterList(null, experimentParameterSet)
-                    "TODO - insert a reference to participant ID here!")[0]
+                    PsychoCoffee.user_id + "blockParameterSet" + @id)[0]
 
         # Collect trial parameters
         parameterSet = {}
@@ -83,7 +83,7 @@ class Model extends Base.Model
             parameterObjectList.push parameters
         if @get "randomized"
             parameterObjectList = Random.seeded_shuffle parameterSet,
-                "TODO - insert a reference to participant ID here!"
+                PsychoCoffee.user_id + "parameterObjectList" + @id
         return [min_length, parameterObjectList]
 
 class Collection extends Base.Collection
