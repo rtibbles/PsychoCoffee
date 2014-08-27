@@ -21,7 +21,8 @@ exports.config =
           'vendor/scripts/common/soundjs-0.5.2.min.js',
           'vendor/scripts/common/flashplugin-0.5.2.min.js',
           'vendor/scripts/common/fabric.min.js',
-          'vendor/scripts/common/seedrandom.min.js'
+          'vendor/scripts/common/seedrandom.min.js',
+          'vendor/scripts/common/md5.js'
         ]
     stylesheets: 
       joinTo: 
@@ -64,7 +65,8 @@ exports.config =
               'vendor/scripts/common/soundjs-0.5.2.min.js',
               'vendor/scripts/common/flashplugin-0.5.2.min.js',
               'vendor/scripts/common/fabric.min.js',
-              'vendor/scripts/common/seedrandom.min.js'
+              'vendor/scripts/common/seedrandom.min.js',
+              'vendor/scripts/common/md5.js'
             ]
       optimize: true
       sourceMaps: false

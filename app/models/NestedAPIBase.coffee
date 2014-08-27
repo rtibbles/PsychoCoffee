@@ -1,11 +1,11 @@
 'use strict'
 
-random = require 'utils/random'
+hashObject = require 'utils/hashObject'
 
 class Model extends Backbone.AssociatedModel
 
     save: =>
-        @set "id", random.guid()
+        @set "id", hashObject @collection.parents[0].toJSON()
         for model in @collection.parents
             model.save()
 
