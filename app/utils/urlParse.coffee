@@ -1,9 +1,11 @@
 decodeGetParams = (url) ->
-    url = url.split("?")
+    url = decodeURIComponent(url).split("?")[1]
     params = {}
-    for item in decodeURIComponent(url).split("&")
-        data = item.split("=")
-        params[data[0]] = data[1]
+    if url
+        for item in url.split("&")
+            data = item.split("=")
+            if data[1]
+                params[data[0]] = data[1]
     return params
 
 module.exports =

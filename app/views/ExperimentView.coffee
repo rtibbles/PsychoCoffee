@@ -15,7 +15,7 @@ module.exports = class ExperimentView extends HandlerView
 
     initialize: =>
         super
-        @urlParams = urlParse.decodeGetParams(window.location)
+        @urlParams = urlParse.decodeGetParams(window.location.href)
         # This sets the User ID depending on the way that the experiment
         # is being run, also collects other relevant information for
         # different subject pool conditions.
