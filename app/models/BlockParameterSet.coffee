@@ -62,6 +62,12 @@ class Model extends Base.Model
             parameterSet[key] = value[0...min_length]
             parameterNameList.push key
 
+
+        # A parameterSet of at least length 1 needs to be returned in order for
+        # for any trials to be run.
+
+        if not min_length? or min_length==0 then min_length = 1
+
         # Now that we have a set length for trials, generate lists of experiment
         # parameters to allow them to be passed in with the trial parameters.
         for key, value of experimentParameterSet
@@ -87,7 +93,7 @@ class Model extends Base.Model
                         for parameter in parameterNameList)
             parameterObjectList.push parameters
         if @get "randomized"
-            parameterObjectList = Random.seeded_shuffle parameterSet,
+            parameterObjectList = Random.seeded_shuffle parameterObjectList,
                 user_id + "parameterObjectList" + @id
         return [blockParameterSet, min_length, parameterObjectList]
 

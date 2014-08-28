@@ -13,18 +13,15 @@ module.exports = class BlockView extends HandlerView
     generateTrialModels: ->
         [@parameters, @trialListLength, @parameterSet] =
             @model.returnParameters(@user_id, @injectedParameters)
-        if not @trialListLength
-            @model.get("trials").create @model.returnTrialProperties(true)
-        else
-            for parameters in @parameterSet
-                trial =
-                    @model.get("trials").create @model.returnTrialProperties(
-                        false, parameters)
-                trial.set "parameters", parameters
-                trial.get("trialObjects").add(
-                    (model.parameterizedTrial(parameters) \
-                    for model in @model.get("trialObjects").models)
-                    )
+        for parameters in @parameterSet
+            trial =
+                @model.get("trials").create @model.returnTrialProperties(
+                    parameters)
+            trial.set "parameters", parameters
+            trial.get("trialObjects").add(
+                (model.parameterizedTrial(parameters) \
+                for model in @model.get("trialObjects").models)
+                )
 
     preLoadBlock: (queue) =>
         for key, view of @subViews

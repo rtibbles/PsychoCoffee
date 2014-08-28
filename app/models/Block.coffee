@@ -41,7 +41,7 @@ class Model extends Base.Model
         @get("parameterSet").returnTrialParameters(
             user_id, @get("numberOfTrials"), experimentParameters)
 
-    returnTrialProperties: (clone=false, parameters={}) ->
+    returnTrialProperties: (parameters={}) ->
         attributes = {}
         for key in @trialProperties
             attributes[key] = @get(key)
@@ -52,7 +52,6 @@ class Model extends Base.Model
                 # trials, e.g. by having them parameterized in some
                 # conditions but not others
                 attributes[attribute] = parameters[parameterName]
-        if clone then attributes["trialObjects"] = @get "trialObjects"
         return attributes
 
     createTrialObject: (options) ->
