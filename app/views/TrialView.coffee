@@ -84,12 +84,10 @@ module.exports = class TrialView extends HandlerView
         @logEvent "trial_end", date_time: date_time
         @datamodel.set "end_time", date_time
         for key, view of @subViews
-            view.deactivate()
             view.remove()
         @clock.stopTimer()
         delete @clock.canvas
         delete @canvas
-        @stopListening()
         @remove()
         @trigger "trialEnded"
 
@@ -98,5 +96,11 @@ module.exports = class TrialView extends HandlerView
             view = _.find(@subViews, (subView) ->
                 subView.name == trigger.objectName
                 )
-            @listenTo view, trigger.eventName, =>
-                @[trigger.callback](trigger.arguments or {})
+            if view?
+                @listenTo view, trigger.eventName, =>
+                    @[trigger.callback](trigger.arguments or {})
+            else
+                console.debug """
+                    There is no object with the name
+                    #{trigger.objectName} in this trial.
+                    """

@@ -72,6 +72,13 @@ module.exports = class TrialObjectView extends View
             view = _.find(siblingViews, (sibling) ->
                 sibling.name == trigger.objectName
                 )
-            @listenTo view, trigger.eventName, (options) =>
-                console.log "Triggering", trigger.eventName
-                @[trigger.callback](_.extend(options, trigger.arguments or {}))
+            if view?
+                @listenTo view, trigger.eventName, (options) =>
+                    console.log "Triggering", trigger.eventName
+                    @[trigger.callback](_.extend(options,
+                        trigger.arguments or {}))
+            else
+                console.debug """
+                    There is no object with the name
+                    #{trigger.objectName} in this trial.
+                    """
