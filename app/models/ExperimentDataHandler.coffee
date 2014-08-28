@@ -36,17 +36,22 @@ class Model extends APIBase.Model
         @get("experimenteventlogs").create event
 
     sync: (method, model, options={}) =>
-        if model?
-            syncNow = => @syncNow(method,model,options)
-            delayTime = @lastSync + @get("saveInterval") - performance.now()
-            if delayTime <= 0
-                @syncNow()
-            else
-                if not @syncCache
-                    @syncCache = setTimeout syncNow, delayTime
+        if options.now
+            @syncNow(method,model,options)
+        else
+            if model?
+                syncNow = => @syncNow(method,model,options)
+                delayTime = @lastSync + @get("saveInterval") - performance.now()
+                if delayTime <= 0
+                    @syncNow()
+                else
+                    if not @syncCache
+                        @syncCache = setTimeout syncNow, delayTime
 
     syncNow: (method, model, options={}) =>
         if model?
+            if options.success
+                callback = options.success
             if not @isNew()
                 options.attrs = Diff.Diff(@serverState, model.toJSON())
                 options.method = 'patch'
@@ -54,10 +59,12 @@ class Model extends APIBase.Model
                     if saved.patched
                         @set model.attributes
                         @serverState = model.toJSON()
+                        callback(saved)
             else
                 options.success = (data) =>
                     @set(data)
                     @serverState = @toJSON()
+                    callback(data)
             @lastSync = performance.now()
             clearTimeout(@syncCache)
             delete @syncCache
@@ -79,7 +86,6 @@ class Collection extends APIBase.Collection
         model = @findWhere
             participant_id: participant_id
             experiment_identifier: experiment_model.get("identifier")
-        console.log model?.get("start_time")?
         model or @create
             participant_id: participant_id
             saveInterval: experiment_model.get("saveInterval")

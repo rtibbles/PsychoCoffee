@@ -42,9 +42,7 @@ class Model extends Base.Model
                             injectedParameters={}) ->
         for attribute, name of @get "parameterizedAttributes"
             if name of injectedParameters
-                console.log "Injecting!"
                 @set attribute, injectedParameters[name]
-                console.log @get attribute
         switch @get "returnType"
             when "fixedList"
                 data = @fixedList(user_id, trials_wanted)
@@ -91,7 +89,6 @@ class Model extends Base.Model
         return {}
 
     shuffleListArrays: (user_id, list) ->
-        console.log list
         for item, index in list
             list[index] = Random.seeded_shuffle item,
                 user_id + "shuffleListArrays" + @id + index

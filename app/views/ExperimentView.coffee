@@ -103,4 +103,8 @@ module.exports = class ExperimentView extends HandlerView
         @logEvent "experiment_end", date_time: date_time
         @datamodel.set "end_time", date_time
         @datamodel.set "complete", true
-        console.log ("I am done here!")
+        @datamodel.save null,
+            now: true
+            success: =>
+                console.log "I'm done here!"
+                @$("#messages").html("<h1>Experiment Complete - Thank you</h1>")
