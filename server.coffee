@@ -40,3 +40,6 @@ app.start = ->
 
 exports.startServer = (port, path, callback) ->
     app.start()
+
+if require.main == module
+    app.start()
