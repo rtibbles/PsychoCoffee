@@ -55,7 +55,6 @@ merge = (master, update) ->
                 else
                     master[name] = merge(master[name], update[name])
             else
-                console.log name, master[name], update[name]
                 master[name] = update[name]
         else
             master[name] = update[name]

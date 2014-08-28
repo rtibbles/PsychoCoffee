@@ -28,7 +28,12 @@
     "express": "~4.5.1",
     "serve-favicon": "~2.0.1",
     "compression": "~1.0.9",
-    "errorhandler": "~1.1.1"
+    "errorhandler": "~1.1.1",
+    "loopback-datasource-juggler": "~2.7.0",
+    "loopback": "~2.1.4",
+    "loopback-boot": "~2.0.0",
+    "loopback-connector-mongodb": "~1.4.3",
+    "underscore": "~1.7.0"
   },
   "devDependencies": {
     "karma": "~0.12.9",
@@ -40,6 +45,7 @@
     "karma-benchmark": "~0.4.0",
     "karma-benchmark-reporter": "~0.1.0",
     "benchmark": "~1.0.0",
-    "coffeelint-brunch": "~1.7.0"
+    "coffeelint-brunch": "~1.7.0",
+    "loopback-explorer": "~1.2.9"
   }
 }
