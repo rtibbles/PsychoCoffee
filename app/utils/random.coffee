@@ -24,14 +24,16 @@ guid = (seed=null) ->
     return _p8() + _p8(true) + _p8(true) + _p8()
 
 seededguid = ->
-    guid(seed=PsychoCoffee.GUIDrandom)
+    guid(PsychoCoffee.random.GUIDseed)
+
+GUIDseed = null
 
 seedGUID = (seed) ->
-    if PsychoCoffee
-        PsychoCoffee.GUIDrandom = new Math.seedrandom seed
+    PsychoCoffee.random.GUIDseed = new Math.seedrandom seed
 
 module.exports =
     seeded_shuffle: seeded_shuffle
     guid: guid
     seededguid: seededguid
     seedGUID: seedGUID
+    GUIDseed: GUIDseed
