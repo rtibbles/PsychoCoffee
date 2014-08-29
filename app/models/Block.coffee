@@ -15,6 +15,7 @@ class Model extends Base.Model
         parameterSet: {}
         trialObjects: []
         numberOfTrials: null
+        triggers: []
 
     trialProperties: [
         "title"

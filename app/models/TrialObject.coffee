@@ -5,12 +5,7 @@ nestedModules = require '../utils/nestedModules'
 
 Base = require('./Base')
 
-subModels = {}
-for modulename in nestedModules('models/TrialObjects')
-    subModels[modulename] = modulename + ".Model"
-
 class Model extends Base.Model
-    subModelTypes: subModels
 
     defaults: ->
         defaults = {}
@@ -70,10 +65,6 @@ class Model extends Base.Model
                 # conditions but not others
                 attributes[attribute] = parameters[parameterName]
         return attributes
-
-    setParameter: (attribute, parameter) ->
-        @set "parameterizedAttributes",
-            @get("parameterizedAttributes")[attribute] = parameter
 
     returnRequired: ->
         required = []

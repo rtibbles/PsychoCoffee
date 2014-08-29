@@ -16,7 +16,7 @@ test "Default values", ->
     ok window.block.get("trialObjects") instanceof PsychoCoffee.TrialObject.Collection
 
 test "Methods", ->
-    expect 4
+    expect 9
     
     trialObject = window.block.createTrialObject()
     ok trialObject instanceof PsychoCoffee.TrialObject.Model
@@ -24,3 +24,9 @@ test "Methods", ->
     deepEqual blockParameterSet, {}
     equal min_length, 1
     deepEqual parameterObjectList, [{}]
+    trialProperties = window.block.returnTrialProperties()
+    equal trialProperties["title"], ""
+    equal trialProperties["width"], 640
+    equal trialProperties["height"], 480
+    equal trialProperties["timeout"], 1000
+    deepEqual trialProperties["triggers"], []
