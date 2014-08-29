@@ -3,6 +3,39 @@
 # Karma configuration
 # Generated on Fri Sep 06 2013 16:44:32 GMT-0400 (AST)
 
+customLaunchers =
+    sl_chrome:
+        base: 'SauceLabs'
+        browserName: 'chrome'
+        platform: 'Windows 7'
+        version: '35'
+
+    sl_firefox:
+        base: 'SauceLabs'
+        browserName: 'firefox'
+        version: '30'
+
+    sl_ios_safari:
+        base: 'SauceLabs'
+        browserName: 'iphone'
+        platform: 'OS X 10.9'
+        version: '7.1'
+
+    sl_ie_11:
+        base: 'SauceLabs'
+        browserName: 'internet explorer'
+        platform: 'Windows 8.1'
+        version: '11'
+
+    sl_chrome_android:
+        base: 'SauceLabs'
+        browserName: 'android chrome'
+        platform: 'Linux'
+        deviceName: 'Android'
+        version: '4.4'
+        "device-orientation": 'landscape'
+
+
 module.exports = (config) =>
   config.set
 
@@ -32,7 +65,7 @@ module.exports = (config) =>
 
     # test results reporter to use
     # possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['progress']#, 'benchmark']
+    reporters: ['progress', 'saucelabs']
 
 
     # web server port
@@ -54,18 +87,17 @@ module.exports = (config) =>
     # tests whenever any file changes
     autoWatch: true
 
+    sauceLabs:
+        testName: 'PsychoCoffee Unit and Integration Tests'
 
-    # Start these browsers, currently available:
-    browsers: ['PhantomJS']
+    customLaunchers: customLaunchers
 
+    browsers: Object.keys(customLaunchers)
+    
+    singleRun: true
 
     # If browser does not capture in given timeout [ms], kill it
     captureTimeout: 600000000
-
-
-    # Continuous Integration mode
-    # if true, it capture browsers, run tests and exit
-    singleRun: false
 
     preprocessors:
         '**/*.coffee': 'coffee'

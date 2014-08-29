@@ -1,7 +1,11 @@
 language: node_js
 node_js:
-    - "0.11"
-    - "0.10"
+- '0.11'
+- '0.10'
 before_script:
-    - "npm install -g brunch"
-    - "npm run build"
+- npm install -g brunch
+- npm run build
+env:
+  global:
+  - secure: Vs9OOm40NwME9cixJyPxam4Nbb3Pa5eHYFtGWkLEeE+l6T2l0RN0INxWahH24GAbNHkdFH0vv5OdOP264dZwxBQYDWSx40JpxHZyxFEX5znVkDMlOZ78IJ6p4u1OmUQI2xKRd0NZQaQxh1ySmyos75hHDg+0aU/3SLsUs5CEZrU=
+  - secure: sridQnCb0VXu1QjWKO5Ovj9hjoFOsDjfSpTSuMpJUOieMjlOu2ndHyLfShWvQd3RPNiBClyQcuvPBFqWmRZNyznTq19oMvd4NRVbFDzYqzPzJZJss/UwnEYqH2WTDCvOuM8kbqLzCFPTQPiBFiJbgPn6SkoqYuLUwEKD4R8MFe0=
