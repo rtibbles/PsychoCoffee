@@ -14,6 +14,7 @@ class Model extends Base.Model
         timeout: 1000
         parameterSet: {}
         trialObjects: []
+        numberOfTrials: null
 
     trialProperties: [
         "title"
