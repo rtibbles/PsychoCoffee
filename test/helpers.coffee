@@ -3,7 +3,11 @@ require('initialize')
 document.write('<div id="backbone-testing"></div>')
 PsychoCoffee.rootElement = '#backbone-testing'
 
-module 'Integration tests',
-    setup: ->
+testCount = 0
+qunitTest = QUnit.test
+QUnit.test = window.test = ->
+    testCount += 1
+    qunitTest.apply(this, arguments)
 
-    teardown: ->
+QUnit.begin (args) ->
+    args.totalTests = testCount
