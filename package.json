@@ -12,7 +12,7 @@
     "node": "~0.6.10 || 0.8 || 0.9"
   },
   "scripts": {
-    "test": "karma start karma.conf-ci.coffee",
+    "test": "./node_modules/karma/bin/karma start karma.conf-ci.coffee",
     "start": "brunch watch --server",
     "build": "brunch build",
     "build:production": "brunch build --production"
