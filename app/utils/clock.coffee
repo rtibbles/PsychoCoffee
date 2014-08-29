@@ -105,9 +105,7 @@ class Clock
     delayedTrigger: (delay, object, callback) =>
         frames = delay/@tick
         nearestFrame = Math.floor frames
-        timeoutDelay = @tick * (nearestFrame - frames)
-        if timeoutDelay >= 1
-            callback = -> setTimeout(callback, timeoutDelay)
+        # Can't guarantee precision below 16ms, so don't even try.
         object.listenToOnce(@, @frame + nearestFrame, callback)
 
     startTimer: =>
