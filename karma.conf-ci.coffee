@@ -27,13 +27,13 @@ customLaunchers =
         platform: 'Windows 8.1'
         version: '11'
 
-    sl_chrome_android:
-        base: 'SauceLabs'
-        browserName: 'android chrome'
-        platform: 'Linux'
-        deviceName: 'Android'
-        version: '4.4'
-        "device-orientation": 'landscape'
+    # sl_chrome_android:
+    #     base: 'SauceLabs'
+    #     browserName: 'android chrome'
+    #     platform: 'Linux'
+    #     deviceName: 'Android'
+    #     version: '4.4'
+    #     "device-orientation": 'landscape'
 
 
 module.exports = (config) =>
