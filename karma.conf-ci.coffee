@@ -97,7 +97,7 @@ module.exports = (config) =>
     singleRun: true
 
     # If browser does not capture in given timeout [ms], kill it
-    captureTimeout: 600000000
+    captureTimeout: 10000
 
     preprocessors:
         '**/*.coffee': 'coffee'
