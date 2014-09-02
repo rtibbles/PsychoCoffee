@@ -130,12 +130,10 @@ class Clock
         delete @timerStart
 
     timerElapsed: =>
-        if @timerStart?
-            @getElapsedTime(@timerStart)
-        else
-            0
+        @getElapsedTime(@timerStart) or 0
 
     ticktock: =>
+        # console.log @timerElapsed()
         @timer = setTimeout(
             @ticktock,
             @tick - (@timerElapsed() - @frame*@tick)

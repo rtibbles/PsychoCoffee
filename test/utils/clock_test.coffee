@@ -57,7 +57,9 @@ test "Timer Tick Tock Test", ->
     expect 62
 
     timedCheck = (frame) ->
-        ok Math.round(frame*window.clock.tick/10) == Math.round(window.clock.timerElapsed()/10)
+        clocktime = window.clock.timerElapsed()
+        frametime = frame*window.clock.tick
+        ok Math.abs(clocktime - frametime) < 10
 
     window.clock.startTimer()
     ok typeof(window.clock.timerStart) == "number"
@@ -74,4 +76,4 @@ test "Timer Tick Tock Test", ->
     
     setTimeout ->
         start()
-    , 1100
+    , 1500
