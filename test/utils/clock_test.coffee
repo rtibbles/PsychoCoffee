@@ -47,4 +47,31 @@ test "Clock Time Methods", ->
         start()
     , 100
 
-    # TODO: Tests for stopWatch/Trial Timing methods.
+
+test "Timer Tick Tock Test", ->
+    ###
+    Runs 60 frames (a second under default frame rate) of the timer
+    and checks that the total time elapsed is within acceptable limits (10ms).
+    ###
+
+    expect 62
+
+    timedCheck = (frame) ->
+        ok Math.round(frame*window.clock.tick/10) == Math.round(window.clock.timerElapsed()/10)
+
+    window.clock.startTimer()
+    ok typeof(window.clock.timerStart) == "number"
+
+    window.clock.stopTimer()
+    ok window.clock.timerStart == undefined
+
+    stop()
+    window.clock.startTimer()
+    [1..60].forEach (i) ->
+        setTimeout ->
+            timedCheck(i)
+        , i*window.clock.tick
+    
+    setTimeout ->
+        start()
+    , 1100
