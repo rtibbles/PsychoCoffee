@@ -35,3 +35,6 @@ design/
 testing_output/
 
 api/datasource.coffee
+
+# SauceLabs Connect credentials
+user.coffee

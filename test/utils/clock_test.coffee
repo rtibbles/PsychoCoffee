@@ -47,19 +47,17 @@ test "Clock Time Methods", ->
         start()
     , 100
 
+framerateTests = (framerate) ->
+    window.clock = new PsychoCoffee.clock.Clock(framerate)
 
-test "Timer Tick Tock Test", ->
-    ###
-    Runs 60 frames (a second under default frame rate) of the timer
-    and checks that the total time elapsed is within acceptable limits (10ms).
-    ###
+    startTimes = [1..framerate]
 
-    expect 62
+    expect framerate + 2
 
-    timedCheck = (frame) ->
-        clocktime = window.clock.timerElapsed()
+    timedCheck = (frame, startTime) ->
+        clocktime = window.clock.timerElapsed() - startTime
         frametime = frame*window.clock.tick
-        ok Math.abs(clocktime - frametime) < 10
+        ok Math.abs(clocktime - frametime) < window.clock.tick
 
     window.clock.startTimer()
     ok typeof(window.clock.timerStart) == "number"
@@ -69,11 +67,20 @@ test "Timer Tick Tock Test", ->
 
     stop()
     window.clock.startTimer()
-    [1..60].forEach (i) ->
+    [1..framerate].forEach (i) ->
+        startTimes[i-1] = window.clock.timerElapsed()
         setTimeout ->
-            timedCheck(i)
+            timedCheck(i, startTimes[i-1])
         , i*window.clock.tick
     
     setTimeout ->
         start()
     , 1500
+
+
+test "Timer Tick Tock Test", ->
+    ###
+    Runs 60 frames (a second under default frame rate) of the timer
+    and checks that the total time elapsed is within acceptable limits (16.7ms).
+    ###
+    framerateTests(60)

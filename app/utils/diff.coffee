@@ -6,10 +6,10 @@ else
 id_attr = "id"
 
 diff = (master, update) ->
-    if not master then return update
+    if _.isEmpty(master) then return update
     ret = {}
-    for name,value of master
-        if name of update
+    for name,value of update
+        if name of master
             if _.isObject(update[name])
                 if _.isArray(update[name])
                     ret[name] = []
@@ -29,14 +29,24 @@ diff = (master, update) ->
             else if not _.isEqual(master[name], update[name]) or
                     name == id_attr
                 ret[name] = update[name]
+        else
+            ret[name] = update[name]
     keys = Object.keys(ret)
     if keys.length==1 and keys[0]==id_attr
         return {}
     else
         return ret
 
+###
+This will not work, and is not designed to work
+for arrays that do not contain objects.
+Arrays of objects allow for unique identification
+of elements in the array, and mean that the exact ordering
+is unimportant. Hard to do this with a diff otherwise.
+###
+
 merge = (master, update) ->
-    if not master then return update
+    if _.isEmpty(master) then return update
     for name, value of update
         if name of master
             if _.isObject(update[name])
@@ -45,7 +55,7 @@ merge = (master, update) ->
                         update_node = update[name][i]
                         if _.isObject(update_node)
                             master_node = _.find(master[name], (item) ->
-                                item.id==update_node.id)
+                                item[id_attr]==update_node[id_attr])
                             if master_node
                                 master_node = merge(master_node, update_node)
                             else
