@@ -1,12 +1,12 @@
 'use strict'
 
-TrialObject = require("../TrialObject")
+define ['cs!../TrialObject'],
+    (TrialObject) ->
 
-class Model extends TrialObject.Model
+    class Model extends TrialObject.Model
 
-    name: ->
-        @get("name") or @get("file")
+        name: ->
+            @get("name") or @get("file")
 
-module.exports =
     Model: Model
     Type: "audio"

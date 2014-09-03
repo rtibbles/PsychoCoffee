@@ -1,7 +1,8 @@
+requirejs = require 'requirejs'
 fs = require 'fs'
 loopback = require 'loopback'
 DataSource = require('loopback-datasource-juggler').DataSource
-DiffTools = require '../../app/utils/diff'
+DiffTools = requirejs 'cs!./app/utils/diff'
 database = require '../datasource'
 
 module.exports = mountRestApi = (server) ->

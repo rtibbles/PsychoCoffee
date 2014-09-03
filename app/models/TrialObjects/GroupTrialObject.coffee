@@ -16,39 +16,39 @@ always ignored, and any arrays passed in as parameters
 are assumed to be parameters for the children.
 ###
 
-TrialObject = require("../TrialObject")
+define ['cs!../TrialObject'],
+    (TrialObject) ->
 
-class Model extends TrialObject.Model
+    class Model extends TrialObject.Model
 
 
-    defaults: ->
-        _.extend
-            trialObjects: []
-            super
-    
-    relations: [
-        type: Backbone.Many
-        key: 'trialObjects'
-        collectionType: TrialObject.Collection
-    ]
+        defaults: ->
+            _.extend
+                trialObjects: []
+                super
+        
+        relations: [
+            type: Backbone.Many
+            key: 'trialObjects'
+            collectionType: TrialObject.Collection
+        ]
 
-    parameterizedTrial: (parameters) ->
-        attributes = super()
-        trialObjects = []
-        for model, index in attributes.trialObjects.models
-            localParameters = {}
-            for key, value of parameters
-                if value instanceof Array
-                    localParameters[key] = value[index]
-                else
-                    localParameters[key] = value
-            trialObjects.push model.parameterizedTrial(localParameters)
-        attributes.trialObjects = trialObjects
-        return attributes
+        parameterizedTrial: (parameters) ->
+            attributes = super()
+            trialObjects = []
+            for model, index in attributes.trialObjects.models
+                localParameters = {}
+                for key, value of parameters
+                    if value instanceof Array
+                        localParameters[key] = value[index]
+                    else
+                        localParameters[key] = value
+                trialObjects.push model.parameterizedTrial(localParameters)
+            attributes.trialObjects = trialObjects
+            return attributes
 
-    createTrialObject: (options) ->
-        @get("trialObjects").create(options)
+        createTrialObject: (options) ->
+            @get("trialObjects").create(options)
 
-module.exports =
     Model: Model
     Type: "group"

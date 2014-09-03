@@ -1,23 +1,22 @@
 'use strict'
 
-Base = require('./Base')
-TrialObject = require("./TrialObject")
+define ['cs!./Base', 'cs!./TrialObject'],
+    (Base, TrialObject) ->
 
-class Model extends Base.Model
-    defaults:
-        width: 640
-        height: 480
-        trialObjects: []
+    class Model extends Base.Model
+        defaults:
+            width: 640
+            height: 480
+            trialObjects: []
 
-    relations: [
-        type: Backbone.Many
-        key: 'trialObjects'
-        collectionType: TrialObject.Collection
-    ]
+        relations: [
+            type: Backbone.Many
+            key: 'trialObjects'
+            collectionType: TrialObject.Collection
+        ]
 
-class Collection extends Base.Collection
-    model: Model
+    class Collection extends Base.Collection
+        model: Model
 
-module.exports =
     Model: Model
     Collection: Collection

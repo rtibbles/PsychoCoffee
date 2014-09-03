@@ -1,35 +1,37 @@
-###
-Derived from:
- Javascript HashCode v1.0.0
- This function returns a hash code (MD5) based on the argument object.
- http://pmav.eu/stuff/javascript-hash-code
+define ->
 
- Example:
-  var s = "my String";
-  alert(HashCode.value(s));
+    ###
+    Derived from:
+     Javascript HashCode v1.0.0
+     This function returns a hash code (MD5) based on the argument object.
+     http://pmav.eu/stuff/javascript-hash-code
 
- pmav, 2010
-###
+     Example:
+      var s = "my String";
+      alert(HashCode.value(s));
 
-serialize = (object) ->
-    serializedCode = ""
+     pmav, 2010
+    ###
 
-    type = typeof object
+    serialize = (object) ->
+        serializedCode = ""
 
-    if type == 'object'
+        type = typeof object
 
-        for element of object
-            serializedCode += "[" + type + ":" +
-                element + serialize(object[element]) + "]"
+        if type == 'object'
+
+            for element of object
+                serializedCode += "[" + type + ":" +
+                    element + serialize(object[element]) + "]"
 
 
-    else if type == 'function'
-        serializedCode += "[" + type + ":" + object.toString() + "]"
-    else
-        serializedCode += "[" + type + ":" + object + "]"
+        else if type == 'function'
+            serializedCode += "[" + type + ":" + object.toString() + "]"
+        else
+            serializedCode += "[" + type + ":" + object + "]"
 
-    return serializedCode.replace(/\s/g, "")
+        return serializedCode.replace(/\s/g, "")
 
-module.exports = (object) ->
+    (object) ->
 
-    md5(serialize(object))
+        md5(serialize(object))

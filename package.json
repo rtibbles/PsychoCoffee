@@ -33,7 +33,8 @@
     "loopback": "~2.1.4",
     "loopback-boot": "~2.0.0",
     "loopback-connector-mongodb": "~1.4.3",
-    "underscore": "~1.7.0"
+    "underscore": "~1.7.0",
+    "requirejs": "~2.1.14"
   },
   "devDependencies": {
     "karma": "~0.12.9",
