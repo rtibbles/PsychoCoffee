@@ -41,7 +41,7 @@ exports.config =
         indentation:
             value: 4
     uglify:
-          mangle: false
+          mangle: true
           compress:
             global_defs: 
               DEBUG: false

@@ -1,6 +1,6 @@
 module "ExperimentParameterSet Model Tests",
 
-    setup: =>
+    setup: ->
         window.experimentParameterSet = new PsychoCoffee.ExperimentParameterSet.Model
 
 test "Default values", ->

@@ -1,6 +1,6 @@
 module "BlockParameterSet Model Tests",
 
-    setup: =>
+    setup: ->
         window.blockParameterSet = new PsychoCoffee.BlockParameterSet.Model
 
 test "Default values", ->

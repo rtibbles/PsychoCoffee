@@ -1,6 +1,6 @@
 module "Parameter Model Tests",
 
-    setup: =>
+    setup: ->
         window.parameter = new PsychoCoffee.Parameter.Model
 
 test "Default values", ->

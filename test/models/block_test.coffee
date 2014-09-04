@@ -1,6 +1,6 @@
 module "Block Model Tests",
 
-    setup: =>
+    setup: ->
         window.block = new PsychoCoffee.Block.Model
 
 test "Default values", ->

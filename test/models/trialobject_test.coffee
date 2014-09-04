@@ -1,6 +1,6 @@
 module "TrialObject Model Tests",
 
-    setup: =>
+    setup: ->
         window.trialObject = new PsychoCoffee.TrialObject.Model
 
 test "Default values", ->
