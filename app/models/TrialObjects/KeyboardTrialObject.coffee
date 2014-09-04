@@ -1,16 +1,15 @@
 'use strict'
 
-define ['cs!../TrialObject', 'cs!utils/keys'],
-    (TrialObject, Keys) ->
+TrialObject = require "../TrialObject"
+Keys = require "utils/keys"
 
-    class Model extends TrialObject.Model
+class Model extends TrialObject.Model
 
-        objectOptions: ->
-            super().concat([
-                name: "keys"
-                default: _.keys(Keys.Keys)
-                type: "array"
-            ])
+    defaults: ->
+        _.extend
+            keys: _.keys(Keys.Keys)
+            super
 
+module.exports =
     Model: Model
     Type: "keyboard"

@@ -1,13 +1,13 @@
 'use strict'
 
-define ['cs!./NestedAPIBase'],
-    (NestedAPIBase) ->
+NestedAPIBase = require('./NestedAPIBase')
 
-    class Model extends NestedAPIBase.Model
+class Model extends NestedAPIBase.Model
 
 
-    class Collection extends NestedAPIBase.Collection
-        model: Model
+class Collection extends NestedAPIBase.Collection
+    model: Model
 
+module.exports =
     Model: Model
     Collection: Collection

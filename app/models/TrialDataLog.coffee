@@ -1,32 +1,33 @@
 'use strict'
 
-define ['cs!./NestedAPIBase', 'cs!./EventLog'],
-    (NestedAPIBase, EventLog) ->
+NestedAPIBase = require('./NestedAPIBase')
+EventLog = require('./EventLog')
 
-    class Model extends NestedAPIBase.Model
+class Model extends NestedAPIBase.Model
 
-        defaults:
-            trialeventlogs: []
+    defaults:
+        trialeventlogs: []
 
-        relations: [
-            type: Backbone.Many
-            key: 'trialeventlogs'
-            collectionType: EventLog.Collection
-        ]
+    relations: [
+        type: Backbone.Many
+        key: 'trialeventlogs'
+        collectionType: EventLog.Collection
+    ]
 
-        logEvent: (event_type, clock, options={}) =>
-            @addEvent(
-                _.extend options,
-                    experiment_time: clock.getTime()
-                    trial_time: clock.timerElapsed()
-                    event_type: event_type
-                    )
+    logEvent: (event_type, clock, options={}) =>
+        @addEvent(
+            _.extend options,
+                experiment_time: clock.getTime()
+                trial_time: clock.timerElapsed()
+                event_type: event_type
+                )
 
-        addEvent: (event) ->
-            @get("trialeventlogs").create event
+    addEvent: (event) ->
+        @get("trialeventlogs").create event
 
-    class Collection extends NestedAPIBase.Collection
-        model: Model
+class Collection extends NestedAPIBase.Collection
+    model: Model
 
+module.exports =
     Model: Model
     Collection: Collection

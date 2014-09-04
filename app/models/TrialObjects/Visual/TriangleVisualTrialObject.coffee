@@ -1,9 +1,9 @@
 'use strict'
 
-define ['cs!../VisualTrialObject'],
-    (VisualTrialObject) ->
+VisualTrialObject = require("../VisualTrialObject")
 
-    class Model extends VisualTrialObject.Model
+class Model extends VisualTrialObject.Model
 
+module.exports =
     Model: Model
     Type: "triangle"
