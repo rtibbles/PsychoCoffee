@@ -56,7 +56,7 @@ merge = (master, update) ->
                         if _.isObject(update_node)
                             master_node = _.find(master[name], (item) ->
                                 item[id_attr]==update_node[id_attr])
-                            if master_node
+                            if _.isObject(master_node)
                                 master_node = merge(master_node, update_node)
                             else
                                 master[name].push update_node
