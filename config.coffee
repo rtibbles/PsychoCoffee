@@ -11,7 +11,7 @@ exports.config =
           'vendor/scripts/common/es5-shim.min.js',
           'vendor/scripts/common/modernizr.min.js',
           'vendor/scripts/common/console-polyfill.js',
-          'vendor/scripts/common/jquery.js',
+          'vendor/scripts/development/jquery-1.11.1.js',
           'vendor/scripts/common/jquery.ajax-progress.js',
           'vendor/scripts/common/handlebars.js',
           'vendor/scripts/common/underscore.js',
@@ -40,6 +40,11 @@ exports.config =
       options:
         indentation:
             value: 4
+    uglify:
+          mangle: false
+          compress:
+            global_defs: 
+              DEBUG: false
   server:
     path: 'server.coffee'
     port: 3333
@@ -56,7 +61,7 @@ exports.config =
               'vendor/scripts/common/es5-shim.min.js',
               'vendor/scripts/common/modernizr.min.js',
               'vendor/scripts/common/console-polyfill.js',
-              'vendor/scripts/common/jquery.js',
+              'vendor/scripts/production/jquery-1.11.1.min.js',
               'vendor/scripts/common/jquery.ajax-progress.js',
               'vendor/scripts/common/handlebars.js',
               'vendor/scripts/common/underscore.js',
