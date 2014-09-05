@@ -22,6 +22,7 @@ module "Experiment View Tests",
             ]
         )
         @setupExperimentModel()
+        @setupExperimentView()
 
     tearDown: ->
         @server.restore()
@@ -32,7 +33,7 @@ test "Default values", ->
 
     expect 5
 
-    @setupExperimentView()
+    
     @server.respond()
     @experimentview.progressBarView.close()
 
@@ -45,8 +46,6 @@ test "Default values", ->
 test "Methods", ->
 
     expect 5
-
-    @setupExperimentView()
 
     @startExperiment = sinon.stub @experimentview, "startExperiment"
 
