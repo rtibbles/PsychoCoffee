@@ -1,6 +1,6 @@
 module "Clock Util Tests",
 
-    setup: =>
+    setup: ->
         window.clock = new PsychoCoffee.clock.Clock()
 
 test "Default values", ->

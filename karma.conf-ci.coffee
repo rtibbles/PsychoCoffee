@@ -44,7 +44,7 @@ module.exports = (config) =>
 
 
     # frameworks to use
-    frameworks: ['qunit', 'benchmark']
+    frameworks: ['qunit', 'benchmark', 'sinon']
 
 
     # list of files / patterns to load in the browser

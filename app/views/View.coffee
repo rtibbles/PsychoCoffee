@@ -4,9 +4,9 @@
 module.exports = class View extends Backbone.View
     initialize: (options) =>
         super
-        @clock = options.clock
-        @user_id = options.user_id
-        @injectedParameters = options.parameters
+        @clock = options?.clock
+        @user_id = options?.user_id
+        @injectedParameters = options?.parameters
 
     template: ->
         return
@@ -25,7 +25,7 @@ module.exports = class View extends Backbone.View
 
     instantiateSubViews: (key, viewType, viewFunction, options={}) =>
         @subViews = {}
-        for model in @model.get(key).models
+        for model in @model?.get(key).models or []
             if viewFunction? then viewType = viewFunction(model)
             options = _.extend(
                 options

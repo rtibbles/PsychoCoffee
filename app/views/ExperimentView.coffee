@@ -19,7 +19,7 @@ module.exports = class ExperimentView extends HandlerView
         # This sets the User ID depending on the way that the experiment
         # is being run, also collects other relevant information for
         # different subject pool conditions.
-        switch @model.get("subjectPool")
+        switch @model?.get("subjectPool")
             when "AMT"
                 @user_id = @urlParams.workerId
                 @assignment_id = @urlParams.assignmentId
@@ -32,7 +32,7 @@ module.exports = class ExperimentView extends HandlerView
         @render()
         @appendTo("#app")
         @datacollection = new ExperimentDataHandler.Collection
-            experiment_identifier: @model.get("identifier")
+            experiment_identifier: @model?.get("identifier")
             participant_id: @user_id
         @datacollection.filterFetch().then =>
             @datamodel = @datacollection.getOrCreateParticipantModel(@user_id,
