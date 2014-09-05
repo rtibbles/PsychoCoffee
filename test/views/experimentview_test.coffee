@@ -35,8 +35,7 @@ test "Default values", ->
 
     
     @server.respond()
-    @experimentview.progressBarView.close()
-
+    @experimentview.startExperiment()
     ok @experimentview.clock instanceof PsychoCoffee.clock.Clock, "Check clock instantiated"
     equal @experimentview.user_id, PsychoCoffee.stringHash(PsychoCoffee.fingerprint()), "Check user_id instantiated"
     ok @experimentview.datacollection instanceof PsychoCoffee.ExperimentDataHandler.Collection, "Check data collection instantiated"
@@ -47,15 +46,11 @@ test "Methods", ->
 
     expect 5
 
-    @startExperiment = sinon.stub @experimentview, "startExperiment"
+    @preloadExperiment = sinon.stub @experimentview, "preLoadExperiment"
 
     @server.respond()
 
-    @experimentview.progressBarView.close()
-
-    ok @startExperiment.calledOnce
-
-    @startExperiment.restore()
+    ok @preloadExperiment.calledOnce
 
     @logEvent = sinon.stub @experimentview, "logEvent"
 
