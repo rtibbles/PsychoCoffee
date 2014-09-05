@@ -1,21 +1,21 @@
 module "Parameter Model Tests",
 
     setup: ->
-        window.parameter = new PsychoCoffee.Parameter.Model
+        @parameter = new PsychoCoffee.Parameter.Model
 
 test "Default values", ->
     expect 6
 
-    equal window.parameter.get("randomized"), false
-    equal window.parameter.get("returnType"), "fixedList"
-    equal window.parameter.get("dataType"), ""
-    equal window.parameter.get("parameterName"), "Untitled Parameter"
-    deepEqual window.parameter.get("parameters"), []
-    deepEqual window.parameter.get("parameterizedAttributes"), {}
+    equal @parameter.get("randomized"), false
+    equal @parameter.get("returnType"), "fixedList"
+    equal @parameter.get("dataType"), ""
+    equal @parameter.get("parameterName"), "Untitled Parameter"
+    deepEqual @parameter.get("parameters"), []
+    deepEqual @parameter.get("parameterizedAttributes"), {}
 
 
 test "Methods", ->
     expect 1
     
-    parameterList = window.parameter.returnParameterList("testing", null, {})
+    parameterList = @parameter.returnParameterList("testing", null, {})
     deepEqual parameterList, []
