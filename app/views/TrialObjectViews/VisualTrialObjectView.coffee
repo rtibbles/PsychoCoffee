@@ -8,6 +8,7 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
         @canvas = endpoints.canvas
         @object.setVisible false
         @canvas.add @object
+        @render()
 
     activate: ->
         @object.hasControls = false

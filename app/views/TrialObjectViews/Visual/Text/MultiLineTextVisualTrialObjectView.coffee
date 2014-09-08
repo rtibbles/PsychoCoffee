@@ -1,12 +1,18 @@
 'use strict'
 
 TextVisualTrialObjectView = require '../TextVisualTrialObjectView'
+wrapCanvasText = require 'utils/wrapCanvasText'
 
 module.exports =
     class MultiLineTextVisualTrialObjectView extends TextVisualTrialObjectView
 
         render: ->
-            if not @object
-                @object = new @object_type @model.returnRequired()[0],
-                    @model.returnOptions()
             super
+            if @canvas
+                @object = wrapCanvasText(
+                    @object
+                    @canvas
+                    @model.get("width")
+                    @model.get("height")
+                    @model.get("justify")
+                    )
