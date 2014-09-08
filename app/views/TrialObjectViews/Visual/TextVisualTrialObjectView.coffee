@@ -20,7 +20,6 @@ module.exports = class TextVisualTrialObjectView extends VisualTrialObjectView
         else if "key" of options
             text = Keys.KeysToText[options.key] or options.key
             if typeof text == "string" and options.shiftKey
-                console.log "True"
                 text = text.toUpperCase()
         if text instanceof Function
             @model.set("text", text(@model.get("text")))

@@ -97,7 +97,7 @@ module.exports = (t, canvas, maxW, maxH, justify) ->
     
     # get rid of empy newline at the end
     formatted = formatted.substr(0, formatted.length - 1)
-                                                                    
+
     ret = t.setText(formatted)
 
     return ret
