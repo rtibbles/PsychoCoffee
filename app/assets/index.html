@@ -6,13 +6,13 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Online Experiments</title>
+    <title>PsychoCoffee Experiment Editor</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-    <link rel="stylesheet" href="/stylesheets/app.css">
+    <link rel="stylesheet" href="/stylesheets/PsychoCoffee.css">
     <link rel="icon" type="image/png" href="/favicon.png">
 
   </head>
@@ -24,7 +24,21 @@
     <script src="/js/vendor.js"></script>
     <script src="/js/app.js"></script>
     <script>require('initialize');</script>
+    <script src="/js/editor_vendor.js"></script>
+    <script type="text/javascript" src="msg/js/en.js"></script>
+    <script src="js/experiment_editor.js"></script>
     <div id="app"></div>
+    <div id="blocklyDiv" style="height: 480px; width: 600px;">
+      <xml id="toolbox" style="display: none">
+        <block type="controls_if"></block>
+        <block type="controls_repeat_ext"></block>
+        <block type="logic_compare"></block>
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+        <block type="text"></block>
+        <block type="text_print"></block>
+      </xml>
+    </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
@@ -33,6 +47,10 @@
       e.src='//www.google-analytics.com/analytics.js';
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
       ga('create','UA-XXXXX-X');ga('send','pageview');
+    </script>
+     <script type="text/javascript">
+      Blockly.inject(document.getElementById('blocklyDiv'),
+          {path: './', toolbox: document.getElementById('toolbox')});
     </script>
   </body>
 </html>

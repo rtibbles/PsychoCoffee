@@ -3,9 +3,11 @@ exports.config =
     watched: ['api', 'app', 'envs', 'vendor', 'test','server.coffee']
   files:
     javascripts: 
-      joinTo: 
-        'js/app.js': /^(app|envs\/development)/,
-        'js/vendor.js': /^(vendor\/scripts\/(common|development)|vendor\\scripts\\(common|development))/
+      joinTo:
+        'js/experiment_editor.js': /^(app|envs\/development)(\/|\\)experiment_editor/,
+        'js/app.js': /^(app|envs\/development)(\/|\\)(?!experiment_editor)/,
+        'js/vendor.js': /^(vendor\/scripts\/(common|development)|vendor\\scripts\\(common|development))/,
+        'js/editor_vendor.js': /^(vendor\/scripts\/editor|vendor\\scripts\\editor)/
       order: 
         before: [
           'vendor/scripts/common/es5-shim.min.js',
@@ -53,9 +55,11 @@ exports.config =
     production: 
       files: 
         javascripts: 
-          joinTo: 
-            'js/app.js': /^(app|envs\/production)/,
-            'js/vendor.js': /^(vendor\/scripts\/(common|production)|vendor\\scripts\\(common|production))/
+          joinTo:
+            'js/experiment_editor.js': /^(app|envs\/production)(\/|\\)experiment_editor/,
+            'js/app.js': /^(app|envs\/production)(\/|\\)(?!experiment_editor)/,
+            'js/vendor.js': /^(vendor\/scripts\/(common|production)|vendor\\scripts\\(common|production))/,
+            'js/editor_vendor.js': /^(vendor\/scripts\/editor|vendor\\scripts\\editor)/
           order: 
             before: [
               'vendor/scripts/common/es5-shim.min.js',
