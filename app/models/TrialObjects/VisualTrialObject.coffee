@@ -8,41 +8,49 @@ class Model extends TrialObject.Model
         super().concat([
             name: "angle"
             default: 0
-            type: "number"
+            type: "Number"
         ,
             name: "fill"
             default: "#000000"
-            type: "hex-colour"
+            type: "Colour"
         ,
             name: "height"
-            type: "number"
+            type: "Number"
         ,
             name: "x"
             default: 0
-            type: "number"
+            type: "Number"
             alias: "left"
         ,
             name: "opacity"
             default: 1
-            type: "number"
+            type: "Number"
         ,
             name: "originX"
             default: "center"
-            type: "options"
-            options: ["center", "left", "right"]
+            type: "String"
+            options: [
+                ["center", "CENTER"]
+                ["left", "LEFT"]
+                ["right", "RIGHT"]
+            ]
         ,
             name: "originY"
             default: "center"
-            type: "options"
-            options: ["center", "top", "bottom"]
+            type: "String"
+            options: [
+                ["center", "CENTER"]
+                ["top", "TOP"]
+                ["bottom", "BOTTOM"]
+            ]
         ,
             name: "y"
             default: 0
-            type: "number"
+            type: "Number"
             alias: "top"
         ,
             name: "width"
-            type: "number"
+            type: "Number"
         ])
 
 module.exports =

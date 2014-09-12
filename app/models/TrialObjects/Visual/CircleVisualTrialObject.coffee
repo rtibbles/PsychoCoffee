@@ -9,7 +9,7 @@ class Model extends VisualTrialObject.Model
             [
                     name: "radius"
                     default: 24
-                    type: "number"
+                    type: "Number"
             ])
 
 module.exports =

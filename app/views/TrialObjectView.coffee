@@ -42,10 +42,7 @@ module.exports = class TrialObjectView extends View
         @clock.changeEvents.push event
 
     logDetails: ->
-        if PsychoCoffee.DEBUG
-            @model.attributes
-        else
-            @model.get("type") or @model.get("subModelTypeAttribute")
+        @model.get("type") or @model.get("subModelTypeAttribute")
 
     activate: ->
         if not @active

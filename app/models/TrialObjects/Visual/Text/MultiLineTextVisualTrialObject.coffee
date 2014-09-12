@@ -9,8 +9,12 @@ class Model extends TextVisualTrialObject.Model
             [
                     name: "justify"
                     default: "left"
-                    type: "options"
-                    options: ["left", "right", "center"]
+                    type: "String"
+                    options: [
+                        ["left", "LEFT"]
+                        ["right", "RIGHT"]
+                        ["center", "CENTER"]
+                    ]
             ])
 
     name: ->

@@ -7,28 +7,36 @@ class Model extends TrialObject.Model
     objectOptions: ->
         super().concat([
             name: "height"
-            type: "number"
+            type: "Number"
         ,
             name: "x"
             default: 0
-            type: "number"
+            type: "Number"
         ,
             name: "originX"
             default: "center"
-            type: "options"
-            options: ["center", "left", "right"]
+            type: "String"
+            options: [
+                ["center", "CENTER"]
+                ["left", "LEFT"]
+                ["right", "RIGHT"]
+            ]
         ,
             name: "originY"
             default: "center"
-            type: "options"
-            options: ["center", "top", "bottom"]
+            type: "String"
+            options: [
+                ["center", "CENTER"]
+                ["top", "TOP"]
+                ["bottom", "BOTTOM"]
+            ]
         ,
             name: "y"
             default: 0
-            type: "number"
+            type: "Number"
         ,
             name: "width"
-            type: "number"
+            type: "Number"
         ])
 
 module.exports =

@@ -17,19 +17,19 @@ class Model extends VisualTrialObject.Model
             [
                     name: "fontSize"
                     default: 24
-                    type: "number"
+                    type: "Number"
                 ,
                     name: "fontFamily"
                     default: "arial"
-                    type: "string"
+                    type: "String"
                 ,
                     name: "fontStyle"
                     default: "normal"
-                    type: "string"
+                    type: "String"
                 ,
                     name: "backgroundColor"
                     default: ""
-                    type: "hex-colour"
+                    type: "Colour"
             ])
 
     name: ->

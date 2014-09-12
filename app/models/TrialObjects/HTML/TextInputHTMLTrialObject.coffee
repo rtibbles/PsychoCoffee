@@ -8,11 +8,11 @@ class Model extends HTMLTrialObject.Model
         [
             name: "prefill"
             default: ""
-            type: "string"
+            type: "String"
         ,
             name: "prompt"
             default: ""
-            type: "string"
+            type: "String"
         ]
 
     objectOptions: ->
@@ -20,19 +20,19 @@ class Model extends HTMLTrialObject.Model
             [
                     name: "fontSize"
                     default: 24
-                    type: "number"
+                    type: "Number"
                 ,
                     name: "fontFamily"
                     default: "arial"
-                    type: "string"
+                    type: "String"
                 ,
                     name: "fontStyle"
                     default: "normal"
-                    type: "string"
+                    type: "String"
                 ,
                     name: "backgroundColor"
                     default: ""
-                    type: "hex-colour"
+                    type: "Colour"
             ])
 
     name: ->

@@ -8,7 +8,7 @@ class Model extends VisualTrialObject.Model
         [
             name: "file"
             default: ""
-            type: "file"
+            type: "File"
             extensions: ["png", "jpg", "gif"]
         ]
 

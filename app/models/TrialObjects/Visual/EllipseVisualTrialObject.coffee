@@ -9,11 +9,11 @@ class Model extends VisualTrialObject.Model
             [
                     name: "ry"
                     default: 24
-                    type: "number"
+                    type: "Number"
                 ,
                     name: "ry"
                     default: 24
-                    type: "number"
+                    type: "Number"
             ])
 
 module.exports =

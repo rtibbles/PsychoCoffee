@@ -8,7 +8,7 @@ class Model extends VisualTrialObject.Model
         [
             name: "points"
             default: []
-            type: "array"
+            type: "Array"
             embedded_type: fabric.Point
         ]
 

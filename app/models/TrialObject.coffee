@@ -26,19 +26,19 @@ class Model extends Base.Model
         [
             name: "delay"
             default: 0
-            type: "number"
+            type: "Number"
         ,
             name: "duration"
             default: 0
-            type: "number"
+            type: "Number"
         ,
             name: "startWithTrial"
             default: true
-            type: "boolean"
+            type: "Boolean"
         ,
             name: "parameterizedAttributes"
             default: {}
-            type: "object"
+            type: "Object"
         ,
             ###
             Triggers are objects of the form -
@@ -51,7 +51,7 @@ class Model extends Base.Model
             ###
             name: "triggers"
             default: []
-            type: "array"
+            type: "Array"
             embedded_type: Object
         ]
 
