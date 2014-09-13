@@ -19,7 +19,11 @@ class Model extends Base.Model
     requiredParameters: ->
         # Lists all parameters needed to initialize object
         # Assumes listed in order that they appear in args
-        []
+        [
+            name: "name"
+            default: ""
+            type: "String"
+        ]
 
     objectOptions: ->
         # Lists additional parameters for object

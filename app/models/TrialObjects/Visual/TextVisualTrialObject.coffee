@@ -9,7 +9,7 @@ class Model extends VisualTrialObject.Model
         [
             name: "text"
             default: ""
-            type: "string"
+            type: "String"
         ]
 
     objectOptions: ->
