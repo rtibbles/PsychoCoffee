@@ -13,7 +13,7 @@ urlParse = require 'utils/urlParse'
 module.exports = class ExperimentView extends HandlerView
     template: Template
 
-    initialize: =>
+    initialize: (options) =>
         super
         @urlParams = urlParse.decodeGetParams(window.location.href)
         # This sets the User ID depending on the way that the experiment
@@ -27,6 +27,7 @@ module.exports = class ExperimentView extends HandlerView
                 @hitId = @urlParams.hitId
             else
                 @user_id = stringHash(fingerprint())
+        @blockSelector = options.selector or @defaultNextBlock
         @clock = new clock.Clock()
         @refreshTime()
         @render()
@@ -92,9 +93,11 @@ module.exports = class ExperimentView extends HandlerView
         @listenToOnce @blockView, "blockEnded", @nextBlock
         @blockView.startBlock()
 
+    defaultNextBlock: (blocks, blocknumber) ->
+        blocknumber + 1
 
     nextBlock: ->
-        @datamodel.set("block", @datamodel.get("block") + 1)
+        @datamodel.set("block", @trialSelector(@model.get("blocks"), @datamodel.get("block")))
         currentBlock = @model.get("blocks").at(@datamodel.get("block"))
         @showBlock currentBlock
 

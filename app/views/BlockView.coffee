@@ -11,7 +11,7 @@ module.exports = class BlockView extends HandlerView
             "TrialView", null)
         # trialSelector is a function that takes two arguments:
         # the list of possible trials, and the trial number.
-        @trialSelector = options.trialSelector or @defaultNextTrial
+        @trialSelector = options.selector or @defaultNextTrial
 
     generateTrialModels: ->
         [@parameters, @trialListLength, @parameterSet] =
