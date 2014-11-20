@@ -9,6 +9,9 @@ module.exports = class BlockView extends HandlerView
         @generateTrialModels()
         @instantiateSubViews("trials",
             "TrialView", null)
+        # trialSelector is a function that takes two arguments:
+        # the list of possible trials, and the trial number.
+        @trialSelector = options.trialSelector or @defaultNextTrial
 
     generateTrialModels: ->
         [@parameters, @trialListLength, @parameterSet] =
@@ -58,8 +61,11 @@ module.exports = class BlockView extends HandlerView
         @listenToOnce @trialView, "trialEnded", @nextTrial
         @trialView.startTrial()
 
+    defaultNextTrial: (trials, trialnumber) ->
+        trialnumber + 1
+
     nextTrial: ->
-        @datamodel.set("trial", @datamodel.get("trial") + 1)
+        @datamodel.set("trial", @trialSelector(@model.get("trials"), @datamodel.get("trial")))
         currentTrial = @model.get("trials").at(@datamodel.get("trial"))
         @showTrial currentTrial
 
