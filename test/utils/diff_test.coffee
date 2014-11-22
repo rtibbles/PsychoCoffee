@@ -37,7 +37,8 @@ test "Diff Method Nested Object", ->
         that:
             that: "this"
 
-    deepEqual PsychoCoffee.diff.Diff(test_master_object, test_update_object), test_result_object
+    deepEqual PsychoCoffee.diff.Diff(test_master_object, test_update_object),
+        test_result_object
 
 test "Diff Method Nested Array", ->
     expect 1
@@ -53,7 +54,8 @@ test "Diff Method Nested Array", ->
         id: "764"
         that: ["that", "this"]
 
-    deepEqual PsychoCoffee.diff.Diff(test_master_array, test_update_array), test_result_array
+    deepEqual PsychoCoffee.diff.Diff(test_master_array, test_update_array),
+        test_result_array
 
 test "Diff Method Nested Array with Object", ->
     expect 1
@@ -69,7 +71,8 @@ test "Diff Method Nested Array with Object", ->
         id: "764"
         that: ["that", {that: "this"}]
 
-    deepEqual PsychoCoffee.diff.Diff(test_master_array, test_update_array), test_result_array
+    deepEqual PsychoCoffee.diff.Diff(test_master_array, test_update_array),
+        test_result_array
 
 test "Diff Method Nested Array with Objects with ids", ->
     expect 1
@@ -101,7 +104,8 @@ test "Diff Method Nested Array with Objects with ids", ->
             id: "123"
         ]
 
-    deepEqual PsychoCoffee.diff.Diff(test_master_array, test_update_array), test_result_array
+    deepEqual PsychoCoffee.diff.Diff(test_master_array, test_update_array),
+        test_result_array
 
 test "Merge Method Top Level", ->
     expect 2
@@ -138,7 +142,8 @@ test "Merge Method Nested Object", ->
         that:
             that: "this"
 
-    deepEqual PsychoCoffee.diff.Merge(test_master_object, test_update_object), test_result_object
+    deepEqual PsychoCoffee.diff.Merge(test_master_object, test_update_object),
+        test_result_object
 
 test "Merge Method Nested Array", ->
     expect 1
@@ -156,7 +161,8 @@ test "Merge Method Nested Array", ->
         id: "764"
         that: ["that", "this"]
 
-    notDeepEqual PsychoCoffee.diff.Merge(test_master_array, test_update_array), test_result_array
+    notDeepEqual PsychoCoffee.diff.Merge(test_master_array, test_update_array),
+        test_result_array
 
 test "Merge Method Nested Array with Object", ->
     expect 1
@@ -174,7 +180,8 @@ test "Merge Method Nested Array with Object", ->
         id: "764"
         that: ["that", {that: "this"}]
 
-    notDeepEqual PsychoCoffee.diff.Merge(test_master_array, test_update_array), test_result_array
+    notDeepEqual PsychoCoffee.diff.Merge(test_master_array, test_update_array),
+        test_result_array
 
 test "Merge Method Nested Array with Objects with ids", ->
     expect 1
@@ -206,5 +213,6 @@ test "Merge Method Nested Array with Objects with ids", ->
             id: "123"
         ]
 
-    deepEqual PsychoCoffee.diff.Merge(test_master_array, test_update_array), test_result_array
+    deepEqual PsychoCoffee.diff.Merge(test_master_array, test_update_array),
+        test_result_array
 

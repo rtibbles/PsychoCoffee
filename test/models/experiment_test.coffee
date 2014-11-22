@@ -8,7 +8,8 @@ test "Default values", ->
 
     equal @experiment.get("title"), "Experiment"
     equal @experiment.get("saveInterval"), 10000
-    ok @experiment.get("parameterSet") instanceof PsychoCoffee.ExperimentParameterSet.Model
+    ok @experiment.get("parameterSet") instanceof
+        PsychoCoffee.ExperimentParameterSet.Model
     ok @experiment.get("blocks") instanceof PsychoCoffee.Block.Collection
 
 test "Initialize", ->

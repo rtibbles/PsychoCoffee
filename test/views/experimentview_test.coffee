@@ -5,11 +5,14 @@ module "Experiment View Tests",
         @experimentmodelgetstub = sinon.stub(@experimentmodel, "get")
         @experimentmodelgetstub.withArgs("identifier").returns("test_id")
         @experimentmodelgetstub.withArgs("saveInterval").returns(10000)
-        @experimentmodelgetstub.withArgs("blocks").returns(new Backbone.Collection())
-        @experimentmodelparamstub = sinon.stub(@experimentmodel, "returnParameters", -> {})
+        @experimentmodelgetstub.withArgs("blocks")
+            .returns(new Backbone.Collection())
+        @experimentmodelparamstub =
+            sinon.stub(@experimentmodel, "returnParameters", -> {})
 
     setupExperimentView: ->
-        @experimentview = new PsychoCoffee.ExperimentView(model: @experimentmodel)
+        @experimentview =
+            new PsychoCoffee.ExperimentView(model: @experimentmodel)
 
     setup: ->
         @server = sinon.fakeServer.create()
@@ -36,17 +39,25 @@ test "Default values", ->
     
     @server.respond()
     @experimentview.startExperiment()
-    ok @experimentview.clock instanceof PsychoCoffee.clock.Clock, "Check clock instantiated"
-    equal @experimentview.user_id, PsychoCoffee.stringHash(PsychoCoffee.fingerprint()), "Check user_id instantiated"
-    ok @experimentview.datacollection instanceof PsychoCoffee.ExperimentDataHandler.Collection, "Check data collection instantiated"
-    ok @experimentview.datamodel instanceof PsychoCoffee.ExperimentDataHandler.Model, "Check data model instantiated"
+    ok @experimentview.clock instanceof PsychoCoffee.clock.Clock,
+        "Check clock instantiated"
+    equal @experimentview.user_id,
+        PsychoCoffee.stringHash(PsychoCoffee.fingerprint()),
+        "Check user_id instantiated"
+    ok @experimentview.datacollection instanceof
+        PsychoCoffee.ExperimentDataHandler.Collection,
+        "Check data collection instantiated"
+    ok @experimentview.datamodel instanceof
+        PsychoCoffee.ExperimentDataHandler.Model,
+        "Check data model instantiated"
     equal @server.requests.length, 2
 
 test "Methods", ->
 
     expect 5
 
-    @preloadExperiment = sinon.stub @experimentview, "preLoadExperiment"
+    @preloadExperiment =
+        sinon.stub @experimentview, "preLoadExperiment"
 
     @server.respond()
 
