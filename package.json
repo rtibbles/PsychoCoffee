@@ -48,8 +48,8 @@
     "coffeelint-brunch": "~1.7.0",
     "loopback-explorer": "~1.2.9",
     "karma-sauce-launcher": "~0.2.10",
-    "sinon": "~1.10.3",
+    "sinon": "~1.12.1",
     "sinon-qunit": "~2.0.0",
-    "karma-sinon": "~1.0.3"
+    "karma-sinon-ie": "~1.0.1"
   }
 }
