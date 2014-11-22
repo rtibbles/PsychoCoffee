@@ -10,4 +10,5 @@ test "Method Test", ->
     string_2 = "I am a seed! 2"
 
     equal PsychoCoffee.stringHash(string_1), PsychoCoffee.stringHash(string_1)
-    notEqual PsychoCoffee.stringHash(string_1), PsychoCoffee.stringHash(string_2)
+    notEqual PsychoCoffee.stringHash(string_1),
+        PsychoCoffee.stringHash(string_2)
