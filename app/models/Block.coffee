@@ -16,6 +16,7 @@ class Model extends Base.Model
         trialObjects: []
         numberOfTrials: null
         triggers: []
+        flow: null
 
     trialProperties: [
         "title"
@@ -23,6 +24,7 @@ class Model extends Base.Model
         "height"
         "timeout"
         "triggers"
+        "flow"
     ]
 
     relations: [

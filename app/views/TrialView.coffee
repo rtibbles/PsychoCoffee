@@ -40,6 +40,7 @@ module.exports = class TrialView extends HandlerView
             @logEvent "trial_start", date_time: date_time
         @datamodel.set "trial_id", @model.id
         @datamodel.set "parameters", @model.get("parameters")
+        window.Variables = _.extend(window.Variables, @parameters)
         @createCanvas()
         endpoints =
             canvas: @canvas

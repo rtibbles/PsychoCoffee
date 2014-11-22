@@ -40,6 +40,7 @@ module.exports = class ExperimentView extends HandlerView
                 @model)
             @datamodel.set("parameters", @datamodel.get("parameters") or
                 @model.returnParameters(@user_id))
+            window.Variables = @datamodel.get("parameters")
             if @model.get("subjectPool") == "AMT"
                 @datamodel.set
                     assignment_id: @assignment_id
@@ -97,7 +98,8 @@ module.exports = class ExperimentView extends HandlerView
         blocknumber + 1
 
     nextBlock: ->
-        @datamodel.set("block", @trialSelector(@model.get("blocks"), @datamodel.get("block")))
+        @datamodel.set("block",
+            @trialSelector(@model.get("blocks"), @datamodel.get("block")))
         currentBlock = @model.get("blocks").at(@datamodel.get("block"))
         @showBlock currentBlock
 

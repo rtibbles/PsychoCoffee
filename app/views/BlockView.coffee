@@ -39,6 +39,7 @@ module.exports = class BlockView extends HandlerView
             @logEvent "block_start", date_time: date_time
         @datamodel.set "block_id", @model.id
         @datamodel.set "parameters", @parameters
+        window.Variables = _.extend(window.Variables, @parameters)
         @datamodel.set("trial", @datamodel.get("trial") or 0)
         currentTrial = @model.get("trials").at(@datamodel.get("trial"))
         @showTrial currentTrial
@@ -65,7 +66,8 @@ module.exports = class BlockView extends HandlerView
         trialnumber + 1
 
     nextTrial: ->
-        @datamodel.set("trial", @trialSelector(@model.get("trials"), @datamodel.get("trial")))
+        @datamodel.set("trial",
+            @trialSelector(@model.get("trials"), @datamodel.get("trial")))
         currentTrial = @model.get("trials").at(@datamodel.get("trial"))
         @showTrial currentTrial
 
