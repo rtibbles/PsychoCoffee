@@ -22,7 +22,7 @@ test "Methods", ->
     deepEqual trialProperties["parameterizedAttributes"], {}
     deepEqual trialProperties["triggers"], []
 
-    deepEqual @trialObject.returnRequired(), []
+    deepEqual @trialObject.returnRequired(), [""]
     ok @trialObject.returnOptions() instanceof Object
     ok @trialObject.allParameters() instanceof Object
 
