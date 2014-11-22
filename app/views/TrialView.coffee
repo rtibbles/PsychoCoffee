@@ -32,6 +32,7 @@ module.exports = class TrialView extends HandlerView
             console.debug error, "Unknown element type #{elementType}"
 
     startTrial: ->
+        window.TrialDataHandler = @datamodel
         date_time = new Date().getTime()
         if @datamodel.get("start_time")?
             @logEvent "trial_resume", date_time: date_time
@@ -41,6 +42,7 @@ module.exports = class TrialView extends HandlerView
         @datamodel.set "trial_id", @model.id
         @datamodel.set "parameters", @model.get("parameters")
         window.Variables = _.extend(window.Variables, @parameters)
+        @setWindowTrialObjects()
         @createCanvas()
         endpoints =
             canvas: @canvas
@@ -92,7 +94,13 @@ module.exports = class TrialView extends HandlerView
         @remove()
         @trigger "trialEnded"
 
+    setWindowTrialObjects: ->
+        window.TrialObjects = {}
+        for subView in @subViewList
+            window.TrialObjects[subView.name] = subView
+
     registerEvents: =>
+        if @model.get("flow")? then @model.get("flow")()
         for trigger in (@model.get("triggers") or [])
             view = _.find(@subViews, (subView) ->
                 subView.name == trigger.objectName
