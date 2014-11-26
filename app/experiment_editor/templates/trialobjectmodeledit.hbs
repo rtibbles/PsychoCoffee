@@ -1,0 +1,10 @@
+<div class="modeledit">
+    <ul>
+        {{#each required}}
+            {{#modelinput this}}{{/modelinput}}
+        {{/each}}
+        {{#each options}}
+            {{#modelinput this}}{{/modelinput}}
+        {{/each}}
+    </ul>
+</div>
