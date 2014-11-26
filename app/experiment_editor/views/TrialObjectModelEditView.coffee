@@ -1,9 +1,9 @@
 'use strict'
 
 Template = require '../templates/trialobjectmodeledit'
-ModalView = require './ModalView'
+ModelEditView = require './ModelEditView'
 
-module.exports = class TrialObjectModelEditView extends ModalView
+module.exports = class TrialObjectModelEditView extends ModelEditView
     template: Template
 
     getRenderData: ->
