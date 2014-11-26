@@ -6,17 +6,22 @@ TrialObject = require './TrialObject'
 BlockParameterSet = require './BlockParameterSet'
 
 class Model extends Base.Model
-    defaults:
-        trials: []
-        name: ""
-        width: 640
-        height: 480
-        timeout: 1000
-        parameterSet: {}
-        trialObjects: []
-        numberOfTrials: null
-        triggers: []
-        flow: null
+
+    requiredParameters: ->
+        super.concat(
+            [
+                name: "width"
+                default: 640
+                type: "Number"
+            ,
+                name: "height"
+                default: 480
+                type: "Number"
+            ,
+                name: "timeout"
+                default: 0
+                type: "Number"
+            ])
 
     trialProperties: [
         "name"

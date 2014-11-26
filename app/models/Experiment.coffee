@@ -12,15 +12,17 @@ class Model extends Base.Model
         super
         random.seedGUID fingerprint()
 
-    defaults:
-        blocks: []
-        name: "Experiment"
-        # This attribute determines the time intervals between
-        # saves to the API for experimental data.
-        # Larger save intervals will give better performance,
-        # But increase risk of data loss.
-        saveInterval: 10000
-        parameterSet: {}
+    requiredParameters: ->
+        super().concat(
+            [
+                # This attribute determines the time intervals between
+                # saves to the API for experimental data.
+                # Larger save intervals will give better performance,
+                # But increase risk of data loss.
+                name: "saveInterval"
+                default: 10000
+                type: "Number"
+            ])
 
     relations: [
         type: Backbone.Many
