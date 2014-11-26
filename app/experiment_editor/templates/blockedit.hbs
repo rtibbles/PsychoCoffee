@@ -1,0 +1,19 @@
+<div id="block_editor">
+    <div id="trialObjectToolbar">
+        <h3>Create a new Trial Object</h3>
+        {{#each trialObjects}}
+        <div class="trialObjectToolItem">
+            <button class="addtrialobject" id="{{ modelname }}">{{ name }}</button>
+        </div>
+        {{/each}}
+    </div>
+
+    <div id="trialObjectList">
+        <h3>Current Trial Objects</h3>
+        {{#each trialobjects.models}}
+            <div class="trialObject" id={{ id }}>
+                <span>{{ name }} ({{type}})</span>
+            </div>
+        {{/each}}
+    </div>
+</div>
