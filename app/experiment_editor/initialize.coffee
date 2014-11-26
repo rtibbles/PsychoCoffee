@@ -14,7 +14,7 @@ window.PsychoEdit = require './app/app'
 )()
 
 Handlebars.registerHelper 'modelinput', (context, options) ->
-    ret = "<li>"
+    ret = "<div class='input-group'>"
 
     type = context.type
     value = context.value
@@ -30,15 +30,15 @@ Handlebars.registerHelper 'modelinput', (context, options) ->
         else type = "text"
 
 
-    ret = ret + "<label>" +
-        context.name + "<input type='" +
-        type + "' id='" +
+    ret = ret + "<span class='input-group-addon'>" +
+        context.name + "</span><input type='" +
+        type + "' class='form-control' id='" +
         context.name + "' value='" +
         value + "'" +
         if context.required then "required='required'" else ""
-    ret = ret + "/></label>"
+    ret = ret + "/>"
 
-    return ret + "</li>"
+    return ret + "</div><br>"
 
 $ ->
     PsychoEdit.initialize()

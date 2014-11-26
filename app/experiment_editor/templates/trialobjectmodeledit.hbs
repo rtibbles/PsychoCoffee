@@ -6,14 +6,36 @@
         <h4 class="modal-title" id="ModalLabel">Trial Object Properties</h4>
       </div>
       <div class="modal-body">
-        <ul>
-            {{#each required}}
-                {{#modelinput this}}{{/modelinput}}
-            {{/each}}
-            {{#each options}}
-                {{#modelinput this}}{{/modelinput}}
-            {{/each}}
-        </ul>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingRequired">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseRequired" aria-expanded="true" aria-controls="collapseRequired">
+                  Required Parameters
+                </a>
+              </h4>
+            </div>
+            <div id="collapseRequired" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingRequired">
+                <div class="panel-body">
+                    {{#each required}}
+                        {{#modelinput this}}{{/modelinput}}
+                    {{/each}}
+                </div>
+            </div>
+            <div class="panel-heading" role="tab" id="headingOptional">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOptional" aria-expanded="false" aria-controls="collapseOptional">
+                  Optional Parameters
+                </a>
+              </h4>
+            </div>
+            <div id="collapseOptional" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOptional">
+                <div class="panel-body">
+                    {{#each options}}
+                        {{#modelinput this}}{{/modelinput}}
+                    {{/each}}
+                </div>
+            </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger delete">Delete</button>
