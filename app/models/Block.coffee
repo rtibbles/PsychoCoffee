@@ -8,7 +8,7 @@ BlockParameterSet = require './BlockParameterSet'
 class Model extends Base.Model
     defaults:
         trials: []
-        title: ""
+        name: ""
         width: 640
         height: 480
         timeout: 1000
@@ -19,7 +19,7 @@ class Model extends Base.Model
         flow: null
 
     trialProperties: [
-        "title"
+        "name"
         "width"
         "height"
         "timeout"

@@ -24,4 +24,3 @@ PsychoCoffee.trialObjectTypeKeys =
 
 $ ->
     PsychoCoffee.initialize()
-    Backbone.history.start()

@@ -14,7 +14,7 @@ class Model extends Base.Model
 
     defaults:
         blocks: []
-        title: "Experiment"
+        name: "Experiment"
         # This attribute determines the time intervals between
         # saves to the API for experimental data.
         # Larger save intervals will give better performance,
