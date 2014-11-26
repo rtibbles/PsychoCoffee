@@ -18,4 +18,4 @@ class Model extends VisualTrialObject.Model
 
 module.exports =
     Model: Model
-    Type: "rectangle"
+    Type: "Rectangle"

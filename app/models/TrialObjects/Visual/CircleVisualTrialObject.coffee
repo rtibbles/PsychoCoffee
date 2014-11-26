@@ -14,4 +14,4 @@ class Model extends VisualTrialObject.Model
 
 module.exports =
     Model: Model
-    Type: "circle"
+    Type: "Circle"

@@ -5,15 +5,16 @@ HTMLTrialObject = require("../HTMLTrialObject")
 class Model extends HTMLTrialObject.Model
 
     requiredParameters: ->
-        [
-            name: "prefill"
-            default: ""
-            type: "String"
-        ,
-            name: "prompt"
-            default: ""
-            type: "String"
-        ]
+        super().concat(
+            [
+                name: "prefill"
+                default: ""
+                type: "String"
+            ,
+                name: "prompt"
+                default: ""
+                type: "String"
+            ])
 
     objectOptions: ->
         super().concat(
@@ -40,4 +41,4 @@ class Model extends HTMLTrialObject.Model
 
 module.exports =
     Model: Model
-    Type: "text-input"
+    Type: "Text Input"

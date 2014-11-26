@@ -22,4 +22,4 @@ class Model extends TextVisualTrialObject.Model
 
 module.exports =
     Model: Model
-    Type: "textbox"
+    Type: "Text Box"

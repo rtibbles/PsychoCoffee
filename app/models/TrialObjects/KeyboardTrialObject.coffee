@@ -12,4 +12,4 @@ class Model extends TrialObject.Model
 
 module.exports =
     Model: Model
-    Type: "keyboard"
+    Type: "Keyboard"

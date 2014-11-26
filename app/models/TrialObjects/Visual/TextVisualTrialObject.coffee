@@ -6,11 +6,12 @@ class Model extends VisualTrialObject.Model
 
 
     requiredParameters: ->
-        [
-            name: "text"
-            default: ""
-            type: "String"
-        ]
+        super().concat(
+            [
+                name: "text"
+                default: ""
+                type: "String"
+            ])
 
     objectOptions: ->
         super().concat(
@@ -37,4 +38,4 @@ class Model extends VisualTrialObject.Model
 
 module.exports =
     Model: Model
-    Type: "text"
+    Type: "Text"

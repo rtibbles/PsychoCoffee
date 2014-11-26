@@ -6,4 +6,4 @@ class Model extends TextInputHTMLTrialObject.Model
 
 module.exports =
     Model: Model
-    Type: "text-area-input"
+    Type: "Text Area Input"
