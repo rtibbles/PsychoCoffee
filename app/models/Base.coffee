@@ -10,7 +10,7 @@ class Model extends Backbone.AssociatedModel
                 defaults[option.name] = option.default
         for parameter in @requiredParameters()
             defaults[parameter.name] = parameter.default
-        for parameter in @relations
+        for parameter in @relations or []
             value = if parameter.type is Backbone.Many then [] else {}
             defaults[parameter.key] = value
         return defaults
