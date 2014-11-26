@@ -6,6 +6,17 @@ module.exports = class ModelEditView extends ModalView
 
     events:
         "click .save": "setAttributes"
+        "click .cancel": "cancelEdit"
+        "click .delete": "deleteModel"
+
+    deleteModel: ->
+        @model.destroy()
+        @remove()
+
+    cancelEdit: ->
+        if @model.new
+            @model.destroy()
+        @remove()
 
     setAttributes: ->
         attrs = {}
@@ -17,4 +28,5 @@ module.exports = class ModelEditView extends ModalView
                 ready = false
         if ready
             @model.set attrs
+            @model.new = false
             @remove()

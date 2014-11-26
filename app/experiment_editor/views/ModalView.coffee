@@ -4,8 +4,10 @@ module.exports = class ModalView extends View
 
     render: ->
         super
-        $(".modal").show()
+        $("#editor_window").append @el
+        @$("#Modal").modal()
+        @$("#Modal").modal('show')
 
     remove: ->
-        $(".modal").hide()
+        @$("#Modal").modal('hide')
         super

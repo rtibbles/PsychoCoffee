@@ -29,9 +29,9 @@ module.exports = class BlockListView extends View
 
     addBlock: ->
         newBlock = @collection.add({})
+        newBlock.new = true
         modelEditView = new BlockModelEditView({model: newBlock})
         modelEditView.render()
-        modelEditView.appendTo("#overlay")
 
     render: ->
         super
