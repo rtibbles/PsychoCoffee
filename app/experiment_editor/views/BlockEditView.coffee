@@ -24,8 +24,10 @@ class TrialObjectItemView extends View
     editTrialObject: ->
         editView = new TrialObjectModelEditView({model: @model})
         editView.appendTo("#overlay")
+        editView.render()
 
     initialize: ->
+        @render()
         @listenTo @model, "change", @render
 
 class TrialObjectListView extends View
@@ -39,8 +41,7 @@ class TrialObjectListView extends View
         super
         for model in @collection.models
             view = new TrialObjectItemView model: model
-            view.render()
-            view.appendTo(".trialObjectList")
+            @$(".trialObjectList").append view.el
 
 
 module.exports = class BlockEditView extends CodeGeneratorView
@@ -52,12 +53,12 @@ module.exports = class BlockEditView extends CodeGeneratorView
     render: ->
         super
         @toolbarView = new TrialObjectToolbarView()
-        @toolbarView.render()
         @$("#block_editor").append @toolbarView.el
+        @toolbarView.render()
         @trialObjectListView = new TrialObjectListView(
             {collection: @model.get("trialObjects")})
-        @trialObjectListView.render()
         @$("#block_editor").append @trialObjectListView.el
+        @trialObjectListView.render()
 
     addTrialObject: (event) ->
         type = event.target.id
