@@ -29,7 +29,8 @@ exports.config =
         ]
     stylesheets: 
       joinTo: 
-        'stylesheets/app.css': /^(app|vendor)/
+        'stylesheets/app.css': /^(app|vendor)(\/|\\)(?!experiment_editor)/
+        'stylesheets/experiment_editor.css': /^(app)(\/|\\)experiment_editor/
       order: 
         before: ['vendor/styles/normalize.css']
     templates: 
