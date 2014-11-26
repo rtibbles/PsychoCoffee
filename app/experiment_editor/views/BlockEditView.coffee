@@ -19,7 +19,7 @@ class TrialObjectItemView extends View
     template: ItemTemplate
 
     events:
-        "click .trialobject": "editTrialObjectModel"
+        "click .trialObject": "editTrialObject"
 
     editTrialObject: ->
         editView = new TrialObjectModelEditView({model: @model})
@@ -61,7 +61,9 @@ module.exports = class BlockEditView extends CodeGeneratorView
 
     addTrialObject: (event) ->
         type = event.target.id
-        newTrialObject = @model.get("trialObjects").add({type: type})
+        newTrialObject = @model.get("trialObjects").add({
+            subModelTypeAttribute: type
+        })
         modelEditView = new TrialObjectModelEditView({model: newTrialObject})
         modelEditView.render()
         modelEditView.appendTo("#overlay")

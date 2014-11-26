@@ -97,7 +97,6 @@ class Collection extends Base.Collection
         try
             modelType = attrs["subModelTypeAttribute"] or
                 PsychoCoffee.trialObjectTypeKeys[attrs["type"]]
-
             model = PsychoCoffee[modelType]["Model"]
         catch error
             model = Model
