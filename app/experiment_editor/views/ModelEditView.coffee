@@ -23,7 +23,7 @@ module.exports = class ModelEditView extends ModalView
         ready = true
         for item in @$("input")
             attrs[item.id] = item.value
-            if not item.required? and item.value == ""
+            if item.required? and item.value == ""
                 @$(item).css("border", "2px solid red")
                 ready = false
         if ready
