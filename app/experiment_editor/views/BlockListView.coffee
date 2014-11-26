@@ -3,7 +3,7 @@
 Template = require '../templates/blocklist'
 ItemTemplate = require '../templates/blocklistitem'
 View = require './View'
-BlockModelEditView = require './BlockModelEditView'
+ModelEditView = require './ModelEditView'
 
 class BlockItemView extends View
     template: ItemTemplate
@@ -30,7 +30,7 @@ module.exports = class BlockListView extends View
     addBlock: ->
         newBlock = @collection.add({})
         newBlock.new = true
-        modelEditView = new BlockModelEditView({model: newBlock})
+        modelEditView = new ModelEditView({model: newBlock})
         modelEditView.render()
 
     render: ->

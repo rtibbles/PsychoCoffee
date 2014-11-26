@@ -1,8 +1,10 @@
 'use strict'
 
 ModalView = require './ModalView'
+Template = require '../templates/modeledit'
 
 module.exports = class ModelEditView extends ModalView
+    template: Template
 
     events:
         "click .save": "setAttributes"
@@ -35,3 +37,15 @@ module.exports = class ModelEditView extends ModalView
             @model.set attrs
             @model.new = false
             @remove()
+
+    getRenderData: ->
+        required = (_.extend(
+            value: @model.get(param.name)
+            required: true,
+            param) for param in @model.requiredParameters())
+        options = (_.extend(value: @model.get(param.name),
+            param) for param in @model.objectOptions())
+        data =
+            required: required
+            options: options
+            name: @model.get("name")

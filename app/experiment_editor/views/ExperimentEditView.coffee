@@ -15,7 +15,14 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
                 {
                     name: "this"
                     trialObjects: [
-                        {subModelTypeAttribute: "Audio"}
+                        {
+                            name: "audioTest"
+                            subModelTypeAttribute: "AudioTrialObject"
+                        },
+                        {
+                            name: "audioTest2"
+                            subModelTypeAttribute: "AudioTrialObject"
+                        }
                     ]
                 }
             ]

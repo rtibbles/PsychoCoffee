@@ -5,7 +5,7 @@ Template = require '../templates/blockedit'
 ToolbarTemplate = require '../templates/trialobjecttoolbar'
 ListTemplate = require '../templates/trialobjectlist'
 ItemTemplate = require '../templates/trialobjectlistitem'
-TrialObjectModelEditView = require './TrialObjectModelEditView'
+ModelEditView = require './ModelEditView'
 View = require './View'
 
 class TrialObjectToolbarView extends View
@@ -22,7 +22,7 @@ class TrialObjectItemView extends View
         "click .trialObject": "editTrialObject"
 
     editTrialObject: ->
-        editView = new TrialObjectModelEditView({model: @model})
+        editView = new ModelEditView({model: @model})
         editView.render()
 
     initialize: ->
@@ -65,5 +65,5 @@ module.exports = class BlockEditView extends CodeGeneratorView
             subModelTypeAttribute: subModel
         })
         newTrialObject.new = true
-        modelEditView = new TrialObjectModelEditView({model: newTrialObject})
+        modelEditView = new ModelEditView({model: newTrialObject})
         modelEditView.render()
