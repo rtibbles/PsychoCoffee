@@ -52,11 +52,11 @@ module.exports = class BlockEditView extends CodeGeneratorView
     render: ->
         super
         @toolbarView = new TrialObjectToolbarView()
-        @$("#block_editor").append @toolbarView.el
+        @$("#trialObjects").append @toolbarView.el
         @toolbarView.render()
         @trialObjectListView = new TrialObjectListView(
             {collection: @model.get("trialObjects")})
-        @$("#block_editor").append @trialObjectListView.el
+        @$("#trialObjects").append @trialObjectListView.el
         @trialObjectListView.render()
 
     addTrialObject: (event) ->

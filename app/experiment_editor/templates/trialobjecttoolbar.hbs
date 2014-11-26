@@ -1,8 +1,12 @@
-<div id="trialObjectToolbar">
-    <h3>Create a new Trial Object</h3>
-    {{#each trialObjects}}
-    <div class="trialObjectToolItem">
-        <button class="addtrialobject btn btn-primary" id="{{ modelname }}">{{ name }}</button>
+<div id="trialObjectToolbar" class="col-md-2 panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">New Trial Object</h3>
     </div>
-    {{/each}}
+    <div class="panel-body">
+        {{#each trialObjects}}
+            <div class="trialObjectToolItem addtrialobject btn btn-primary" id="{{ modelname }}">
+                {{ name }}
+            </div>
+        {{/each}}
+    </div>
 </div>
