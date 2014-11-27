@@ -22,7 +22,9 @@ class TrialObjectItemView extends View
         "click .trialObject": "editTrialObject"
 
     editTrialObject: ->
-        editView = new ModelEditView({model: @model})
+        editView = new ModelEditView
+            model: @model
+            deleteable: true
         editView.render()
 
     initialize: ->
@@ -52,12 +54,12 @@ module.exports = class BlockEditView extends CodeGeneratorView
     render: ->
         super
         @toolbarView = new TrialObjectToolbarView()
-        @$("#trialObjects").append @toolbarView.el
-        @toolbarView.render()
         @trialObjectListView = new TrialObjectListView(
             {collection: @model.get("trialObjects")})
-        @$("#trialObjects").append @trialObjectListView.el
+        @$("#trialObjects").prepend @trialObjectListView.el
         @trialObjectListView.render()
+        @$("#trialObjects").prepend @toolbarView.el
+        @toolbarView.render()
 
     addTrialObject: (event) ->
         subModel = event.target.id
@@ -65,5 +67,6 @@ module.exports = class BlockEditView extends CodeGeneratorView
             subModelTypeAttribute: subModel
         })
         newTrialObject.new = true
-        modelEditView = new ModelEditView({model: newTrialObject})
+        modelEditView = new ModelEditView
+            model: newTrialObject
         modelEditView.render()

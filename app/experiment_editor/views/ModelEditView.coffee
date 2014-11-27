@@ -11,6 +11,10 @@ module.exports = class ModelEditView extends ModalView
         "click .cancel": "cancelEdit"
         "click .delete": "deleteModel"
 
+    initialize: (options) ->
+        super
+        @deleteable = options.deleteable
+
     deleteModel: ->
         @model.destroy()
         @remove()
@@ -46,6 +50,7 @@ module.exports = class ModelEditView extends ModalView
         options = (_.extend(value: @model.get(param.name),
             param) for param in @model.objectOptions())
         data =
+            deleteable: @deleteable
             required: required
             options: options
             name: @model.get("name")

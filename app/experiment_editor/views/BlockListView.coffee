@@ -36,6 +36,6 @@ module.exports = class BlockListView extends View
     render: ->
         super
         for model in @collection.models
-            view = new BlockItemView model: model
+            view = new BlockItemView model: model, deleteable: true
             view.render()
             view.appendTo("#blocklist")

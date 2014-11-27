@@ -38,7 +38,9 @@
             </div>
       </div>
       <div class="modal-footer">
+        {{#if deleteable}}
         <button type="button" class="btn btn-danger delete">Delete</button>
+        {{/if}}
         <button type="button" class="btn btn-warning cancel">Cancel</button>
         <button type="button" class="btn btn-primary save">Save changes</button>
       </div>
