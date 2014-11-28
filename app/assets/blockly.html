@@ -1,0 +1,38 @@
+<html>
+<head>
+    <script type="text/javascript" src="js/editor_blockly.js"></script>
+    <script type="text/javascript" src="msg/js/en.js"></script>
+    <style>
+      html, body {
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+      }
+      .blocklySvg {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+    <script>
+    function init() {
+        Blockly.inject(document.getElementById('blockly-code'), {toolbox: document.getElementById('blockly-toolbox')});
+        // Let the top-level application know that Blockly is ready.
+        window.parent.PsychoEdit.global_dispatcher.trigger("blockly_loaded", Blockly);
+    }
+    </script>
+</head>
+<body onload="init()">
+    <div id="blockly-code"></div>
+    <xml id="blockly-toolbox">
+      <block type="controls_if"></block>
+      <block type="controls_repeat_ext"></block>
+      <block type="logic_compare"></block>
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="text"></block>
+      <block type="text_print"></block>
+    </xml>
+</body>
+</html>

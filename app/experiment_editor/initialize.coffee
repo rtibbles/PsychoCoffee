@@ -11,6 +11,7 @@ window.PsychoEdit = require './app/app'
         Backbone.Router:: ], (proto) ->
         # attaching a global dispatcher instance
         _.extend proto, global_dispatcher: dispatcher
+    PsychoEdit.global_dispatcher = dispatcher
 )()
 
 Handlebars.registerHelper 'modelinput', (context, options) ->

@@ -6,6 +6,7 @@ ToolbarTemplate = require '../templates/trialobjecttoolbar'
 ListTemplate = require '../templates/trialobjectlist'
 ItemTemplate = require '../templates/trialobjectlistitem'
 ModelEditView = require './ModelEditView'
+BlocklyView = require './BlocklyView'
 View = require './View'
 
 class TrialObjectToolbarView extends View
@@ -53,13 +54,18 @@ module.exports = class BlockEditView extends CodeGeneratorView
         
     render: ->
         super
-        @toolbarView = new TrialObjectToolbarView()
-        @trialObjectListView = new TrialObjectListView(
-            {collection: @model.get("trialObjects")})
+        @toolbarView = new TrialObjectToolbarView
+        @trialObjectListView = new TrialObjectListView
+            collection: @model.get("trialObjects")
+        @blocklyView = new BlocklyView
+            model: @model
+            el: @$("#block-code")
+        @blocklyView.render()
         @$("#trialObjects").prepend @trialObjectListView.el
         @trialObjectListView.render()
         @$("#trialObjects").prepend @toolbarView.el
         @toolbarView.render()
+        @listenTo @, "appended", @blocklyView.injectBlockly
 
     addTrialObject: (event) ->
         subModel = event.target.id

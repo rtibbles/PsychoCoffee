@@ -7,7 +7,8 @@ exports.config =
         'js/experiment_editor.js': /^(app|envs\/development)(\/|\\)experiment_editor/,
         'js/app.js': /^(app|envs\/development)(\/|\\)(?!experiment_editor)/,
         'js/vendor.js': /^(vendor\/scripts\/(common|development)|vendor\\scripts\\(common|development))/,
-        'js/editor_vendor.js': /^(vendor\/scripts\/editor|vendor\\scripts\\editor)/
+        'js/editor_vendor.js': /^(vendor\/scripts\/experiment_editor|vendor\\scripts\\experiment_editor)/
+        'js/editor_blockly.js': /^(vendor\/scripts\/editor_blockly|vendor\\scripts\\editor_blockly)/
       order: 
         before: [
           'vendor/scripts/common/es5-shim.min.js',
@@ -25,7 +26,9 @@ exports.config =
           'vendor/scripts/common/flashplugin-0.5.2.min.js',
           'vendor/scripts/common/fabric.min.js',
           'vendor/scripts/common/seedrandom.min.js',
-          'vendor/scripts/common/md5.js'
+          'vendor/scripts/common/md5.js',
+          'vendor/scripts/editor_blockly/blockly_compressed.js',
+          'vendor/scripts/editor_blockly/blocks_compressed.js'
         ]
     stylesheets: 
       joinTo: 
@@ -60,7 +63,8 @@ exports.config =
             'js/experiment_editor.js': /^(app|envs\/production)(\/|\\)experiment_editor/,
             'js/app.js': /^(app|envs\/production)(\/|\\)(?!experiment_editor)/,
             'js/vendor.js': /^(vendor\/scripts\/(common|production)|vendor\\scripts\\(common|production))/,
-            'js/editor_vendor.js': /^(vendor\/scripts\/editor|vendor\\scripts\\editor)/
+            'js/editor_vendor.js': /^(vendor\/scripts\/experiment_editor|vendor\\scripts\\experiment_editor)/
+            'js/editor_blockly.js': /^(vendor\/scripts\/editor_blockly|vendor\\scripts\\editor_blockly)/
           order: 
             before: [
               'vendor/scripts/common/es5-shim.min.js',
@@ -78,7 +82,9 @@ exports.config =
               'vendor/scripts/common/flashplugin-0.5.2.min.js',
               'vendor/scripts/common/fabric.min.js',
               'vendor/scripts/common/seedrandom.min.js',
-              'vendor/scripts/common/md5.js'
+              'vendor/scripts/common/md5.js',
+              'vendor/scripts/editor_blockly/blockly_compressed.js',
+              'vendor/scripts/editor_blockly/blocks_compressed.js'
             ]
       optimize: true
       sourceMaps: false
