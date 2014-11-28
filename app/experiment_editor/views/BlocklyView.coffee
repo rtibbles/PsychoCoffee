@@ -1,7 +1,7 @@
-View = require './View'
+DropableView = require './DropableView'
 Template = require '../templates/blockly'
 
-module.exports = class BlocklyView extends View
+module.exports = class BlocklyView extends DropableView
     template: Template
 
     render: ->
@@ -17,10 +17,14 @@ module.exports = class BlocklyView extends View
     iframe$: (selector) ->
         @$('iframe').contents().find(selector)
 
-    dragEnter: (event) ->
-        event.preventDefault()
-        @$el.animate({opacity: 0.5}, 'fast')
+    dragEnter: (event) =>
+        super
+        @$('iframe').animate({opacity: 0.5}, 'fast')
 
-    dragLeave: (event) ->
-        event.preventDefault()
+    dragLeave: (event) =>
+        super
+        @$('iframe').animate({opacity: 1}, 'fast')
+
+    drop: (event) =>
+        super
         @$('iframe').animate({opacity: 1}, 'fast')

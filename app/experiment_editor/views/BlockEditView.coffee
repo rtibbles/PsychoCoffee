@@ -8,6 +8,8 @@ ItemTemplate = require '../templates/trialobjectlistitem'
 ModelEditView = require './ModelEditView'
 BlocklyView = require './BlocklyView'
 View = require './View'
+DraggableView = require './DraggableView'
+DraggableListView = require './DraggableListView'
 
 class TrialObjectToolbarView extends View
     template: ToolbarTemplate
@@ -16,7 +18,7 @@ class TrialObjectToolbarView extends View
         return trialObjects: PsychoEdit.trialObjects
 
 
-class TrialObjectItemView extends View
+class TrialObjectItemView extends DraggableView
     template: ItemTemplate
 
     events:
@@ -29,10 +31,11 @@ class TrialObjectItemView extends View
         editView.render()
 
     initialize: ->
+        super
         @render()
         @listenTo @model, "change", @render
 
-class TrialObjectListView extends View
+class TrialObjectListView extends DraggableListView
     template: ListTemplate
 
     initialize: ->
