@@ -55,6 +55,13 @@ class Model extends Backbone.AssociatedModel
     save: (key, val, options) ->
         @set "id", random.seededguid()
 
+    set: (key, val, options) ->
+        super
+        if key == "name"
+            @id = val
+        if "name" of key
+            @id = key["name"]
+
 class Collection extends Backbone.Collection
     url: "none"
     local: true
