@@ -22,7 +22,7 @@ class TrialObjectItemView extends View
     events:
         "click .trialObject": "editTrialObject"
 
-    editTrialObject: ->
+    editTrialObject: (event) ->
         editView = new ModelEditView
             model: @model
             deleteable: true

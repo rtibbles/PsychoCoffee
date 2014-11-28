@@ -23,7 +23,7 @@
     }
     </script>
 </head>
-<body onload="init()">
+<body onload="init()" ondragover="event.preventDefault()" ondragenter="event.preventDefault()" ondragleave="event.preventDefault()">
     <div id="blockly-code"></div>
     <xml id="blockly-toolbox">
       <block type="controls_if"></block>
