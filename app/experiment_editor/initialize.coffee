@@ -2,18 +2,6 @@
 
 window.PsychoEdit = require './app/app'
 
-(->
-    # attaching the Events object to the dispatcher variable
-    dispatcher = _.extend({}, Backbone.Events, cid: "dispatcher")
-    _.each [ Backbone.Collection::,
-        Backbone.Model::,
-        Backbone.View::,
-        Backbone.Router:: ], (proto) ->
-        # attaching a global dispatcher instance
-        _.extend proto, global_dispatcher: dispatcher
-    PsychoEdit.global_dispatcher = dispatcher
-)()
-
 Handlebars.registerHelper 'modelinput', (context, options) ->
     ret = "<div class='input-group'>"
 

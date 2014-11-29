@@ -6,6 +6,15 @@ ExperimentEditView = require '../views/ExperimentEditView'
 # The application bootstrapper.
 PsychoEdit =
     initialize: ->
+        dispatcher = _.extend({}, Backbone.Events, cid: "dispatcher")
+        _.each [ Backbone.Collection::,
+            Backbone.Model::,
+            Backbone.View::,
+            Backbone.Router:: ], (proto) ->
+            # attaching a global dispatcher instance
+            _.extend proto, global_dispatcher: dispatcher
+        @global_dispatcher = dispatcher
+        @global_dispatcher.eventDataTransfer = {}
         @trialObjects = generator()
         @editView = new ExperimentEditView
 

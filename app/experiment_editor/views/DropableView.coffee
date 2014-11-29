@@ -19,4 +19,8 @@ module.exports = class DropableView extends View
 
     drop: (event) =>
         console.log "Dropped in #{@constructor.name}"
-        event.stopPropagation()
+        if "text/id" in event.originalEvent.dataTransfer.types
+            event.stopPropagation()
+            id = event.originalEvent.dataTransfer.getData("text/id")
+            model = @global_dispatcher.eventDataTransfer[id]
+        return model

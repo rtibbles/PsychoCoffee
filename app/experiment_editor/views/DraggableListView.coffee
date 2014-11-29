@@ -6,12 +6,12 @@ module.exports = class DraggableListView extends View
         "dragstart [draggable='true']": "dragStart"
         "dragend [draggable='true']": "dragEnd"
 
-    dragStart: (event, data, clone, element) ->
+    dragStart: (event) ->
         model = @collection.get event.currentTarget.id
-        model?.trigger("dragstart", event, data, clone, element)
+        model?.trigger("dragstart", event)
         event.stopPropagation()
 
-    dragEnd: (event, data, clone, element) ->
+    dragEnd: (event) ->
         model = @collection.get event.currentTarget.id
-        model?.trigger("dragend", event, data, clone, element)
+        model?.trigger("dragend", event)
         event.stopPropagation()
