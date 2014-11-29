@@ -1,0 +1,9 @@
+<xml id="blockly-toolbox">
+    {{#each this}}
+        <category name="{{ @key }}">
+            {{#each this }}
+                <block type="{{ type }}"></block>
+            {{/each}}
+        </category>
+    {{/each}}
+</xml>
