@@ -102,10 +102,41 @@ module.exports = class BlocklyView extends DropableView
     iframe$: (selector) ->
         @$('iframe').contents().find(selector)
 
+    drop: (event) =>
+        model = super(event)
+        @insertModelBlock(model)
 
     updateToolbox: ->
         @Blockly.updateToolbox(@toolboxTemplate(@toolbox))
 
-    drop: (event) =>
-        super
-        @$('iframe').animate({opacity: 1}, 'fast')
+    insertModelBlock: (model) ->
+        type = "PsychoCoffee_" + model.get("name")
+        Blockly = @Blockly
+        @Blockly.Blocks[type] =
+            init: ->
+                @setColour 40
+                @appendDummyInput().appendField(model.get("name"))
+                for option in model.requiredParameters().concat(
+                    model.objectOptions())
+                    if option.name == "name"
+                        continue
+                    input = @appendValueInput(option.name)
+                    input.setCheck(option.type)
+                    input.appendField(option.name)
+                    if option.options
+                        dropdown = new Blockly.FieldDropdown(option.options)
+                        input.appendField(dropdown, option.name)
+                    else
+                        if option.type == "String"
+                            textInput = new Blockly.FieldTextInput(
+                                option.default)
+                            input.appendField(textInput, option.name)
+                        if option.type == "Colour"
+                            colour = new Blockly.FieldColour(option.default)
+                            input.appendField(colour, option.name)
+        toolbox_object = type: type
+        if "Trial Objects" not of @toolbox
+            @toolbox["Trial Objects"] = []
+        if not _.some(@toolbox, (x) -> x.type == type)
+            @toolbox["Trial Objects"].push type: type
+            @updateToolbox()
