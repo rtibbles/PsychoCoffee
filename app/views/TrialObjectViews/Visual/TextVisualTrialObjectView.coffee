@@ -10,7 +10,7 @@ module.exports = class TextVisualTrialObjectView extends VisualTrialObjectView
 
     render: ->
         if not @object
-            @object = new @object_type @model.returnRequired()[0],
+            @object = new @object_type @model.get("text"),
                 @model.returnOptions()
         super
 
