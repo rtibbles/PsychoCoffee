@@ -123,16 +123,20 @@ module.exports = class BlocklyView extends DropableView
         eventType = @insertModelEventBlock(model)
         getType = @insertModelGetBlock(model)
         setType = @insertModelSetBlock(model)
-        for type in [eventType, getType, setType]
-            toolbox_object = type: type
-            if category not of @toolbox
-                @toolbox[category] = []
-            if not _.some(@toolbox, (x) -> x.type == type)
-                @toolbox[category].push type: type
+        methodType = @insertModelMethodBlock(model)
+        for type in [eventType, getType, setType, methodType]
+            if type
+                toolbox_object = type: type
+                if category not of @toolbox
+                    @toolbox[category] = []
+                if not _.some(@toolbox, (x) -> x.type == type)
+                    @toolbox[category].push type: type
         @updateToolbox()
 
 
     insertModelEventBlock: (model) ->
+        if model.triggers().length == 0
+            return false
         type = "PsychoCoffee_events_" + model.get("name")
         Blockly = @Blockly
         @Blockly.Blocks[type] =
@@ -147,6 +151,8 @@ module.exports = class BlocklyView extends DropableView
         return type
 
     insertModelGetBlock: (model) ->
+        if model.allParameterNames().length == 0
+            return false
         type = "PsychoCoffee_get_" + model.get("name")
         Blockly = @Blockly
         @Blockly.Blocks[type] =
@@ -161,6 +167,8 @@ module.exports = class BlocklyView extends DropableView
         return type
 
     insertModelSetBlock: (model) ->
+        if model.allParameterNames().length == 0
+            return false
         type = "PsychoCoffee_set_" + model.get("name")
         Blockly = @Blockly
         @Blockly.Blocks[type] =
@@ -172,6 +180,24 @@ module.exports = class BlocklyView extends DropableView
                         [name, name] for name in model.allParameterNames()),
                         "ATTRS")
                 @setPreviousStatement(true)
+                @setNextStatement(true)
+        return type
+
+    insertModelMethodBlock: (model) ->
+        console.log model.methods()
+        if model.methods().length == 0
+            return false
+        type = "PsychoCoffee_method_" + model.get("name")
+        Blockly = @Blockly
+        @Blockly.Blocks[type] =
+            init: ->
+                @setColour 40
+                @setInputsInline true
+                @appendDummyInput().appendField(new Blockly.FieldDropdown(
+                    [method, method] for method in model.methods()),
+                        "METHODS").appendField(" " + model.get("name"))
+                @setPreviousStatement(true)
+                @setNextStatement(true)
         return type
 
     insertModelBlock: (model) ->
