@@ -34,6 +34,13 @@ class Model extends Base.Model
                 attributes[attribute] = parameters[parameterName]
         return attributes
 
+    triggers: ->
+        [
+            "activated"
+        ,
+            "deactivated"
+        ]
+
 
 class Collection extends Base.Collection
     model: (attrs, options) ->

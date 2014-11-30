@@ -10,6 +10,11 @@ class Model extends TrialObject.Model
             keys: _.keys(Keys.Keys)
             super
 
+    triggers: ->
+        super().concat([
+                "keypress"
+            ])
+
 module.exports =
     Model: Model
     Type: "Keyboard"

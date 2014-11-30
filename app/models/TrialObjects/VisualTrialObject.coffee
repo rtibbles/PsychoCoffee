@@ -52,6 +52,11 @@ class Model extends TrialObject.Model
             name: "width"
             type: "Number"
         ])
+    
+    triggers: ->
+        super().concat([
+                "click"
+            ])
 
 module.exports =
     Model: Model
