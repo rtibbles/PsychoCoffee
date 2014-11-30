@@ -63,12 +63,18 @@ module.exports = class BlockEditView extends CodeGeneratorView
         @blocklyView = new BlocklyView
             model: @model
             el: @$("#block-code")
+        @listenToOnce @blocklyView, "blockly_ready", @blocklyObjects
         @blocklyView.render()
         @$("#trialObjects").prepend @trialObjectListView.el
         @trialObjectListView.render()
         @$("#trialObjects").prepend @toolbarView.el
         @toolbarView.render()
-        @listenTo @, "appended", @blocklyView.injectBlockly
+
+
+    blocklyObjects: =>
+        for trialObject in @model.get("trialObjects").models
+            @blocklyView.insertModelBlocks(trialObject,
+                "Trial Objects")
 
     addTrialObject: (event) ->
         subModel = event.target.id

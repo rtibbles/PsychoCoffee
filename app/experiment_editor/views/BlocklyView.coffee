@@ -98,6 +98,7 @@ module.exports = class BlocklyView extends DropableView
         @iframe$('body').on "dragleave", @dragLeave
         @iframe$('body').on "dragenter", @dragEnter
         @iframe$('body').on "drop", @drop
+        @trigger "blockly_ready"
 
     iframe$: (selector) ->
         @$('iframe').contents().find(selector)
