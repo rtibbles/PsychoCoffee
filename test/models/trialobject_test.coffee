@@ -13,16 +13,15 @@ test "Default values", ->
     deepEqual @trialObject.get("triggers"), []
 
 test "Methods", ->
-    expect 8
+    expect 7
     
     trialProperties = @trialObject.parameterizedTrial()
     equal trialProperties["delay"], 0
     equal trialProperties["duration"], 0
     equal trialProperties["startWithTrial"], true
     deepEqual trialProperties["parameterizedAttributes"], {}
-    deepEqual trialProperties["triggers"], []
 
-    deepEqual @trialObject.returnRequired(), [""]
+    deepEqual @trialObject.returnRequired(), {}
     ok @trialObject.returnOptions() instanceof Object
     ok @trialObject.allParameters() instanceof Object
 

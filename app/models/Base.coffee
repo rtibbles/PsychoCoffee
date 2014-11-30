@@ -29,9 +29,9 @@ class Model extends Backbone.AssociatedModel
         []
 
     returnRequired: ->
-        required = []
+        required = {}
         for parameter in @requiredParameters()
-            required.push @get(parameter.name)
+            required[option.name] = @get(parameter.name)
         return required
 
     returnOptions: ->
@@ -48,6 +48,10 @@ class Model extends Backbone.AssociatedModel
                 parameters[parameter.alias or
                     parameter.name] = @get parameter.name
         return parameters
+
+    allParameterNames: ->
+        parameter.name for parameter in @objectOptions().concat(
+            @requiredParameters())
 
     name: ->
         @get("name") or @id

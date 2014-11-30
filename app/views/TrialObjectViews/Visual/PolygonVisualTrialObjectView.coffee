@@ -10,6 +10,6 @@ module.exports =
 
         render: ->
             if not @object
-                @object = new @object_type @model.returnRequired()[0],
+                @object = new @object_type @model.get("points"),
                     @model.returnOptions()
             super
