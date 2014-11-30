@@ -109,6 +109,15 @@ module.exports = class BlocklyView extends DropableView
     updateToolbox: ->
         @Blockly.updateToolbox(@toolboxTemplate(@toolbox))
 
+    instantiateDropDown: (option) ->
+        Blockly = @Blockly
+        init: ->
+            @setOutput(true, option.type)
+            @appendDummyInput()
+                .appendField(new Blockly.FieldDropdown(option.options),
+                    'OPTIONS')
+            @setColour 40
+
     insertModelBlock: (model) ->
         type = "PsychoCoffee_" + model.get("name")
         Blockly = @Blockly
@@ -121,22 +130,44 @@ module.exports = class BlocklyView extends DropableView
                     if option.name == "name"
                         continue
                     input = @appendValueInput(option.name)
-                    input.setCheck(option.type)
                     input.appendField(option.name)
-                    if option.options
-                        dropdown = new Blockly.FieldDropdown(option.options)
-                        input.appendField(dropdown, option.name)
+                    input.setCheck(option.type)
+        parentBlock =
+            @Blockly.Block.obtain @Blockly.getMainWorkspace(), type
+        parentBlock.initSvg()
+        parentBlock.render()
+        for option in model.requiredParameters().concat(
+            model.objectOptions())
+            if option.name == "name" or not model.get(option.name)?
+                continue
+            if option.options
+                value_type = option.name + "_drop_down"
+                if value_type not of @Blockly.Blocks
+                    @Blockly.Blocks[value_type] =
+                        @instantiateDropDown(option)
+                variable_type = "OPTIONS"
+            else
+                switch option.type
+                    when "String"
+                        value_type = "text"
+                        variable_type = "TEXT"
+                    when "Number"
+                        value_type = "math_number"
+                        variable_type = "NUM"
+                    when "Boolean"
+                        value_type = "logic_boolean"
+                        variable_type = "BOOL"
+                    when "Colour"
+                        value_type = "colour_picker"
+                        variable_type = "COLOUR"
                     else
-                        if option.type == "String"
-                            textInput = new Blockly.FieldTextInput(
-                                option.default)
-                            input.appendField(textInput, option.name)
-                        if option.type == "Colour"
-                            colour = new Blockly.FieldColour(option.default)
-                            input.appendField(colour, option.name)
-        toolbox_object = type: type
-        if "Trial Objects" not of @toolbox
-            @toolbox["Trial Objects"] = []
-        if not _.some(@toolbox, (x) -> x.type == type)
-            @toolbox["Trial Objects"].push type: type
-            @updateToolbox()
+                        value_type = "text"
+                        variable_type = "TEXT"
+            childBlock = @Blockly.Block.obtain @Blockly.getMainWorkspace(),
+                value_type
+            childBlock.setFieldValue(String(model.get(option.name)),
+                variable_type)
+            childBlock.initSvg()
+            childBlock.render()
+            parentBlock.getInput(option.name)
+                .connection.connect(childBlock.outputConnection)
