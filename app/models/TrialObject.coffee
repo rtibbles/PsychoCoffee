@@ -41,6 +41,13 @@ class Model extends Base.Model
             "deactivated"
         ]
 
+    methods: ->
+        super().concat([
+            "activate"
+        ,
+            "deactivate"
+        ])
+
 
 class Collection extends Base.Collection
     model: (attrs, options) ->

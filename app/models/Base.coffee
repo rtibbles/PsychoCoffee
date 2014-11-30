@@ -53,6 +53,9 @@ class Model extends Backbone.AssociatedModel
         parameter.name for parameter in @objectOptions().concat(
             @requiredParameters())
 
+    methods: ->
+        []
+
     name: ->
         @get("name") or @id
 
