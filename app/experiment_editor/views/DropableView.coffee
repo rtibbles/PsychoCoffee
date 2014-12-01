@@ -2,25 +2,16 @@ View = require './View'
 
 module.exports = class DropableView extends View
 
-    events:
-        "dragenter .dropable": "dragEnter"
-        "dragleave .dropable": "dragLeave"
-        "dragover .dropable": "dragOver"
-        "drop .dropable": "drop"
+    render: ->
+        super
+        @$el.droppable
+            drop: @drop
 
-    dragEnter: (event) ->
-        event.preventDefault()
-
-    dragLeave: (event) ->
-        event.preventDefault()
-
-    dragOver: (event) ->
-        event.preventDefault()
-
-    drop: (event) =>
-        console.log "Dropped in #{@constructor.name}"
-        if "text/id" in event.originalEvent.dataTransfer.types
-            event.stopPropagation()
-            id = event.originalEvent.dataTransfer.getData("text/id")
-            model = @global_dispatcher.eventDataTransfer[id]
-        return model
+    drop: (event, ui) =>
+        if ui
+            console.log "Dropped in #{@constructor.name}"
+            if $(ui.draggable).data("id")
+                event.stopPropagation()
+                id = $(ui.draggable).data("id")
+                model = @global_dispatcher.eventDataTransfer[id]
+                return model

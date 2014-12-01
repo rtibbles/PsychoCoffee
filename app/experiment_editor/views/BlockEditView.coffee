@@ -9,7 +9,6 @@ ModelEditView = require './ModelEditView'
 BlocklyView = require './BlocklyView'
 View = require './View'
 DraggableView = require './DraggableView'
-DraggableListView = require './DraggableListView'
 
 class TrialObjectToolbarView extends View
     template: ToolbarTemplate
@@ -35,7 +34,7 @@ class TrialObjectItemView extends DraggableView
         @render()
         @listenTo @model, "change", @render
 
-class TrialObjectListView extends DraggableListView
+class TrialObjectListView extends View
     template: ListTemplate
 
     initialize: ->

@@ -147,8 +147,8 @@ module.exports = class BlocklyView extends DropableView
     iframe$: (selector) ->
         @$('iframe').contents().find(selector)
 
-    drop: (event) =>
-        model = super(event)
+    drop: (event, ui) =>
+        model = super(event, ui)
         @insertModelBlock(model)
 
     updateToolbox: ->
