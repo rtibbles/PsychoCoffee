@@ -77,6 +77,46 @@ toolbox =
         ,
             type: "lists_setIndex"
         ]
+    Colour:
+        [
+            type: "colour_picker"
+        ,
+            type: "colour_random"
+        ,
+            type: "colour_rgb"
+        ,
+            type: "colour_blend"
+        ]
+    Text:
+        [
+            type: "text"
+        ,
+            type: "text_join"
+        ,
+            type: "text_create_join_container"
+        ,
+            type: "text_create_join_item"
+        ,
+            type: "text_append"
+        ,
+            type: "text_length"
+        ,
+            type: "text_isEmpty"
+        ,
+            type: "text_indexOf"
+        ,
+            type: "text_charAt"
+        ,
+            type: "text_getSubstring"
+        ,
+            type: "text_changeCase"
+        ,
+            type: "text_trim"
+        ]
+    Variables:
+        custom: "VARIABLE"
+    Functions:
+        custom: "PROCEDURE"
 
 
 module.exports = class BlocklyView extends DropableView
@@ -184,7 +224,6 @@ module.exports = class BlocklyView extends DropableView
         return type
 
     insertModelMethodBlock: (model) ->
-        console.log model.methods()
         if model.methods().length == 0
             return false
         type = "PsychoCoffee_method_" + model.get("name")
