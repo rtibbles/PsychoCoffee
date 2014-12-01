@@ -1,6 +1,7 @@
 DropableView = require './DropableView'
 Template = require '../templates/blockly'
 ToolboxTemplate = require '../templates/blocklytoolbox'
+BlocklyModelCodeTemplate = require '../templates/blocklymodelcode'
 
 toolbox =
     Logic:
@@ -289,6 +290,24 @@ module.exports = class BlocklyView extends DropableView
                     input = @appendValueInput(option.name)
                     input.appendField(option.name)
                     input.setCheck(option.type)
+        @Blockly.JavaScript[type] =
+            (block) ->
+                attrs = {}
+                attrs["name"] = model.get("name")
+                attrs["parameters"] = []
+                for option in model.requiredParameters().concat(
+                    model.objectOptions())
+                    paramobject = {}
+                    if option.name == "name"
+                        continue
+                    paramobject["name"] = option.name
+                    paramobject["value"] = Blockly.JavaScript.valueToCode(
+                        block, option.name,
+                        Blockly.JavaScript.ORDER_ATOMIC
+                        ) or option.default or '0'
+                    attrs["parameters"].push paramobject
+                paramobject["last"] = true
+                BlocklyModelCodeTemplate(attrs)
         parentBlock =
             @Blockly.Block.obtain @Blockly.getMainWorkspace(), type
         parentBlock.initSvg()

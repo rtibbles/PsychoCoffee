@@ -1,0 +1,5 @@
+this.subViews['{{ name }}'].set({
+    {{#each parameters}}
+        {{ name }}: {{{ value }}} {{#unless last}},{{/unless}}
+    {{/each}}
+})
