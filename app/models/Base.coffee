@@ -66,8 +66,9 @@ class Model extends Backbone.AssociatedModel
         super
         if key == "name"
             @id = val
-        if "name" of key
-            @id = key["name"]
+        if _.isObject key
+            if "name" of key
+                @id = key["name"]
 
 class Collection extends Backbone.Collection
     url: "none"
