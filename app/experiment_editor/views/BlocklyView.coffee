@@ -164,6 +164,14 @@ module.exports = class BlocklyView extends DropableView
                     'OPTIONS')
             @setColour 40
 
+    codeGenDropDown: (option) ->
+        Blockly = @Blockly
+        (block) ->
+            value = block.getFieldValue("OPTIONS")
+            if option.type == 'String'
+                value = "'#{value}'"
+            [value, 0]
+
     insertModelBlocks: (model, category) =>
         if @registeredModels.length == 0
             eventType = @instantiateModelEventBlock()
@@ -321,6 +329,8 @@ module.exports = class BlocklyView extends DropableView
                 if value_type not of @Blockly.Blocks
                     @Blockly.Blocks[value_type] =
                         @instantiateDropDown(option)
+                    @Blockly.JavaScript[value_type] =
+                        @codeGenDropDown(option)
                 variable_type = "OPTIONS"
             else
                 switch option.type
