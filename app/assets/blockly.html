@@ -17,6 +17,8 @@
     </style>
     <script>
     function init() {
+        Blockly.HSV_SATURATION = 0.65;
+        Blockly.HSV_VALUE = 0.9;
         Blockly.inject(document.getElementById('blockly-code'), {toolbox: document.getElementById('blockly-toolbox')});
         // Let the top-level application know that Blockly is ready.
         window.parent.PsychoEdit.global_dispatcher.trigger("blockly_loaded", Blockly);
