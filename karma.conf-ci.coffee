@@ -53,7 +53,8 @@ module.exports = (config) =>
       'public/js/app.js',
       'test/helpers.coffee',
       'test/**/*_test.js',
-      'test/**/*_test.coffee'
+      'test/**/*_test.coffee',
+      'helpers/*.js'
     ],
 
 
