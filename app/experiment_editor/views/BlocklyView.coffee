@@ -139,6 +139,7 @@ module.exports = class BlocklyView extends DropableView
 
     blocklyReady: (Blockly) =>
         @Blockly = Blockly
+        @nameSpaceBlocklyVariables()
         @updateToolbox()
         @iframe$('body').on "dragleave", @dragLeave
         @iframe$('body').on "dragenter", @dragEnter
@@ -155,6 +156,15 @@ module.exports = class BlocklyView extends DropableView
     updateToolbox: ->
         @Blockly.updateToolbox(@toolboxTemplate(@toolbox))
 
+    nameSpaceBlocklyVariables: ->
+        variables_get = @Blockly.JavaScript['variables_get']
+        variables_set = @Blockly.JavaScript['variables_set']
+        @Blockly.JavaScript['variables_get'] = (block) ->
+            [code, order] = variables_get block
+            ["window.Variables.#{code}", order]
+        @Blockly.JavaScript['variables_set'] = (block) ->
+            code = variables_set block
+            "window.Variables.#{code}"
     instantiateDropDown: (option) ->
         Blockly = @Blockly
         init: ->
