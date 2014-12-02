@@ -31,7 +31,7 @@ class Model extends Backbone.AssociatedModel
     returnRequired: ->
         required = {}
         for parameter in @requiredParameters()
-            required[option.name] = @get(parameter.name)
+            required[parameter.name] = @get(parameter.name)
         return required
 
     returnOptions: ->

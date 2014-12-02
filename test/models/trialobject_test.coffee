@@ -4,24 +4,21 @@ module "TrialObject Model Tests",
         @trialObject = new PsychoCoffee.TrialObject.Model
 
 test "Default values", ->
-    expect 5
+    expect 3
 
     equal @trialObject.get("delay"), 0
     equal @trialObject.get("duration"), 0
     equal @trialObject.get("startWithTrial"), true
-    deepEqual @trialObject.get("parameterizedAttributes"), {}
-    deepEqual @trialObject.get("triggers"), []
 
 test "Methods", ->
-    expect 7
+    expect 6
     
     trialProperties = @trialObject.parameterizedTrial()
     equal trialProperties["delay"], 0
     equal trialProperties["duration"], 0
     equal trialProperties["startWithTrial"], true
-    deepEqual trialProperties["parameterizedAttributes"], {}
 
-    deepEqual @trialObject.returnRequired(), {}
+    deepEqual @trialObject.returnRequired(), {"name": ""}
     ok @trialObject.returnOptions() instanceof Object
     ok @trialObject.allParameters() instanceof Object
 

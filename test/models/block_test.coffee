@@ -7,10 +7,10 @@ test "Default values", ->
     expect 8
 
     ok @block.get("trials") instanceof PsychoCoffee.Trial.Collection
-    equal @block.get("title"), ""
+    equal @block.get("name"), ""
     equal @block.get("width"), 640
     equal @block.get("height"), 480
-    equal @block.get("timeout"), 1000
+    equal @block.get("timeout"), 0
     equal @block.get("numberOfTrials"), null
     ok @block.get("parameterSet") instanceof
         PsychoCoffee.BlockParameterSet.Model
@@ -18,7 +18,7 @@ test "Default values", ->
         PsychoCoffee.TrialObject.Collection
 
 test "Methods", ->
-    expect 9
+    expect 8
     
     trialObject = @block.createTrialObject()
     ok trialObject instanceof PsychoCoffee.TrialObject.Model
@@ -28,8 +28,7 @@ test "Methods", ->
     equal min_length, 1
     deepEqual parameterObjectList, [{}]
     trialProperties = @block.returnTrialProperties()
-    equal trialProperties["title"], ""
+    equal trialProperties["name"], ""
     equal trialProperties["width"], 640
     equal trialProperties["height"], 480
-    equal trialProperties["timeout"], 1000
-    deepEqual trialProperties["triggers"], []
+    equal trialProperties["timeout"], 0

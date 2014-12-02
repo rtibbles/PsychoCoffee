@@ -6,7 +6,7 @@ module "Experiment Model Tests",
 test "Default values", ->
     expect 4
 
-    equal @experiment.get("title"), "Experiment"
+    equal @experiment.get("name"), ""
     equal @experiment.get("saveInterval"), 10000
     ok @experiment.get("parameterSet") instanceof
         PsychoCoffee.ExperimentParameterSet.Model
