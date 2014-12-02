@@ -215,6 +215,15 @@ module.exports = class BlocklyView extends DropableView
                     .appendField(new Blockly.FieldDropdown(-> events),
                         "TRIGGERS")
                 @appendStatementInput('DO').appendField('do')
+        @Blockly.JavaScript[type] =
+            (block) ->
+                name = block.getFieldValue("NAME")
+                event = block.getFieldValue("TRIGGERS")
+                code = Blockly.JavaScript.statementToCode(block, 'DO')
+                """this.listenTo(window.subViews['#{name}'],
+                    '#{event}', function() {
+                        #{code}
+                        }"""
         return type
 
     instantiateModelGetBlock: () ->
@@ -237,6 +246,12 @@ module.exports = class BlocklyView extends DropableView
                     .appendField(new Blockly.FieldDropdown(
                         -> attrs), "ATTRS")
                 @setOutput(true, null)
+        @Blockly.JavaScript[type] =
+            (block) ->
+                name = block.getFieldValue("NAME")
+                attr = block.getFieldValue("ATTRS")
+                """window.subViews['#{name}'].get(
+                    '#{attr}')"""
         return type
 
     instantiateModelSetBlock: () ->
@@ -249,7 +264,7 @@ module.exports = class BlocklyView extends DropableView
                 attrs = registeredAttrs[registeredModels[0][0]]
                 @setColour 40
                 @setInputsInline true
-                @appendValueInput().appendField("set ")
+                @appendValueInput("VALUE").appendField("set ")
                     .appendField(new Blockly.FieldDropdown(
                         -> registeredModels,
                         (option) ->
@@ -260,6 +275,14 @@ module.exports = class BlocklyView extends DropableView
                         -> attrs), "ATTRS")
                 @setPreviousStatement(true)
                 @setNextStatement(true)
+        @Blockly.JavaScript[type] =
+            (block) ->
+                name = block.getFieldValue("NAME")
+                attr = block.getFieldValue("ATTRS")
+                value = Blockly.JavaScript.valueToCode(block, "VALUE",
+                    Blockly.JavaScript.ORDER_ATOMIC) || '0'
+                """window.subViews['#{name}'].set(
+                    '#{attr}', #{value})"""
         return type
 
     instantiateModelMethodBlock: () ->
@@ -282,6 +305,11 @@ module.exports = class BlocklyView extends DropableView
                             ), "NAME")
                 @setPreviousStatement(true)
                 @setNextStatement(true)
+        @Blockly.JavaScript[type] =
+            (block) ->
+                name = block.getFieldValue("NAME")
+                method = block.getFieldValue("METHODS")
+                "window.subViews['#{name}'].#{method}"
         return type
 
     insertModelBlock: (model) ->
