@@ -166,6 +166,60 @@ module.exports = class BlocklyView extends DropableView
             code = variables_set block
             "window.Variables.#{code}"
 
+    addClockBlocks: ->
+        Blockly = @Blockly
+        type_root = "PsychoCoffee_clock_"
+        type = type_root + "trial_time"
+        @Blockly.Blocks[type] =
+            init: ->
+                @setColour 40
+                @setInputsInline true
+                @appendDummyInput().appendField("time since trial start")
+                @setOutput(true, "NUMBER")
+        @Blockly.JavaScript[type] =
+            (block) ->
+                "window.clock.getTime()"
+        @addToToolbox(type, "Data Logging")
+
+        timers = {}
+        type = type_root + "start_timer"
+        @Blockly.Blocks[type] =
+            init: ->
+                @setColour 40
+                @setInputsInline true
+                @appendDummyInput().appendField("Start timer named ")
+                    .appendField(new Blockly.FieldTextInput("timer", (text) ->
+                        timers[@id] = text
+                        ), "TIMER")
+                @setPreviousStatement(true)
+                @setNextStatement(true)
+        @Blockly.JavaScript[type] =
+            (block) ->
+                timername = block.getFieldValue("TIMER")
+                "window.clock.setTimer('#{timername}')"
+        @addToToolbox(type, "Data Logging")
+
+        type = type_root + "get_timer"
+        @Blockly.Blocks[type] =
+            init: ->
+                @setColour 40
+                @setInputsInline true
+                @appendDummyInput().appendField("Timer count for ")
+                    .appendField(new Blockly.FieldDropdown( ->
+                        output = ([val, val] for key, val of timers)
+                        if output.length == 0
+                            output = [["",""]]
+                        output
+                        ), "TIMER")
+                @setOutput(true, "NUMBER")
+        @Blockly.JavaScript[type] =
+            (block) ->
+                timername = block.getFieldValue("TIMER")
+                "window.clock.getTimer('#{timername}')"
+        @addToToolbox(type, "Data Logging")
+        @updateToolbox()
+
+
     addDataModel: (dataModelName) ->
         Blockly = @Blockly
         type = "PsychoCoffee_dataHandler_#{dataModelName}"
