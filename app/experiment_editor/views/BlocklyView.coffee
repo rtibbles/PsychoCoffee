@@ -165,6 +165,29 @@ module.exports = class BlocklyView extends DropableView
         @Blockly.JavaScript['variables_set'] = (block) ->
             code = variables_set block
             "window.Variables.#{code}"
+
+    addDataModel: (dataModelName) ->
+        Blockly = @Blockly
+        type = "PsychoCoffee_dataHandler_#{dataModelName}"
+        @Blockly.Blocks[type] =
+            init: ->
+                @setColour 40
+                @setInputsInline true
+                @appendValueInput("INPUT").appendField("Log ")
+                @appendDummyInput().appendField(" as ")
+                    .appendField(new Blockly.FieldTextInput("outputname"),
+                        "PARAMETER")
+                @setPreviousStatement(true)
+                @setNextStatement(true)
+        @Blockly.JavaScript[type] =
+            (block) ->
+                parameter = block.getFieldValue("PARAMETER")
+                input = block.getFieldValue("INPUT")
+                "window.#{dataModelName}.set('#{parameter}', #{input})"
+        @addToToolbox(type, "Data Logging")
+        @updateToolbox()
+
+
     instantiateDropDown: (option) ->
         Blockly = @Blockly
         init: ->

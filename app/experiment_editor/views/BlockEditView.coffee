@@ -74,6 +74,7 @@ module.exports = class BlockEditView extends CodeGeneratorView
         for trialObject in @model.get("trialObjects").models
             @blocklyView.insertModelBlocks(trialObject,
                 "Trial Objects")
+        @blocklyView.addDataModel("TrialDataHandler")
 
     addTrialObject: (event) ->
         subModel = event.target.id
