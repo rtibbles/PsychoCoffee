@@ -36,10 +36,11 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
                         {
                             name: "audioTest"
                             subModelTypeAttribute: "AudioTrialObject"
+                            file: "/sounds/test.mp3"
                         },
                         {
-                            name: "audioTest2"
-                            subModelTypeAttribute: "AudioTrialObject"
+                            name: "textTest"
+                            subModelTypeAttribute: "TextVisualTrialObject"
                         }
                     ]
                 }
@@ -57,6 +58,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         @blockListView = new BlockListView({collection: @model.get("blocks")})
         @$("#blocks-container").append @blockListView.el
         @blockListView.render()
+        @experimentPreview = new PsychoCoffee.ExperimentView({model: @model})
 
     editBlock: (model) ->
         if model != @blockmodel
