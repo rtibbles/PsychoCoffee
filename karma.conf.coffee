@@ -19,7 +19,6 @@ module.exports = (config) =>
       'public/js/vendor.js',
       'public/js/app.js',
       'test/helpers.coffee',
-      'test/**/*_test.js',
       'test/**/*_test.coffee'
     ],
 

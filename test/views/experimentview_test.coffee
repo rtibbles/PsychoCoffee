@@ -21,7 +21,7 @@ module "Experiment View Tests",
             [
               200
               {"Content-Type": "application/json"}
-              '{}'
+              '[]'
             ]
         )
         @setupExperimentModel()
