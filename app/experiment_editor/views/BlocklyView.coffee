@@ -178,7 +178,7 @@ module.exports = class BlocklyView extends DropableView
                 @setOutput(true, "NUMBER")
         @Blockly.JavaScript[type] =
             (block) ->
-                "window.clock.getTime()"
+                ["window.clock.getTime()", Blockly.JavaScript.ORDER_ATOMIC]
         @addToToolbox(type, "Data Logging")
 
         timers = {}
@@ -215,7 +215,8 @@ module.exports = class BlocklyView extends DropableView
         @Blockly.JavaScript[type] =
             (block) ->
                 timername = block.getFieldValue("TIMER")
-                "window.clock.getTimer('#{timername}')"
+                ["window.clock.getTimer('#{timername}')",
+                    Blockly.JavaScript.ORDER_ATOMIC]
         @addToToolbox(type, "Data Logging")
         @updateToolbox()
 
@@ -236,7 +237,8 @@ module.exports = class BlocklyView extends DropableView
         @Blockly.JavaScript[type] =
             (block) ->
                 parameter = block.getFieldValue("PARAMETER")
-                input = block.getFieldValue("INPUT")
+                input = Blockly.JavaScript.valueToCode(block, "INPUT",
+                    Blockly.JavaScript.ORDER_ATOMIC) || '0'
                 "window.#{dataModelName}.set('#{parameter}', #{input})"
         @addToToolbox(type, "Data Logging")
         @updateToolbox()
@@ -313,7 +315,7 @@ module.exports = class BlocklyView extends DropableView
                 """this.listenTo(window.subViews['#{name}'],
                     '#{event}', function() {
                         #{code}
-                        }"""
+                        })"""
         return type
 
     instantiateModelGetBlock: () ->
