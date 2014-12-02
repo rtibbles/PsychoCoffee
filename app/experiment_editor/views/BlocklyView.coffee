@@ -139,6 +139,7 @@ module.exports = class BlocklyView extends DropableView
 
     blocklyReady: (Blockly) =>
         @Blockly = Blockly
+        @Blockly.addChangeListener => @trigger "change"
         @nameSpaceBlocklyVariables()
         @updateToolbox()
         @iframe$('body').on "dragleave", @dragLeave
@@ -152,6 +153,9 @@ module.exports = class BlocklyView extends DropableView
     drop: (event, ui) =>
         model = super(event, ui)
         @insertModelBlock(model)
+
+    generateCode: =>
+        @Blockly.JavaScript.workspaceToCode()
 
     updateToolbox: ->
         @Blockly.updateToolbox(@toolboxTemplate(@toolbox))

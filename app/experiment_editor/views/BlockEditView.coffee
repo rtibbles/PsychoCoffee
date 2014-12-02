@@ -64,6 +64,7 @@ module.exports = class BlockEditView extends CodeGeneratorView
             el: @$("#block-code")
         @listenToOnce @blocklyView, "blockly_ready", @blocklyObjects
         @blocklyView.render()
+        @listenTo @blocklyView, "change", @generateCode
         @$("#trialObjects").prepend @trialObjectListView.el
         @trialObjectListView.render()
         @$("#trialObjects").prepend @toolbarView.el
@@ -90,3 +91,6 @@ module.exports = class BlockEditView extends CodeGeneratorView
         @listenToOnce newTrialObject, "change:name", ->
             blocklyView.insertModelBlocks(newTrialObject,
                 "Trial Objects")
+
+    generateCode: =>
+        @model.set "flow", new Function(@blocklyView.generateCode())
