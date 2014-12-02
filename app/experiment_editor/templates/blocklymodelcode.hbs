@@ -1,4 +1,4 @@
-this.subViews['{{ name }}'].set({
+window.subViews['{{ name }}'].set({
     {{#each parameters}}
         {{ name }}: {{{ value }}} {{#unless last}},{{/unless}}
     {{/each}}

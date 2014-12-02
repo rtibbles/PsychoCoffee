@@ -83,6 +83,7 @@ class Clock
         @tick = 1000/framerate
         @frame = 0
         @changeEvents = []
+        @timers = {}
         @timingType = performance.type
         @animationFrameType = window.AnimationFrameType
         console.log "Using clock type:", @timingType
@@ -92,6 +93,12 @@ class Clock
 
     getTime: =>
         performance.now() - @start
+
+    setTimer: (name) =>
+        @timers[name] = @getTime()
+
+    getTimer: (name) =>
+        @getTime() - @timers[name]
 
     getElapsedTime: (time) =>
         @getTime() - time
@@ -127,6 +134,7 @@ class Clock
     stopTimer: =>
         clearTimeout @timer
         @frame = 0
+        @timers = {}
         delete @timerStart
 
     timerElapsed: =>

@@ -42,6 +42,8 @@ module.exports = class TrialView extends HandlerView
         @datamodel.set "trial_id", @model.id
         @datamodel.set "parameters", @model.get("parameters")
         window.Variables = _.extend(window.Variables, @parameters)
+        window.subViews = @subViews
+        window.clock = @clock
         @setWindowTrialObjects()
         @createCanvas()
         endpoints =
