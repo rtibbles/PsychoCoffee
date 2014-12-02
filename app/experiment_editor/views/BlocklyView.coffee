@@ -182,6 +182,13 @@ module.exports = class BlocklyView extends DropableView
                 value = "'#{value}'"
             [value, 0]
 
+    addToToolbox: (type, category) =>
+        toolbox_object = type: type
+        if category not of @toolbox
+            @toolbox[category] = []
+        if not _.some(@toolbox, (x) -> x.type == type)
+            @toolbox[category].push type: type
+
     insertModelBlocks: (model, category) =>
         if @registeredModels.length == 0
             eventType = @instantiateModelEventBlock()
@@ -190,11 +197,7 @@ module.exports = class BlocklyView extends DropableView
             methodType = @instantiateModelMethodBlock()
             for type in [eventType, getType, setType, methodType]
                 if type
-                    toolbox_object = type: type
-                    if category not of @toolbox
-                        @toolbox[category] = []
-                    if not _.some(@toolbox, (x) -> x.type == type)
-                        @toolbox[category].push type: type
+                    @addToToolbox(type, category)
         @registeredModels.push [model.get("name"), model.get("name")]
         @registeredEvents[model.get("name")] =
             [trigger, trigger] for trigger in model.triggers()
