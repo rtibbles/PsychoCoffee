@@ -42,7 +42,6 @@ module.exports = class TrialView extends HandlerView
         @datamodel.set "trial_id", @model.id
         @datamodel.set "parameters", @model.get("parameters")
         window.Variables = _.extend(window.Variables, @parameters)
-        window.subViews = @subViews
         window.clock = @clock
         @setWindowTrialObjects()
         @createCanvas()
@@ -56,6 +55,8 @@ module.exports = class TrialView extends HandlerView
             view.registerEvents(@subViewList)
         @registerEvents()
         @registerTimeout()
+        if _.isFunction(@model.get("flow"))
+            @model.get("flow")()
         @clock.startTimer()
 
     createCanvas: =>
@@ -97,9 +98,9 @@ module.exports = class TrialView extends HandlerView
         @trigger "trialEnded"
 
     setWindowTrialObjects: ->
-        window.TrialObjects = {}
+        window.subViews = {}
         for subView in @subViewList
-            window.TrialObjects[subView.name] = subView
+            window.subViews[subView.name] = subView
 
     registerEvents: =>
         if @model.get("flow")? then @model.get("flow")()

@@ -25,6 +25,7 @@ module.exports = class BlockView extends HandlerView
                 (model.parameterizedTrial(parameters) \
                 for model in @model.get("trialObjects").models)
                 )
+            trial.save()
 
     preLoadBlock: (queue) =>
         for key, view of @subViews
@@ -48,7 +49,7 @@ module.exports = class BlockView extends HandlerView
         if not trial
             @endBlock()
             return
-        trialView = @subViews[trial.get("id")]
+        trialView = @subViews[trial.id]
         if @trialView
             if @trialView.close then @trialView.close() else @trialView.remove()
         @trialdatamodel =

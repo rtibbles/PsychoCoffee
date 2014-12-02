@@ -81,7 +81,7 @@ module.exports = class ExperimentView extends HandlerView
         if not block
             @endExperiment()
             return
-        blockView = @subViews[block.get("id")]
+        blockView = @subViews[block.id]
         if @blockView
             if @blockView.close then @blockView.close() else @blockView.remove()
         @blockdatamodel =
