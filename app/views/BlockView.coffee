@@ -6,30 +6,26 @@ module.exports = class BlockView extends HandlerView
 
     initialize: (options) =>
         super
-        @generateTrialModels()
-        @instantiateSubViews("trials",
-            "TrialView", null)
+        @model.setParameters(@user_id, @injectedParameters)
+        @instantiateSubView(@model,
+            "TrialView", "trialView")
         # trialSelector is a function that takes two arguments:
         # the list of possible trials, and the trial number.
         @trialSelector = options.selector or @defaultNextTrial
 
-    generateTrialModels: ->
-        [@parameters, @trialListLength, @parameterSet] =
-            @model.returnParameters(@user_id, @injectedParameters)
-        for parameters in @parameterSet
-            trial =
-                @model.get("trials").create @model.returnTrialProperties(
-                    parameters)
-            trial.set "parameters", parameters
-            trial.get("trialObjects").add(
-                (model.parameterizedTrial(parameters) \
-                for model in @model.get("trialObjects").models)
-                )
-            trial.save()
-
     preLoadBlock: (queue) =>
         for key, view of @subViews
             view.preLoadTrial(queue)
+
+    previewBlock: =>
+        @trialView = @subViews["trialView"]
+        @trialdatamodel =
+            @datamodel.get("trialdatalogs").add({})
+        @trialView.datamodel = @trialdatamodel
+        @trialView.render()
+        @trialView.appendTo("#trials")
+        @trialView.editor = true
+        @trialView
 
     startBlock: ->
         date_time = new Date().getTime()
@@ -42,13 +38,10 @@ module.exports = class BlockView extends HandlerView
         @datamodel.set "parameters", @parameters
         window.Variables = _.extend(window.Variables, @parameters)
         @datamodel.set("trial", @datamodel.get("trial") or 0)
-        currentTrial = @model.get("trials").at(@datamodel.get("trial"))
-        @showTrial currentTrial
+        @model.setTrialParameters @datamodel.get("trial")
+        if @model.get "trialParameters" then @showTrial else @endBlock()
 
-    showTrial: (trial) =>
-        if not trial
-            @endBlock()
-            return
+    showTrial: =>
         trialView = @subViews[trial.id]
         if @trialView
             if @trialView.close then @trialView.close() else @trialView.remove()
@@ -69,8 +62,8 @@ module.exports = class BlockView extends HandlerView
     nextTrial: ->
         @datamodel.set("trial",
             @trialSelector(@model.get("trials"), @datamodel.get("trial")))
-        currentTrial = @model.get("trials").at(@datamodel.get("trial"))
-        @showTrial currentTrial
+        @model.setTrialParameters @datamodel.get("trial")
+        if @model.get "trialParameters" then @showTrial else @endBlock()
 
     endBlock: ->
         date_time = new Date().getTime()

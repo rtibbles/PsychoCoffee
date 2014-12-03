@@ -24,16 +24,20 @@ module.exports = class View extends Backbone.View
         $(el).append(@el)
 
     instantiateSubViews: (key, viewType, viewFunction, options={}) =>
-        @subViews = {}
         for model in @model?.get(key).models or []
             if viewFunction? then viewType = viewFunction(model)
-            options = _.extend(
-                options
-                model: model
-                clock: @clock
-                user_id: @user_id)
-            @subViews[model.id] = new PsychoCoffee[viewType] options
+            @instantiateSubView(model, viewType, model.id, options)
         @subViewList = _.values(@subViews)
+
+    instantiateSubView: (model, viewType, id, options={}) =>
+        if not @subViews
+            @subViews = {}
+        options = _.extend(
+            options
+            model: model
+            clock: @clock
+            user_id: @user_id)
+        @subViews[id] = new PsychoCoffee[viewType] options
 
     registerSubViewSubViews: ->
         for subView in @subViewList
