@@ -21,7 +21,7 @@ class Model extends Base.Model
         collectionType: Parameter.Collection
     ]
 
-    returnTrialParameters: (user_id="",\
+    setTrialParameters: (user_id="",\
                             trials_wanted=null,\
                             experimentParameterSet={}) ->
         parameterObjectList = []
@@ -95,7 +95,10 @@ class Model extends Base.Model
         if @get "randomized"
             parameterObjectList = Random.seeded_shuffle parameterObjectList,
                 user_id + "parameterObjectList" + @id
-        return [blockParameterSet, min_length, parameterObjectList]
+        @set
+            blockParameterSet: blockParameterSet
+            min_length: min_length
+            parameterObjectList: parameterObjectList
 
 class Collection extends Base.Collection
     model: Model
