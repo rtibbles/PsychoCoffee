@@ -15,8 +15,7 @@ test "Default values", ->
 test "Methods", ->
     expect 3
     
-    [blockParameterSet, min_length, parameterObjectList] =
-        @blockParameterSet.returnTrialParameters("testing", null, {})
-    deepEqual blockParameterSet, {}
-    equal min_length, 1
-    deepEqual parameterObjectList, [{}]
+    @blockParameterSet.setTrialParameters("testing", null, {})
+    deepEqual @blockParameterSet.get("blockParameterSet"), {}
+    equal @blockParameterSet.get("min_length"), 1
+    deepEqual @blockParameterSet.get("parameterObjectList"), [{}]
