@@ -6,6 +6,7 @@ ExperimentEditView = require '../views/ExperimentEditView'
 # The application bootstrapper.
 PsychoEdit =
     initialize: ->
+        Backbone.Associations.EVENTS_NC = true
         dispatcher = _.extend({}, Backbone.Events, cid: "dispatcher")
         _.each [ Backbone.Collection::,
             Backbone.Model::,

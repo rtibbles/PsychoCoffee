@@ -26,6 +26,10 @@ class ExperimentTitleView extends View
 module.exports = class ExperimentEditView extends CodeGeneratorView
     template: Template
 
+    events:
+        "click .play": "playPreview"
+        "click .pause": "pausePreview"
+
     initialize: ->
         @model = new Experiment.Model({
             name: "My Test Experiment"
@@ -41,6 +45,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
                         {
                             name: "textTest"
                             subModelTypeAttribute: "TextVisualTrialObject"
+                            text: "This is here"
                         }
                     ]
                 }
@@ -58,7 +63,6 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         @blockListView = new BlockListView({collection: @model.get("blocks")})
         @$("#blocks-container").append @blockListView.el
         @blockListView.render()
-        @experimentPreview = new PsychoCoffee.ExperimentView({model: @model})
 
     editBlock: (model) ->
         if model != @blockmodel
@@ -67,3 +71,58 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             @blockEditView = new BlockEditView({model: @blockmodel})
             @blockEditView.render()
             @blockEditView.appendTo("#blockedit")
+            @initializePreview()
+            @listenTo @blockmodel, "nested-change", @initializePreview
+    
+    initializePreview: =>
+        @frame = 0
+        if @experimentPreview
+            if @experimentPreview.close
+                @experimentPreview.close()
+            else
+                @experimentPreview.remove()
+        if @trialPreview
+            if @trialPreview.close
+                @trialPreview.close()
+            else
+                @trialPreview.remove()
+        delete @experimentPreview
+        delete @trialPreview
+        @experimentPreview = new PsychoCoffee.ExperimentView({
+            model: @model
+            editor: true
+        })
+        @trialPreview = @experimentPreview.previewBlock @blockmodel
+        @$(".play").show()
+        @$(".pause").hide()
+        @updateFrame()
+        @trialPreview.startTrial()
+
+    playPreview: =>
+        if @trialPreview.clock.pauseTimestamp
+            @trialPreview.clock.resumeTimer()
+        else
+            @trialPreview.clock.startTimer()
+        @listenTo @trialPreview.clock, "tick", @updateFrame
+        @$(".play").hide()
+        @$(".pause").show()
+
+    pausePreview: =>
+        @trialPreview.clock.pauseTimer()
+        @$(".play").show()
+        @$(".pause").hide()
+
+    updateFrame: (frame) =>
+        @frame = frame or @frame
+        duration = if @blockmodel.get("timeout") != 0\
+            then @blockmodel.get("timeout") else 20000
+        elapsed = @frame*@trialPreview.clock.tick
+        if elapsed/duration <= 1
+            @animateScrubBar(elapsed/duration)
+        else
+            @pausePreview()
+
+    animateScrubBar: _.throttle(
+        (fraction) =>
+            $(".progress-bar.scrub").css("width", 100*fraction + "%")
+        , 200)

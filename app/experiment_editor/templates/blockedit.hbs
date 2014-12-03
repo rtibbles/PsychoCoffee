@@ -1,5 +1,13 @@
 <div id="block_editor" class="container">
     <div id="trialObjects" class="row">
-        <div id="block-code" class="col-md-8"></div>
+        <div id="block-code" class="col-md-4"></div>
+        <div id="block-preview" class="col-md-4">
+            <div class="btn btn-success play"><span class="glyphicon glyphicon-play"></span></div>
+            <div class="btn btn-success pause" style="display: none;"><span class="glyphicon glyphicon-pause"></span></div>
+            <div class="progress" id="scrubber">
+              <div class="progress-bar scrub" role="progressbar" style="width: 0%;">
+              </div>
+            </div>
+        </div>
     </div>
 </div>
