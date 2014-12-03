@@ -121,14 +121,11 @@ class Clock
 
     pauseTimer: =>
         @pauseTimestamp = @getTime()
-        @stopTimer()
-        if window.confirm("Do you really want to stop the experiment?")
-            window.close()
-        else
-            @resumeTimer(@pauseTimestamp)
+        clearTimeout @timer
 
-    resumeTimer: (timestamp) =>
-        @start += @getTime() - timestamp
+    resumeTimer: =>
+        @timerStart += @getTime() - @pauseTimestamp
+        delete @pauseTimestamp
         @ticktock()
 
     stopTimer: =>
@@ -147,6 +144,7 @@ class Clock
             @tick - (@timerElapsed() - @frame*@tick)
             )
         @trigger(@frame)
+        @trigger("tick", @frame)
         # console.log "Tick Tock!", @timerElapsed() - @frame*@tick
         @frame += 1
         # if @frame > 100 then @stopTimer()
