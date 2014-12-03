@@ -65,17 +65,3 @@ module.exports = class TrialObjectView extends View
     registerEvents: (siblingViews) =>
         if @model.get("startWithTrial")
             @clock.delayedTrigger @model.get("delay"), @, @activate
-        for trigger in (@model.get("triggers") or [])
-            view = _.find(siblingViews, (sibling) ->
-                sibling.name == trigger.objectName
-                )
-            if view?
-                @listenTo view, trigger.eventName, (options) =>
-                    console.log "Triggering", trigger.eventName
-                    @[trigger.callback](_.extend(options,
-                        trigger.arguments or {}))
-            else
-                console.debug """
-                    There is no object with the name
-                    #{trigger.objectName} in this trial.
-                    """

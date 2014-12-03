@@ -55,8 +55,6 @@ module.exports = class TrialView extends HandlerView
             view.registerEvents(@subViewList)
         @registerEvents()
         @registerTimeout()
-        if _.isFunction(@model.get("flow"))
-            @model.get("flow")()
         @clock.startTimer()
 
     createCanvas: =>
@@ -103,16 +101,5 @@ module.exports = class TrialView extends HandlerView
             window.subViews[subView.name] = subView
 
     registerEvents: =>
-        if @model.get("flow")? then @model.get("flow")()
-        for trigger in (@model.get("triggers") or [])
-            view = _.find(@subViews, (subView) ->
-                subView.name == trigger.objectName
-                )
-            if view?
-                @listenTo view, trigger.eventName, =>
-                    @[trigger.callback](trigger.arguments or {})
-            else
-                console.debug """
-                    There is no object with the name
-                    #{trigger.objectName} in this trial.
-                    """
+        if _.isFunction(@model.get("flow"))
+            @model.get("flow")()
