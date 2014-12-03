@@ -55,7 +55,8 @@ module.exports = class TrialView extends HandlerView
             view.registerEvents(@subViewList)
         @registerEvents()
         @registerTimeout()
-        @clock.startTimer()
+        if not @editor
+            @clock.startTimer()
 
     createCanvas: =>
         @canvas = new fabric.Canvas "trial-canvas"
