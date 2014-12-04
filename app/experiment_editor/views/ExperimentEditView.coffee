@@ -99,6 +99,10 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         @startPreview()
 
     startPreview: =>
+        offset = $("#scrubber").offset()
+        offset["top"] += $("#scrubber").height() + 5
+        offset["left"] = $("#block-preview").offset()["left"]
+        $("#trial-draw").offset(offset)
         @$(".play").show()
         @$(".pause").hide()
         @updateFrame()

@@ -1,12 +1,10 @@
-<div id="trialObjectToolbar" class="col-md-2 panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">New Trial Object</h3>
-    </div>
-    <div class="panel-body">
+<div id="trialObjectToolbar" class="dropdown col-md-1">
+    <button id="dLabel" class="btn btn-success" type="button" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">New Trial Object<span class="caret"></span></button>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
         {{#each trialObjects}}
-            <div class="trialObjectToolItem addtrialobject btn btn-primary" id="{{ modelname }}">
+            <li class="trialObjectToolItem addtrialobject btn btn-primary" id="{{ modelname }}">
                 {{ name }}
-            </div>
+            </li>
         {{/each}}
-    </div>
+    </ul>
 </div>
