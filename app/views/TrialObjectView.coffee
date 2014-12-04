@@ -9,6 +9,7 @@ module.exports = class TrialObjectView extends View
         if not @model.get "file" then @render()
         @active = false
         @name = @model.name()
+        @listenTo @model, "change", @render
 
     attach: (endpoints) ->
         return

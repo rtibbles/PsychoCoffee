@@ -15,10 +15,6 @@ module.exports = class ExperimentView extends HandlerView
 
     initialize: (options) =>
         super
-        # Flag to allow the views to behave differently under
-        # editing conditions
-        if options.editor
-            @editor = true
         @urlParams = urlParse.decodeGetParams(window.location.href)
         # This sets the User ID depending on the way that the experiment
         # is being run, also collects other relevant information for
@@ -61,7 +57,8 @@ module.exports = class ExperimentView extends HandlerView
             "blocks"
             "BlockView"
             null
-            parameters: @datamodel.get("parameters"))
+            parameters: @datamodel.get("parameters")
+            editor: @editor)
         @preLoadExperiment()
 
     refreshTime: =>
@@ -88,6 +85,7 @@ module.exports = class ExperimentView extends HandlerView
             @datamodel.set("block", @datamodel.get("block") or 0)
             currentBlock = @model.get("blocks").at(@datamodel.get("block"))
             @showBlock currentBlock
+        @trigger "loaded"
 
     showBlock: (block) =>
         if not block

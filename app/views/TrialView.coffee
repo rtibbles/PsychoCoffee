@@ -9,7 +9,7 @@ module.exports = class TrialView extends HandlerView
     initialize: (options) =>
         super
         @instantiateSubViews("trialObjects",
-            "TrialObjectView", @trialObjectViewType)
+            "TrialObjectView", @trialObjectViewType, editor: @editor)
         @registerSubViewSubViews()
 
     preLoadTrial: (queue) =>
@@ -60,8 +60,9 @@ module.exports = class TrialView extends HandlerView
 
     createCanvas: =>
         @canvas = new fabric.Canvas "trial-canvas"
-        @canvas.selection = false
-        @canvas.hoverCursor = 'default'
+        if not @editor
+            @canvas.selection = false
+            @canvas.hoverCursor = 'default'
         @clock.canvas = @canvas
         if not Modernizr.pointerevents
             for eventType in [

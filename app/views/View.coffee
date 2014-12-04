@@ -7,6 +7,7 @@ module.exports = class View extends Backbone.View
         @clock = options?.clock
         @user_id = options?.user_id
         @injectedParameters = options?.parameters
+        @editor = options?.editor
 
     template: ->
         return

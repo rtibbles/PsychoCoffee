@@ -8,7 +8,7 @@ module.exports = class BlockView extends HandlerView
         super
         @model.setParameters(@user_id, @injectedParameters)
         @instantiateSubView(@model,
-            "TrialView", "trialView")
+            "TrialView", "trialView", editor: @editor)
         # trialSelector is a function that takes two arguments:
         # the list of possible trials, and the trial number.
         @trialSelector = options.selector or @defaultNextTrial
