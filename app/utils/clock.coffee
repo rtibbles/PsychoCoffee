@@ -115,8 +115,11 @@ class Clock
         # Can't guarantee precision below 16ms, so don't even try.
         object.listenToOnce(@, @frame + nearestFrame, callback)
 
-    startTimer: =>
+    initTimer: =>
         @timerStart = @getTime()
+
+    startTimer: =>
+        @initTimer()
         @ticktock()
 
     pauseTimer: =>
@@ -143,6 +146,9 @@ class Clock
             @ticktock,
             @tick - (@timerElapsed() - @frame*@tick)
             )
+        @advanceFrame()
+
+    advanceFrame: =>
         @trigger(@frame)
         @trigger("tick", @frame)
         # console.log "Tick Tock!", @timerElapsed() - @frame*@tick

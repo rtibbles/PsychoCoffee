@@ -72,7 +72,9 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             @blockEditView.render()
             @blockEditView.appendTo("#blockedit")
             @initializePreview()
-            @listenTo @blockmodel, "nested-change", @initializePreview
+            @listenTo @blockmodel, "change", @startPreview
+            @listenTo @blockmodel, "nested-change",
+                @frameAdvance
     
     initializePreview: =>
         @frame = 0
@@ -93,10 +95,19 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             editor: true
         })
         @trialPreview = @experimentPreview.previewBlock @blockmodel
+        @listenToOnce @experimentPreview, "loaded", @frameAdvance
+        @startPreview()
+
+    startPreview: =>
         @$(".play").show()
         @$(".pause").hide()
         @updateFrame()
         @trialPreview.startTrial()
+
+    frameAdvance: =>
+        if not @trialPreview.clock.timerStart
+            @trialPreview.clock.initTimer()
+        @trialPreview.clock.advanceFrame()
 
     playPreview: =>
         if @trialPreview.clock.pauseTimestamp
