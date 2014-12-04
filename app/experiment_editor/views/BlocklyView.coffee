@@ -385,7 +385,7 @@ module.exports = class BlocklyView extends DropableView
             (block) ->
                 name = block.getFieldValue("NAME")
                 attr = block.getFieldValue("ATTRS")
-                """window.subViews['#{name}'].get(
+                """window.subViews['#{name}'].model.get(
                     '#{attr}')"""
         return type
 
@@ -415,7 +415,7 @@ module.exports = class BlocklyView extends DropableView
                 attr = block.getFieldValue("ATTRS")
                 value = Blockly.JavaScript.valueToCode(block, "VALUE",
                     Blockly.JavaScript.ORDER_ATOMIC) || '0'
-                """window.subViews['#{name}'].set(
+                """window.subViews['#{name}'].model.set(
                     '#{attr}', #{value})"""
         return type
 
