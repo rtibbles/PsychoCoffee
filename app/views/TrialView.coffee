@@ -31,7 +31,7 @@ module.exports = class TrialView extends HandlerView
         catch error
             console.debug error, "Unknown element type #{elementType}"
 
-    startTrial: ->
+    startTrial: =>
         window.TrialDataHandler = @datamodel
         date_time = new Date().getTime()
         if @datamodel.get("start_time")?
@@ -97,10 +97,8 @@ module.exports = class TrialView extends HandlerView
         @remove()
         @trigger "trialEnded"
 
-    setWindowTrialObjects: ->
-        window.subViews = {}
-        for subView in @subViewList
-            window.subViews[subView.name] = subView
+    setWindowTrialObjects: =>
+        window.subViews = @subViews
 
     registerEvents: =>
         if _.isFunction(@model.get("flow"))
