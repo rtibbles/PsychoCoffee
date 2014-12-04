@@ -493,7 +493,9 @@ module.exports = class BlocklyView extends DropableView
                     @Blockly.JavaScript[value_type] =
                         @codeGenDropDown(option)
                 variable_type = "OPTIONS"
+                value = String(model.get(option.name))
             else
+                value = String(model.get(option.name))
                 switch option.type
                     when "String"
                         value_type = "text"
@@ -504,6 +506,7 @@ module.exports = class BlocklyView extends DropableView
                     when "Boolean"
                         value_type = "logic_boolean"
                         variable_type = "BOOL"
+                        value = value.toUpperCase()
                     when "Colour"
                         value_type = "colour_picker"
                         variable_type = "COLOUR"
@@ -513,8 +516,7 @@ module.exports = class BlocklyView extends DropableView
             childBlock = @Blockly.Block.obtain @Blockly.getMainWorkspace(),
                 value_type
             childBlock.attr_name = option.name
-            childBlock.setFieldValue(String(model.get(option.name)),
-                variable_type)
+            childBlock.setFieldValue(value, variable_type)
             childBlock.initSvg()
             childBlock.render()
             parentBlock.getInput(option.name)
