@@ -72,8 +72,7 @@ module.exports = class BlockEditView extends CodeGeneratorView
 
 
     blocklyObjects: =>
-        for trialObject in @model.get("trialObjects").models
-            @blocklyView.insertModelBlocks(trialObject,
+        @blocklyView.insertModelBlocks(@model.get("trialObjects"),
                 "Trial Objects")
         @blocklyView.addDataModel("TrialDataHandler")
         @blocklyView.addClockBlocks()
@@ -87,10 +86,6 @@ module.exports = class BlockEditView extends CodeGeneratorView
         modelEditView = new ModelEditView
             model: newTrialObject
         modelEditView.render()
-        blocklyView = @blocklyView
-        @listenToOnce newTrialObject, "change:name", ->
-            blocklyView.insertModelBlocks(newTrialObject,
-                "Trial Objects")
 
     generateCode: =>
         @model.set "flow", new Function(@blocklyView.generateCode())

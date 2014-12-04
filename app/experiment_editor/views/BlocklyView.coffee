@@ -128,10 +128,6 @@ module.exports = class BlocklyView extends DropableView
     initialize: ->
         super
         @toolbox = @defaultToolbox
-        @registeredModels = []
-        @registeredEvents = {}
-        @registeredAttrs = {}
-        @registeredMethods = {}
 
     render: ->
         super
@@ -140,6 +136,10 @@ module.exports = class BlocklyView extends DropableView
     blocklyReady: (Blockly) =>
         @Blockly = Blockly
         @Blockly.addChangeListener => @trigger "change"
+        @Blockly.registeredModels = []
+        @Blockly.registeredEvents = {}
+        @Blockly.registeredAttrs = {}
+        @Blockly.registeredMethods = {}
         @nameSpaceBlocklyVariables()
         @updateToolbox()
         @iframe$('body').on "dragleave", @dragLeave
@@ -272,40 +272,58 @@ module.exports = class BlocklyView extends DropableView
         if not _.some(@toolbox, (x) -> x.type == type)
             @toolbox[category].push type: type
 
-    insertModelBlocks: (model, category) =>
-        if @registeredModels.length == 0
-            eventType = @instantiateModelEventBlock()
-            getType = @instantiateModelGetBlock()
-            setType = @instantiateModelSetBlock()
-            methodType = @instantiateModelMethodBlock()
-            for type in [eventType, getType, setType, methodType]
-                if type
-                    @addToToolbox(type, category)
-        @registeredModels.push [model.get("name"), model.get("name")]
-        @registeredEvents[model.get("name")] =
-            [trigger, trigger] for trigger in model.triggers()
-        @registeredAttrs[model.get("name")] =
-            [name, name] for name in model.allParameterNames()
-        @registeredMethods[model.get("name")] =
-            [method, method] for method in model.methods()
+    insertModelBlocks: (collection, category) =>
+        @collection = collection
+        @category = category
+        if @collection.length > 0
+            @createModelBlocks()
+        else
+            @listenToOnce @collection, "add", @createModelBlocks
+
+    createModelBlocks: =>
+        @registerModels()
+        eventType = @instantiateModelEventBlock()
+        getType = @instantiateModelGetBlock()
+        setType = @instantiateModelSetBlock()
+        methodType = @instantiateModelMethodBlock()
+        for type in [eventType, getType, setType, methodType]
+            if type
+                @addToToolbox(type, @category)
+        @updateToolbox()
+        @listenTo @collection, "add", @registerModels
+        @listenTo @collection, "remove", @registerModels
+
+
+    registerModels: =>
+        @Blockly.registeredModels = _.map @collection.models, (model) ->
+            [model.get("name"), model.get("name")]
+        @Blockly.registeredEvents = _.object(
+            ([model.get("name"), [trig, trig]\
+                for trig in model.triggers()] for model in @collection.models))
+        @Blockly.registeredAttrs = _.object(
+            ([model.get("name"), [name, name]\
+                for name in model.allParameterNames()]\
+                    for model in @collection.models))
+        @Blockly.registeredMethods = _.object(
+            ([model.get("name"), [method, method]\
+                for method in model.methods()]\
+                    for model in @collection.models))
         @updateToolbox()
 
-
-    instantiateModelEventBlock: () ->
+    instantiateModelEventBlock: ->
         type = "PsychoCoffee_events"
-        registeredModels = @registeredModels
-        registeredEvents = @registeredEvents
         Blockly = @Blockly
         @Blockly.Blocks[type] =
             init: ->
-                events = registeredEvents[registeredModels[0][0]]
+                events =
+                    Blockly.registeredEvents[Blockly.registeredModels[0][0]]
                 @setColour 40
                 @setInputsInline true
                 @appendDummyInput().appendField("when ")
                     .appendField(new Blockly.FieldDropdown(
-                        -> registeredModels,
+                        -> Blockly.registeredModels,
                         (option) ->
-                            events = registeredEvents[option]
+                            events = Blockly.registeredEvents[option]
                             return undefined
                             ), "NAME")
                     .appendField(new Blockly.FieldDropdown(-> events),
@@ -316,27 +334,26 @@ module.exports = class BlocklyView extends DropableView
                 name = block.getFieldValue("NAME")
                 event = block.getFieldValue("TRIGGERS")
                 code = Blockly.JavaScript.statementToCode(block, 'DO')
-                """this.listenTo(window.subViews['#{name}'],
+                """window.trialView.listenTo(window.subViews['#{name}'],
                     '#{event}', function() {
                         #{code}
                         })"""
         return type
 
-    instantiateModelGetBlock: () ->
-        registeredModels = @registeredModels
-        registeredAttrs = @registeredAttrs
+    instantiateModelGetBlock: ->
         type = "PsychoCoffee_get"
         Blockly = @Blockly
         @Blockly.Blocks[type] =
             init: ->
-                attrs = registeredAttrs[registeredModels[0][0]]
+                attrs =
+                    Blockly.registeredAttrs[Blockly.registeredModels[0][0]]
                 @setColour 40
                 @setInputsInline true
                 @appendDummyInput().appendField("get ")
                     .appendField(new Blockly.FieldDropdown(
-                        -> registeredModels,
+                        -> Blockly.registeredModels,
                         (option) ->
-                            attrs = registeredAttrs[option]
+                            attrs = Blockly.registeredAttrs[option]
                             return undefined
                             ), "NAME")
                     .appendField(new Blockly.FieldDropdown(
@@ -350,21 +367,20 @@ module.exports = class BlocklyView extends DropableView
                     '#{attr}')"""
         return type
 
-    instantiateModelSetBlock: () ->
-        registeredModels = @registeredModels
-        registeredAttrs = @registeredAttrs
+    instantiateModelSetBlock: ->
         type = "PsychoCoffee_set"
         Blockly = @Blockly
         @Blockly.Blocks[type] =
             init: ->
-                attrs = registeredAttrs[registeredModels[0][0]]
+                attrs =
+                    Blockly.registeredAttrs[Blockly.registeredModels[0][0]]
                 @setColour 40
                 @setInputsInline true
                 @appendValueInput("VALUE").appendField("set ")
                     .appendField(new Blockly.FieldDropdown(
-                        -> registeredModels,
+                        -> Blockly.registeredModels,
                         (option) ->
-                            attrs = registeredAttrs[option]
+                            attrs = Blockly.registeredAttrs[option]
                             return undefined
                             ), "NAME")
                     .appendField(new Blockly.FieldDropdown(
@@ -381,22 +397,21 @@ module.exports = class BlocklyView extends DropableView
                     '#{attr}', #{value})"""
         return type
 
-    instantiateModelMethodBlock: () ->
-        registeredModels = @registeredModels
-        registeredMethods = @registeredMethods
+    instantiateModelMethodBlock: ->
         type = "PsychoCoffee_method"
         Blockly = @Blockly
         @Blockly.Blocks[type] =
             init: ->
-                methods = registeredMethods[registeredModels[0][0]]
+                methods =
+                    Blockly.registeredMethods[Blockly.registeredModels[0][0]]
                 @setColour 40
                 @setInputsInline true
                 @appendDummyInput().appendField(new Blockly.FieldDropdown(
                     -> methods), "METHODS").appendField(" ")
                     .appendField(new Blockly.FieldDropdown(
-                        -> registeredModels,
+                        -> Blockly.registeredModels,
                         (option) ->
-                            methods = registeredMethods[option]
+                            methods = Blockly.registeredMethods[option]
                             return undefined
                             ), "NAME")
                 @setPreviousStatement(true)
