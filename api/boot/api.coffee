@@ -11,10 +11,15 @@ module.exports = mountRestApi = (server) ->
 
     db = new DataSource database.config
 
+    filestore = loopback.createDataSource(database.filestore)
+
+    container = filestore.createModel("container")
+
     # Register models to data source
     experimentdatahandler = loopback.createModel "experimentdatahandler"
     experimentdatahandler.attachTo db
     server.model experimentdatahandler
+    server.model container
 
     experimentdatahandler.patch = (id, diff, callback) ->
         experimentdatahandler.findById id, (err, model) ->
