@@ -18,7 +18,7 @@ module.exports = class BlockView extends HandlerView
             view.preLoadTrial(queue)
 
     previewBlock: =>
-        @trialView = @subViews["trialView"]
+        window.trialView = @trialView = @subViews["trialView"]
         @trialdatamodel =
             @datamodel.get("trialdatalogs").add({})
         @trialView.datamodel = @trialdatamodel
@@ -39,17 +39,14 @@ module.exports = class BlockView extends HandlerView
         window.Variables = _.extend(window.Variables, @parameters)
         @datamodel.set("trial", @datamodel.get("trial") or 0)
         @model.setTrialParameters @datamodel.get("trial")
-        if @model.get "trialParameters" then @showTrial else @endBlock()
+        if @model.get "trialParameters" then @showTrial() else @endBlock()
 
     showTrial: =>
-        trialView = @subViews[trial.id]
-        if @trialView
-            if @trialView.close then @trialView.close() else @trialView.remove()
+        window.trialView = @trialView = @subViews["trialView"]
         @trialdatamodel =
             @datamodel.get("trialdatalogs").at(@datamodel.get("trial")) or
             @datamodel.get("trialdatalogs").create()
         @datamodel.save()
-        @trialView = trialView
         @trialView.datamodel = @trialdatamodel
         @trialView.render()
         @trialView.appendTo("#trials")
