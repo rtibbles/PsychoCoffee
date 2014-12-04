@@ -119,6 +119,21 @@ toolbox =
     Functions:
         custom: "PROCEDURE"
 
+class BlocklyValueView extends Backbone.View
+
+    initialize: (options) ->
+        @block = options.block
+        @model = options.model
+        @type = options.type
+        @name = options.name
+        @blocklyview = options.blocklyview
+        @listenTo @model, "change:" + @name, @update
+
+    update: =>
+        console.log "Changing " + @name
+        @blocklyview.change_blocked = true
+        @block.setFieldValue(String(@model.get(@name)),
+            @type)
 
 module.exports = class BlocklyView extends DropableView
     template: Template
@@ -135,7 +150,7 @@ module.exports = class BlocklyView extends DropableView
 
     blocklyReady: (Blockly) =>
         @Blockly = Blockly
-        @Blockly.addChangeListener => @trigger "change"
+        @Blockly.addChangeListener @change
         @Blockly.registeredModels = []
         @Blockly.registeredEvents = {}
         @Blockly.registeredAttrs = {}
@@ -146,6 +161,12 @@ module.exports = class BlocklyView extends DropableView
         @iframe$('body').on "dragenter", @dragEnter
         @iframe$('body').on "drop", @drop
         @trigger "blockly_ready"
+
+    change: =>
+        if not @change_blocked
+            @trigger "change"
+        else
+            @change_blocked = false
 
     iframe$: (selector) ->
         @$('iframe').contents().find(selector)
@@ -459,6 +480,7 @@ module.exports = class BlocklyView extends DropableView
             @Blockly.Block.obtain @Blockly.getMainWorkspace(), type
         parentBlock.initSvg()
         parentBlock.render()
+        parentBlock.subViews = {}
         for option in model.requiredParameters().concat(
             model.objectOptions())
             if option.name == "name" or not model.get(option.name)?
@@ -490,9 +512,17 @@ module.exports = class BlocklyView extends DropableView
                         variable_type = "TEXT"
             childBlock = @Blockly.Block.obtain @Blockly.getMainWorkspace(),
                 value_type
+            childBlock.attr_name = option.name
             childBlock.setFieldValue(String(model.get(option.name)),
                 variable_type)
             childBlock.initSvg()
             childBlock.render()
             parentBlock.getInput(option.name)
                 .connection.connect(childBlock.outputConnection)
+            parentBlock.subViews[option.name] = new BlocklyValueView({
+                block: childBlock
+                model: model
+                type: variable_type
+                name: option.name
+                blocklyview: @
+            })
