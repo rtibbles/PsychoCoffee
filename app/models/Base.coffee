@@ -53,6 +53,25 @@ class Model extends Backbone.AssociatedModel
         parameter.name for parameter in @objectOptions().concat(
             @requiredParameters())
 
+    allAliasNames: ->
+        parameter.alias or parameter.name for parameter in @objectOptions()
+            .concat(@requiredParameters())
+
+    aliasMap: ->
+        map = {}
+        for parameter in @objectOptions().concat(@requiredParameters())
+            if parameter.alias
+                map[parameter.alias] = parameter.name
+        return map
+
+    setFromObject: (object) ->
+        attrs = _.pick(object, @allAliasNames())
+        for alias, name of @aliasMap()
+            if alias of attrs
+                attrs[name] = attrs[alias]
+                delete attrs[alias]
+        @set attrs
+
     methods: ->
         []
 

@@ -7,13 +7,16 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
     attach: (endpoints) ->
         @canvas = endpoints.canvas
         @object.setVisible false
+        if @editor
+            @object.on "modified", @objectToModel
         @canvas.add @object
         @render()
 
     activate: ->
-        @object.hasControls = false
-        @object.hasBorders = false
-        @object.lockMovementX = @object.lockMovementY = true
+        if not @editor
+            @object.hasControls = false
+            @object.hasBorders = false
+            @object.lockMovementX = @object.lockMovementY = true
         @object.setVisible true
         @addToClockChangeEvents("activated")
         @object.on "mousedown", (event) =>
@@ -27,8 +30,15 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
         @object.off "mousedown"
         super()
 
+    objectToModel: (event) =>
+        @cancel_render = true
+        @model.setFromObject(@object)
+
     render: ->
-        if not @object
-            @object = new @object_type()
-        @object.set @model.allParameters()
-        @addToClockChangeEvents("change")
+        if not @cancel_render
+            if not @object
+                @object = new @object_type()
+            @object.set @model.allParameters()
+            @addToClockChangeEvents("change")
+        else
+            @cancel_render = false
