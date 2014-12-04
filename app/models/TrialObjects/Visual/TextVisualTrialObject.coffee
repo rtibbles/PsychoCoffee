@@ -29,7 +29,7 @@ class Model extends VisualTrialObject.Model
                     type: "String"
                 ,
                     name: "backgroundColor"
-                    default: ""
+                    default: "#FFFFFF"
                     type: "Colour"
             ])
 
