@@ -130,10 +130,22 @@ class BlocklyValueView extends Backbone.View
         @listenTo @model, "change:" + @name, @update
 
     update: =>
-        console.log "Changing " + @name
         @blocklyview.change_blocked = true
         @block.setFieldValue(String(@model.get(@name)),
             @type)
+
+class BlocklyBlockView extends Backbone.View
+
+    initialize: (options) ->
+        @block = options.block
+        @model = options.model
+        @blocklyview = options.blocklyview
+        @listenTo @blocklyview, "change", @update
+
+    update: =>
+        if not @block.workspace
+            @model.destroy()
+            @remove()
 
 module.exports = class BlocklyView extends DropableView
     template: Template
@@ -533,3 +545,8 @@ module.exports = class BlocklyView extends DropableView
             })
         parentBlock.setCollapsed(true)
         if y then parentBlock.moveBy(0, y*40)
+        parentBlock.subViews["self"] = new BlocklyBlockView({
+            block: parentBlock
+            model: model
+            blocklyview: @
+        })
