@@ -57,21 +57,19 @@ module.exports = class BlockEditView extends CodeGeneratorView
     render: ->
         super
         @toolbarView = new TrialObjectToolbarView
-        @trialObjectListView = new TrialObjectListView
-            collection: @model.get("trialObjects")
         @blocklyView = new BlocklyView
             model: @model
             el: @$("#block-code")
         @listenToOnce @blocklyView, "blockly_ready", @blocklyObjects
         @blocklyView.render()
         @listenTo @blocklyView, "change", @generateCode
-        @$("#trialObjects").prepend @trialObjectListView.el
-        @trialObjectListView.render()
-        @$("#trialObjects").prepend @toolbarView.el
+        @$("#new_models").prepend @toolbarView.el
         @toolbarView.render()
 
 
     blocklyObjects: =>
+        for model, i in @model.get("trialObjects").models
+            @blocklyView.insertModelBlock model, i
         @blocklyView.insertModelBlocks(@model.get("trialObjects"),
                 "Trial Objects")
         @blocklyView.addDataModel("TrialDataHandler")
@@ -79,13 +77,17 @@ module.exports = class BlockEditView extends CodeGeneratorView
 
     addTrialObject: (event) ->
         subModel = event.target.id
-        newTrialObject = @model.get("trialObjects").add({
+        @newTrialObject = @model.get("trialObjects").add({
             subModelTypeAttribute: subModel
         })
-        newTrialObject.new = true
+        @newTrialObject.new = true
         modelEditView = new ModelEditView
-            model: newTrialObject
+            model: @newTrialObject
         modelEditView.render()
+        @listenTo @newTrialObject, "change:name", @addModelToBlockly
+
+    addModelToBlockly: =>
+        @blocklyView.insertModelBlock @newTrialObject
 
     generateCode: =>
         @model.set "flow", new Function(@blocklyView.generateCode())

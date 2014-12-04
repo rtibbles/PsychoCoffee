@@ -313,6 +313,7 @@ module.exports = class BlocklyView extends DropableView
         @updateToolbox()
         @listenTo @collection, "add", @registerModels
         @listenTo @collection, "remove", @registerModels
+        @listenTo @collection, "change", @registerModels
 
 
     registerModels: =>
@@ -444,13 +445,15 @@ module.exports = class BlocklyView extends DropableView
                 "window.subViews['#{name}'].#{method}"
         return type
 
-    insertModelBlock: (model) ->
+    insertModelBlock: (model, y) ->
         type = "PsychoCoffee_" + model.get("name")
         Blockly = @Blockly
         @Blockly.Blocks[type] =
             init: ->
                 @setColour 40
                 @appendDummyInput().appendField(model.get("name"))
+                @appendDummyInput().appendField(model.get("type"))
+                    .setAlign(Blockly.ALIGN_RIGHT)
                 for option in model.requiredParameters().concat(
                     model.objectOptions())
                     if option.name == "name"
@@ -528,3 +531,5 @@ module.exports = class BlocklyView extends DropableView
                 name: option.name
                 blocklyview: @
             })
+        parentBlock.setCollapsed(true)
+        if y then parentBlock.moveBy(0, y*40)
