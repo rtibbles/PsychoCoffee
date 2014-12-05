@@ -5,6 +5,7 @@ Block = require('./Block')
 fingerprint = require 'utils/fingerprint'
 random = require 'utils/random'
 ExperimentParameterSet = require './ExperimentParameterSet'
+File = require './File'
 
 class Model extends Base.Model
 
@@ -32,6 +33,10 @@ class Model extends Base.Model
         type: Backbone.One
         key: 'parameterSet'
         relatedModel: ExperimentParameterSet.Model
+    ,
+        type: Backbone.Many
+        key: 'files'
+        collectionType: File.Collection
     ]
 
 

@@ -8,6 +8,7 @@ module.exports = class View extends Backbone.View
         @user_id = options?.user_id
         @injectedParameters = options?.parameters
         @editor = options?.editor
+        @files = options?.files
 
     template: ->
         return
@@ -37,7 +38,8 @@ module.exports = class View extends Backbone.View
             options
             model: model
             clock: @clock
-            user_id: @user_id)
+            user_id: @user_id
+            files: @files)
         @subViews[id] = new PsychoCoffee[viewType] options
 
     registerSubViewSubViews: ->

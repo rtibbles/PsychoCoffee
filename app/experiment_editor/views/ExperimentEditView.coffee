@@ -68,7 +68,9 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         if model != @blockmodel
             @blockmodel = model
             @blockEditView?.remove()
-            @blockEditView = new BlockEditView({model: @blockmodel})
+            @blockEditView = new BlockEditView
+                model: @blockmodel
+                files: @model.get("files")
             @blockEditView.render()
             @blockEditView.appendTo("#blockedit")
             @initializePreview()
@@ -138,6 +140,6 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             @pausePreview()
 
     animateScrubBar: _.throttle(
-        (fraction) =>
+        (fraction) ->
             $(".progress-bar.scrub").css("width", 100*fraction + "%")
-        , 200)
+        , 50)

@@ -28,6 +28,7 @@ module.exports = class ExperimentView extends HandlerView
             else
                 @user_id = stringHash(fingerprint())
         @blockSelector = options.selector or @defaultNextBlock
+        @files = @model?.get("files") or new Backbone.Collection
         @clock = new clock.Clock()
         @refreshTime()
         @render()
