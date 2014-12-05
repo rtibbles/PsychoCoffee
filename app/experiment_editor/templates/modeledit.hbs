@@ -8,6 +8,7 @@
       <div class="modal-body">
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
           <div class="panel panel-default">
+            {{#if required }}
             <div class="panel-heading" role="tab" id="headingRequired">
               <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseRequired" aria-expanded="true" aria-controls="collapseRequired">
@@ -22,6 +23,8 @@
                     {{/each}}
                 </div>
             </div>
+            {{/if}}
+            {{#if options }}
             <div class="panel-heading" role="tab" id="headingOptional">
               <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseOptional" aria-expanded="false" aria-controls="collapseOptional">
@@ -36,6 +39,7 @@
                     {{/each}}
                 </div>
             </div>
+            {{/if}}
       </div>
       <div class="modal-footer">
         {{#if deleteable}}
