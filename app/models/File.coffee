@@ -14,10 +14,10 @@ class Model extends Backbone.Model
             @trigger "loaded"
 
     downloadURL: ->
-        @containerURL + "/download/" + @get("name")
+        @containerURL() + "/download/" + @get("name")
 
     deleteURL: ->
-        @containerURL + "/files/" + @get("name")
+        @containerURL() + "/files/" + @get("name")
 
     containerURL: ->
         "/api/containers/" + "test"#@collection.parents[0].id
