@@ -1,0 +1,35 @@
+<div class="col-md-8" id="fileupload">
+  <button id="fileLabel" class="btn btn-success" type="button" data-toggle="modal" data-target="#fileModal">Upload Files<span class="caret"></span></button>
+  <div class="modal fade" id="fileModal" tabindex="-1" role="dialog" aria-labelledby="fileLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div id="actions" class="row modal-header">
+
+            <div class="col-md-4">
+              <!-- The fileinput-button span is used to style the file input field as button -->
+              <span class="btn btn-success fileinput-button dz-clickable">
+                  <i class="glyphicon glyphicon-plus"></i>
+                  <span>Add files...</span>
+              </span>
+              <button type="reset" class="btn btn-warning cancel">
+                  <i class="glyphicon glyphicon-ban-circle"></i>
+                  <span>Cancel upload</span>
+              </button>
+            </div>
+
+            <div class="col-md-8">
+              <!-- The global file processing state -->
+              <span class="fileupload-process">
+                <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                  <div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress=""></div>
+                </div>
+              </span>
+            </div>
+          </div>
+          <div class="table table-striped files modal-body" id="previews">
+            <span class="glyphicon glyphicon-upload"></span>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>

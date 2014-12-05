@@ -9,6 +9,7 @@ ModelEditView = require './ModelEditView'
 BlocklyView = require './BlocklyView'
 View = require './View'
 DraggableView = require './DraggableView'
+FileUploadView = require './FileUploadView'
 
 class TrialObjectToolbarView extends View
     template: ToolbarTemplate
@@ -53,10 +54,14 @@ module.exports = class BlockEditView extends CodeGeneratorView
 
     events:
         "click .addtrialobject": "addTrialObject"
-        
+    
+    initialize: (options) ->
+        @files = options.files
+
     render: ->
         super
         @toolbarView = new TrialObjectToolbarView
+        @fileUploadView = new FileUploadView files: @files
         @blocklyView = new BlocklyView
             model: @model
             el: @$("#block-code")
@@ -64,7 +69,9 @@ module.exports = class BlockEditView extends CodeGeneratorView
         @blocklyView.render()
         @listenTo @blocklyView, "change", @generateCode
         @$("#new_models").prepend @toolbarView.el
+        @$("#new_models").append @fileUploadView.el
         @toolbarView.render()
+        @fileUploadView.render()
 
 
     blocklyObjects: =>
