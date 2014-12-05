@@ -16,6 +16,8 @@ Handlebars.registerHelper 'modelinput', (context, options) ->
             value = if value then "true' checked='checked" else ""
         when "Colour"
             type = "color"
+        when "File"
+            type = "file"
         else type = "text"
 
 

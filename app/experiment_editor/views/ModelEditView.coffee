@@ -15,6 +15,23 @@ module.exports = class ModelEditView extends ModalView
         super
         @deleteable = options.deleteable
 
+    render: ->
+        super
+        @$("input[type=file]").replaceWith( ->
+            "<span class='btn btn-success fileinput dz-clickable' id='" +
+                $(@).attr("id") + """'><i class='glyphicon glyphicon-plus'></i>
+                  <span>Add files...</span>
+              </span>"""
+            ).dropzone({
+            url: PsychoEdit.files.containerURL() + "/upload"
+            clickable: @$(".fileinput")[0]
+            success: (file) =>
+                @$(".fileinput").html(file.name).attr("value", file.name)
+                PsychoEdit.files.add
+                    name: file.name
+                    extension: file.name.split('.').pop()
+        })
+
     deleteModel: ->
         @model.destroy()
         @remove()
@@ -27,9 +44,9 @@ module.exports = class ModelEditView extends ModalView
     setAttributes: ->
         attrs = {}
         ready = true
-        for item in @$("input")
-            attrs[item.id] = item.value
-            if item.required and item.value == ""
+        for item in @$("input, span.fileinput")
+            attrs[item.id] = item.value or @$(item).attr("value")
+            if item.required and attrs[item.id] == ""
                 @$(item).css("border", "2px solid red").popover
                     content: "<span class='label label-warning'>
                         required</span>"
