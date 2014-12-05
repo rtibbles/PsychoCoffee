@@ -57,6 +57,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
     
     render: ->
         super
+        PsychoEdit.files = @model.get("files")
         @experimentTitleView = new ExperimentTitleView({model: @model})
         @$("#experiment_info").append @experimentTitleView.el
         @experimentTitleView.render()
@@ -74,7 +75,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             @blockEditView.render()
             @blockEditView.appendTo("#blockedit")
             @initializePreview()
-            @listenTo @blockmodel, "change", @startPreview
+            @listenTo @blockmodel, "change", @initializePreview
             @listenTo @blockmodel, "nested-change",
                 @frameAdvance
     

@@ -12,12 +12,14 @@ module.exports = class AudioTrialObjectView extends TrialObjectView
         super
 
     activate: ->
-        @object.play()
-        super()
+        if @object
+            @object.play()
+            super()
 
     deactivate: ->
-        @object.stop()
-        super()
+        if @object
+            @object.stop()
+            super()
 
     render: =>
         if not @object

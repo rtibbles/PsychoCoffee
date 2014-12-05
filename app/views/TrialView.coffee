@@ -8,6 +8,9 @@ module.exports = class TrialView extends HandlerView
 
     initialize: (options) =>
         super
+        @registerAllSubViews()
+
+    registerAllSubViews: =>
         @instantiateSubViews("trialObjects",
             "TrialObjectView", @trialObjectViewType, editor: @editor)
         @registerSubViewSubViews()
