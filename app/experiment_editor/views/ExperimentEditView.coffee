@@ -75,7 +75,8 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             @blockEditView.render()
             @blockEditView.appendTo("#blockedit")
             @initializePreview()
-            @listenTo @blockmodel, "change", @initializePreview
+            @listenTo @blockmodel, "change",
+                _.throttle(@initializePreview, 5000)
             @listenTo @blockmodel, "nested-change",
                 @frameAdvance
     
