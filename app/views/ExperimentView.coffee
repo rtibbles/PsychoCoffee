@@ -67,8 +67,8 @@ module.exports = class ExperimentView extends HandlerView
 
     preLoadExperiment: ->
         queue = new createjs.LoadQueue true
-        for key, view of @subViews
-            view.preLoadBlock(queue)
+        queue.installPlugin createjs.Sound
+        @model.get("files").preLoadFiles(queue)
         @progressBarView = new ProgressBarView
             queue: queue
             complete: @startExperiment

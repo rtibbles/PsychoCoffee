@@ -15,10 +15,6 @@ module.exports = class TrialView extends HandlerView
             "TrialObjectView", @trialObjectViewType, editor: @editor)
         @registerSubViewSubViews()
 
-    preLoadTrial: (queue) =>
-        for key, view of @subViews
-            view.preLoadTrialObject(queue)
-
     trialObjectViewType: (model) ->
         elementType = model.get("subModelTypeAttribute") or
             PsychoCoffee.trialObjectTypeKeys[model.get("type")]

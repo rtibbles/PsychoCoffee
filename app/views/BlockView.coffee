@@ -13,10 +13,6 @@ module.exports = class BlockView extends HandlerView
         # the list of possible trials, and the trial number.
         @trialSelector = options.selector or @defaultNextTrial
 
-    preLoadBlock: (queue) =>
-        for key, view of @subViews
-            view.preLoadTrial(queue)
-
     previewBlock: =>
         window.trialView = @trialView = @subViews["trialView"]
         @trialdatamodel =

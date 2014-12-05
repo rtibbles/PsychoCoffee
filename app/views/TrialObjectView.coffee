@@ -6,7 +6,11 @@ module.exports = class TrialObjectView extends View
 
     initialize: ->
         super
-        if not @model.get "file" then @render()
+        if not @model.get "file"
+            @render()
+        else if @files.get @model.get "file"
+            @listenToOnce @files.get @model.get "file",
+                "loaded", @setFileObject
         @active = false
         @name = @model.name()
         @listenTo @model, "change", @render
@@ -14,17 +18,9 @@ module.exports = class TrialObjectView extends View
     attach: (endpoints) ->
         return
 
-    preLoadTrialObject: (queue) =>
-        if @model.get("file")
-            @object_id = @model.get("file")
-            if not queue.getItem(@object_id)
-                queue.loadFile src: @object_id
-            queue.on "fileload", @postFileLoad
-
-    postFileLoad: (data) =>
-        if data.item.src == @model.get("file")
-            @file_object = data.result
-            @render()
+    setFileObject: =>
+        @file_object = @files.get(@model.get("file")).file_object
+        @render()
 
     render: =>
         console.debug "Rendering #{@constructor.name}"
