@@ -6,25 +6,34 @@ module.exports = class TrialObjectView extends View
 
     initialize: ->
         super
-        if not @model.get "file"
-            @render()
-        else if @files.get @model.get "file"
-            @listenToOnce @files.get @model.get "file",
-                "loaded", @setFileObject
+        @startRender()
         @active = false
         @name = @model.name()
-        @listenTo @model, "change", @render
+        @listenTo @model, "change", @startRender
 
     attach: (endpoints) ->
         return
+
+    waitForFileObject: =>
+        if not @files.get(@model.get("file"))
+            console.debug "File #{@model.get("file")} not found"
+            return
+        if @files.get(@model.get("file"))?.loaded
+            @setFileObject()
+        else
+            @listenToOnce @files.get @model.get "file",
+                "loaded", @setFileObject
 
     setFileObject: =>
         @file_object = @files.get(@model.get("file")).file_object
         @render()
 
-    render: =>
+    startRender: =>
+        if @model.get("file")
+            @waitForFileObject()
+        else
+            @render()
         console.debug "Rendering #{@constructor.name}"
-        @$el.html @file_object
 
     logEvent: (event_type, options={}) =>
         @datamodel.logEvent(

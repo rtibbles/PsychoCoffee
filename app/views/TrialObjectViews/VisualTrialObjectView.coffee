@@ -5,12 +5,14 @@ TrialObjectView = require '../TrialObjectView'
 module.exports = class VisualTrialObjectView extends TrialObjectView
 
     attach: (endpoints) ->
+        if not @object
+            @render()
         @canvas = endpoints.canvas
         @object.setVisible false
         if @editor
+            @objectToModel()
             @object.on "modified", @objectToModel
         @canvas.add @object
-        @render()
 
     activate: ->
         if not @editor

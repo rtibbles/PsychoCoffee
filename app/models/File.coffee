@@ -1,14 +1,18 @@
 'use strict'
 
-class Model extends Backbone.Model
+Base = require './Base'
+
+class Model extends Base.Model
 
     preLoadFile: (queue) =>
+        if not queue
+            queue = new createjs.LoadQueue true
         if not queue.getItem(@get("name"))
             queue.loadFile src: @downloadURL()
         queue.on "fileload", @postFileLoad
 
     postFileLoad: (data) =>
-        if data.item.src == @get("name")
+        if data.item.src.split("/").pop() == @get("name")
             @file_object = data.result
             @loaded = true
             @trigger "loaded"
