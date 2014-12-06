@@ -1,6 +1,7 @@
 'use strict'
 
 ModalView = require './ModalView'
+FileUploadView = require './FileUploadView'
 Template = require '../templates/modeledit'
 
 module.exports = class ModelEditView extends ModalView
@@ -17,21 +18,15 @@ module.exports = class ModelEditView extends ModalView
 
     render: ->
         super
-        @$("input[type=file]").replaceWith( ->
-            "<span class='btn btn-success fileinput dz-clickable' id='" +
-                $(@).attr("id") + """'><i class='glyphicon glyphicon-plus'></i>
-                  <span>Add files...</span>
-              </span>"""
-            ).dropzone({
-            url: PsychoEdit.files.containerURL() + "/upload"
-            clickable: @$(".fileinput")[0]
-            success: (file) =>
-                @$(".fileinput").html(file.name).attr("value", file.name)
-                PsychoEdit.files.add
-                    name: file.name
-                    extension: file.name.split('.').pop()
-        })
-
+        subViews = {}
+        for item in @$("input[type=file]")
+            console.log item.id
+            subViews[item.id] = new FileUploadView({
+                single: true
+                field_id: item.id
+            })
+            subViews[item.id].render()
+            $(item).replaceWith(subViews[item.id].el)
     deleteModel: ->
         @model.destroy()
         @remove()

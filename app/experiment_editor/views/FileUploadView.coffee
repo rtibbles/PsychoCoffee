@@ -1,15 +1,24 @@
 View = require './View'
-Template = require '../templates/fileupload'
+MultiTemplate = require '../templates/multiplefileupload'
+SingleTemplate = require '../templates/singlefileupload'
 PreviewTemplate = require '../templates/filepreview'
 
 module.exports = class FileUploadView extends View
-    template: Template
 
     events:
         "click .cancel": "removeAllFiles"
 
     initialize: (options) ->
-        @collection = options.files
+        @field_id = options.field_id
+        @collection = PsychoEdit.files
+        if options.single
+            @single = true
+            @template = SingleTemplate
+        else
+            @template = MultiTemplate
+
+    getRenderData: ->
+        return id: @field_id
 
     render: ->
         super
@@ -21,7 +30,7 @@ module.exports = class FileUploadView extends View
             previewTemplate: PreviewTemplate()
             autoQueue: true
             previewsContainer: @$("#previews")[0]
-            clickable: @$(".fileinput-button")[0]
+            clickable: @$(".fileinput")[0]
         )
 
         @$("#previews").dropdown('toggle')
@@ -37,9 +46,13 @@ module.exports = class FileUploadView extends View
 
     uploadSuccess: (file) =>
         @$(file.previewElement).remove()
-        @collection.add
+        model = @collection.add
             name: file.name
             extension: file.name.split('.').pop()
+        model.preLoadFile()
+        console.log "Success!"
+        if @single
+            @$(".fileinput").html(file.name).attr("value", file.name)
 
     removeAllFiles: =>
         @dropzone.removeAllFiles(true)
