@@ -8,6 +8,9 @@ class Model extends Backbone.AssociatedModel
         for option in @objectOptions()
             if option.default?
                 defaults[option.name] = option.default
+        for option in @fixedItems()
+            if option.default?
+                defaults[option.name] = option.default
         for parameter in @requiredParameters()
             defaults[parameter.name] = parameter.default
         for parameter in @relations or []
@@ -28,6 +31,10 @@ class Model extends Backbone.AssociatedModel
         # Lists additional parameters for object
         []
 
+    fixedItems: ->
+        #Lists uneditable parameters for the object
+        []
+
     returnRequired: ->
         required = {}
         for parameter in @requiredParameters()
@@ -43,7 +50,8 @@ class Model extends Backbone.AssociatedModel
 
     allParameters: ->
         parameters = {}
-        for parameter in @objectOptions().concat @requiredParameters()
+        for parameter in @objectOptions().concat(@requiredParameters()).concat(
+            @fixedItems())
             if @get(parameter.name)?
                 parameters[parameter.alias or
                     parameter.name] = @get parameter.name
@@ -65,7 +73,7 @@ class Model extends Backbone.AssociatedModel
         return map
 
     setFromObject: (object) ->
-        attrs = _.pick(object, @allAliasNames())
+        attrs = _.clone(object)
         for alias, name of @aliasMap()
             if alias of attrs
                 attrs[name] = attrs[alias]

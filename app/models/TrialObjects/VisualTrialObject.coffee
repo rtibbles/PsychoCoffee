@@ -14,11 +14,12 @@ class Model extends TrialObject.Model
             default: "#000000"
             type: "Colour"
         ,
-            name: "height"
+            name: "scaleY"
+            default: 1
             type: "Number"
         ,
             name: "x"
-            default: 0
+            default: 200
             type: "Number"
             alias: "left"
         ,
@@ -26,6 +27,18 @@ class Model extends TrialObject.Model
             default: 1
             type: "Number"
         ,
+            name: "y"
+            default: 200
+            type: "Number"
+            alias: "top"
+        ,
+            name: "scaleX"
+            default: 1
+            type: "Number"
+        ])
+
+    fixedItems: ->
+        super().concat([
             name: "originX"
             default: "center"
             type: "String"
@@ -43,15 +56,7 @@ class Model extends TrialObject.Model
                 ["top", "TOP"]
                 ["bottom", "BOTTOM"]
             ]
-        ,
-            name: "y"
-            default: 0
-            type: "Number"
-            alias: "top"
-        ,
-            name: "width"
-            type: "Number"
-        ])
+            ])
     
     triggers: ->
         super().concat([
