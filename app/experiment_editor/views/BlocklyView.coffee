@@ -168,6 +168,7 @@ module.exports = class BlocklyView extends DropableView
         @Blockly.registeredAttrs = {}
         @Blockly.registeredMethods = {}
         @nameSpaceBlocklyVariables()
+        @instantiateFileDropDown()
         @updateToolbox()
         @iframe$('body').on "dragleave", @dragLeave
         @iframe$('body').on "dragenter", @dragEnter
@@ -297,6 +298,26 @@ module.exports = class BlocklyView extends DropableView
             if option.type == 'String'
                 value = "'#{value}'"
             [value, 0]
+
+    instantiateFileDropDown: ->
+        Blockly = @Blockly
+        Blockly.Blocks["file_dropdown"] =
+            init: ->
+                @setOutput(true, "File")
+                @appendDummyInput()
+                    .appendField(new Blockly.FieldDropdown(->
+                        output = ([file.get("name"), file.get("name")]\
+                            for file in PsychoEdit.files.models)
+                        output =
+                            if output.length > 0 then output else [["", ""]]
+                        ),
+                        'File')
+                @setColour 40
+        Blockly.JavaScript["file_dropdown"] =
+            (block) ->
+                value = block.getFieldValue("File")
+                value = "'#{value}'"
+                [value, 0]
 
     addToToolbox: (type, category) =>
         toolbox_object = type: type
@@ -525,6 +546,9 @@ module.exports = class BlocklyView extends DropableView
                     when "Colour"
                         value_type = "colour_picker"
                         variable_type = "COLOUR"
+                    when "File"
+                        value_type = "file_dropdown"
+                        variable_type = "File"
                     else
                         value_type = "text"
                         variable_type = "TEXT"
