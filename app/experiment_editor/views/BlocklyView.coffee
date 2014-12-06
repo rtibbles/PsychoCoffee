@@ -130,9 +130,10 @@ class BlocklyValueView extends Backbone.View
         @listenTo @model, "change:" + @name, @update
 
     update: =>
-        @blocklyview.change_blocked = true
-        @block.setFieldValue(String(@model.get(@name)),
-            @type)
+        value = String(@model.get(@name))
+        if @type == "BOOL"
+            value = value.toUpperCase()
+        @block.setFieldValue(value, @type)
 
 class BlocklyBlockView extends Backbone.View
 
@@ -176,10 +177,8 @@ module.exports = class BlocklyView extends DropableView
         @trigger "blockly_ready"
 
     change: =>
-        if not @change_blocked
-            @trigger "change"
-        else
-            @change_blocked = false
+        trigger = @trigger
+        _.throttle(-> trigger "change", 100)
 
     iframe$: (selector) ->
         @$('iframe').contents().find(selector)
