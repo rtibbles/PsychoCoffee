@@ -50,7 +50,6 @@ module.exports = class FileUploadView extends View
             name: file.name
             extension: file.name.split('.').pop()
         model.preLoadFile()
-        console.log "Success!"
         if @single
             @$(".fileinput").html(file.name).attr("value", file.name)
 

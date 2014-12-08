@@ -20,7 +20,6 @@ module.exports = class ModelEditView extends ModalView
         super
         subViews = {}
         for item in @$("input[type=file]")
-            console.log item.id
             subViews[item.id] = new FileUploadView({
                 single: true
                 field_id: item.id
