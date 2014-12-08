@@ -76,7 +76,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             @blockEditView.appendTo("#blockedit")
             @initializePreview()
             @listenTo @blockmodel, "change",
-                _.throttle(@initializePreview, 5000)
+                _.throttle(@startPreview, 5000)
             @listenTo @blockmodel, "nested-change",
                 @frameAdvance
     
@@ -87,22 +87,21 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
                 @experimentPreview.close()
             else
                 @experimentPreview.remove()
+        delete @experimentPreview
+        @experimentPreview = new PsychoCoffee.ExperimentView({
+            model: @model
+            editor: true
+        })
+        @listenToOnce @experimentPreview, "loaded", @startPreview
+
+    startPreview: =>
         if @trialPreview
             if @trialPreview.close
                 @trialPreview.close()
             else
                 @trialPreview.remove()
-        delete @experimentPreview
         delete @trialPreview
-        @experimentPreview = new PsychoCoffee.ExperimentView({
-            model: @model
-            editor: true
-        })
         @trialPreview = @experimentPreview.previewBlock @blockmodel
-        @listenToOnce @experimentPreview, "loaded", @frameAdvance
-        @startPreview()
-
-    startPreview: =>
         offset = $("#scrubber").offset()
         offset["top"] += $("#scrubber").height() + 5
         offset["left"] = $("#block-preview").offset()["left"]
@@ -111,6 +110,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         @$(".pause").hide()
         @updateFrame()
         @trialPreview.startTrial()
+        @frameAdvance()
 
     frameAdvance: =>
         if not @trialPreview.clock.timerStart

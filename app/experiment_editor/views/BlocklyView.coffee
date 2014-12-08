@@ -177,8 +177,7 @@ module.exports = class BlocklyView extends DropableView
         @trigger "blockly_ready"
 
     change: =>
-        trigger = @trigger
-        _.throttle(-> trigger "change", 100)
+        @trigger "change"
 
     iframe$: (selector) ->
         @$('iframe').contents().find(selector)
