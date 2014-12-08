@@ -106,6 +106,12 @@ module.exports = class ExperimentView extends HandlerView
         @blockView.startBlock()
 
     previewBlock: (block) =>
+        @instantiateSubView(
+            block
+            "BlockView"
+            block.id
+            parameters: @datamodel.get("parameters")
+            editor: @editor)
         blockView = @subViews[block.id]
         if @blockView
             if @blockView.close then @blockView.close() else @blockView.remove()

@@ -14,6 +14,12 @@ module.exports = class BlockView extends HandlerView
         @trialSelector = options.selector or @defaultNextTrial
 
     previewBlock: =>
+        @clock.stopTimer()
+        if @subViews["trialView"]
+            @subViews["trialView"].remove()
+            delete @subViews["trialView"]
+            @instantiateSubView(@model,
+                "TrialView", "trialView", editor: @editor)
         window.trialView = @trialView = @subViews["trialView"]
         @trialdatamodel =
             @datamodel.get("trialdatalogs").add({})
