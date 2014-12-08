@@ -64,6 +64,7 @@ class Model extends Backbone.AssociatedModel
     allAliasNames: ->
         parameter.alias or parameter.name for parameter in @objectOptions()
             .concat(@requiredParameters())
+            .concat(@fixedItems())
 
     aliasMap: ->
         map = {}
@@ -73,7 +74,7 @@ class Model extends Backbone.AssociatedModel
         return map
 
     setFromObject: (object) ->
-        attrs = _.clone(object)
+        attrs = _.pick(object, @allAliasNames())
         for alias, name of @aliasMap()
             if alias of attrs
                 attrs[name] = attrs[alias]

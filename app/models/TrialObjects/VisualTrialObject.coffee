@@ -56,7 +56,15 @@ class Model extends TrialObject.Model
                 ["top", "TOP"]
                 ["bottom", "BOTTOM"]
             ]
-            ])
+        ,
+            name: "flipX"
+            default: false
+            type: "Boolean"
+        ,
+            name: "flipY"
+            default: false
+            type: "Boolean"
+        ])
     
     triggers: ->
         super().concat([
