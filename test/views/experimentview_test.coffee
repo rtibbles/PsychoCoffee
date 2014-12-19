@@ -7,6 +7,8 @@ module "Experiment View Tests",
         @experimentmodelgetstub.withArgs("saveInterval").returns(10000)
         @experimentmodelgetstub.withArgs("blocks")
             .returns(new Backbone.Collection())
+        @experimentmodelgetstub.withArgs("files")
+            .returns(new PsychoCoffee.File.Collection())
         @experimentmodelparamstub =
             sinon.stub(@experimentmodel, "returnParameters", -> {})
 
