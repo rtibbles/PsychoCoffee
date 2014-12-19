@@ -1,24 +1,28 @@
 View = require './View'
-MultiTemplate = require '../templates/multiplefileupload'
-SingleTemplate = require '../templates/singlefileupload'
+DraggableView = require './DraggableView'
+ManagerTemplate = require '../templates/filemanager'
+ItemTemplate = require '../templates/fileitem'
 PreviewTemplate = require '../templates/filepreview'
 
-module.exports = class FileUploadView extends View
+class FileItemView extends DraggableView
+
+    template: ItemTemplate
+
+
+module.exports = class FileManagerView extends View
+    template: ManagerTemplate
 
     events:
         "click .cancel": "removeAllFiles"
 
     initialize: (options) ->
+        @file_title = if options.single then "Select File" else "Manage Files"
         @field_id = options.field_id
         @collection = PsychoEdit.files
-        if options.single
-            @single = true
-            @template = SingleTemplate
-        else
-            @template = MultiTemplate
+        @listenTo @collection, "add", @addFileView
 
     getRenderData: ->
-        return id: @field_id
+        return id: @field_id, file_title: @file_title
 
     render: ->
         super
@@ -32,6 +36,9 @@ module.exports = class FileUploadView extends View
             previewsContainer: @$("#previews")[0]
             clickable: @$(".fileinput")[0]
         )
+
+        for model in @collection.models
+            @addFileView model
 
         @$("#previews").dropdown('toggle')
          
@@ -58,3 +65,8 @@ module.exports = class FileUploadView extends View
 
     queueComplete: =>
         @updateProgressBar(0)
+
+    addFileView: (model) ->
+        view = new FileItemView model: model
+        view.render()
+        view.appendTo("#filelist")

@@ -1,7 +1,7 @@
 'use strict'
 
 ModalView = require './ModalView'
-FileUploadView = require './FileUploadView'
+FileManagerView = require './FileManagerView'
 Template = require '../templates/modeledit'
 
 module.exports = class ModelEditView extends ModalView
@@ -20,7 +20,7 @@ module.exports = class ModelEditView extends ModalView
         super
         subViews = {}
         for item in @$("input[type=file]")
-            subViews[item.id] = new FileUploadView({
+            subViews[item.id] = new FileManagerView({
                 single: true
                 field_id: item.id
             })

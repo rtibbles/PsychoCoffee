@@ -9,7 +9,7 @@ ModelEditView = require './ModelEditView'
 BlocklyView = require './BlocklyView'
 View = require './View'
 DraggableView = require './DraggableView'
-FileUploadView = require './FileUploadView'
+FileManagerView = require './FileManagerView'
 
 class TrialObjectToolbarView extends View
     template: ToolbarTemplate
@@ -61,7 +61,7 @@ module.exports = class BlockEditView extends CodeGeneratorView
     render: ->
         super
         @toolbarView = new TrialObjectToolbarView
-        @fileUploadView = new FileUploadView files: @files
+        @fileUploadView = new FileManagerView files: @files
         @blocklyView = new BlocklyView
             model: @model
             el: @$("#block-code")

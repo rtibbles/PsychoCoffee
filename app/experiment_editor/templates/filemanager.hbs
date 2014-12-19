@@ -1,8 +1,13 @@
 <div class="col-md-8" id="fileupload">
-  <button id="fileLabel" class="btn btn-success" type="button" data-toggle="modal" data-target="#fileModal">Upload Files<span class="caret"></span></button>
+  <button id="fileLabel" class="btn btn-success" type="button" data-toggle="modal" data-target="#fileModal">{{ file_title }}<span class="caret"></span></button>
   <div class="modal fade" id="fileModal" tabindex="-1" role="dialog" aria-labelledby="fileLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+          <div id="filepane" class="row modal-header">
+            <div class="btn btn-primary"><span class="glyphicon glyphicon-circle-arrow-left"></span>Back</div>
+            <ul id="filelist">
+            </ul>
+          </div>
           <div id="actions" class="row modal-header">
 
             <div class="col-md-4">
