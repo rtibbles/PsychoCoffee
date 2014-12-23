@@ -122,25 +122,89 @@ toolbox =
 class BlocklyValueView extends Backbone.View
 
     initialize: (options) ->
-        @block = options.block
+        @parentBlock = options.parentBlock
         @model = options.model
-        @type = options.type
-        @name = options.name
         @blocklyview = options.blocklyview
+        @option = options.option
+        @name = @option?.name or options.name
+        if @option?.options
+            @value_type = @option.name + "_drop_down"
+            if @value_type not of @Blockly.Blocks
+                @blocklyview.Blockly.Blocks[@value_type] =
+                    @instantiateDropDown(@option)
+                @blocklyview.Blockly.JavaScript[@value_type] =
+                    @codeGenDropDown(@option)
+            @variable_type = "OPTIONS"
+            @value = String(@model.get(@option.name))
+        else
+            if @option
+                @value = String(@model.get(@option.name))
+                type = @option.type
+            else
+                @value = options.value
+                type = options.type
+            switch type
+                when "String"
+                    @value_type = "text"
+                    @variable_type = "TEXT"
+                when "Number"
+                    @value_type = "math_number"
+                    @variable_type = "NUM"
+                when "Boolean"
+                    @value_type = "logic_boolean"
+                    @variable_type = "BOOL"
+                    @value = @value.toUpperCase()
+                when "Colour"
+                    @value_type = "colour_picker"
+                    @variable_type = "COLOUR"
+                when "File"
+                    @value_type = "file_dropdown"
+                    @variable_type = "File"
+                else
+                    @value_type = "text"
+                    @variable_type = "TEXT"
+        @block = @blocklyview.Blockly.Block.obtain(
+            @blocklyview.Blockly.getMainWorkspace(), @value_type
+            )
+        @block.attr_name = @name
+        @block.setFieldValue(@value, @variable_type)
+        @block.initSvg()
+        @block.render()
+        if @parentBlock?
+            @parentBlock.getInput(@name)
+                .connection.connect(@block.outputConnection)
         @listenTo @model, "change:" + @name, @update
 
     update: =>
         value = String(@model.get(@name))
-        if @type == "BOOL"
+        if @variable_type == "BOOL"
             value = value.toUpperCase()
-        @block.setFieldValue(value, @type)
+        @block.setFieldValue(value, @variable_type)
 
 class BlocklyBlockView extends Backbone.View
 
     initialize: (options) ->
-        @block = options.block
+        @type = options.type
         @model = options.model
         @blocklyview = options.blocklyview
+        @y = options.y
+        @block = @blocklyview.Blockly.Block.obtain(
+            @blocklyview.Blockly.getMainWorkspace(), @type)
+        @block.initSvg()
+        @block.render()
+        @block.subViews = {}
+        for option in @model.requiredParameters().concat(
+            @model.objectOptions())
+            if option.name == "name" or not @model.get(option.name)?
+                continue
+            @block.subViews[option.name] = new BlocklyValueView({
+                option: option
+                model: @model
+                blocklyview: @blocklyview
+                parentBlock: @block
+            })
+        @block.setCollapsed(true)
+        if @y then @block.moveBy(0, @y*40)
         @listenTo @blocklyview, "change", @update
 
     update: =>
@@ -156,6 +220,7 @@ module.exports = class BlocklyView extends DropableView
     initialize: ->
         super
         @toolbox = @defaultToolbox
+        @subViews = {}
 
     render: ->
         super
@@ -510,65 +575,12 @@ module.exports = class BlocklyView extends DropableView
                     attrs["parameters"].push paramobject
                 paramobject["last"] = true
                 BlocklyModelCodeTemplate(attrs)
-        parentBlock =
-            @Blockly.Block.obtain @Blockly.getMainWorkspace(), type
-        parentBlock.initSvg()
-        parentBlock.render()
-        parentBlock.subViews = {}
-        for option in model.requiredParameters().concat(
-            model.objectOptions())
-            if option.name == "name" or not model.get(option.name)?
-                continue
-            if option.options
-                value_type = option.name + "_drop_down"
-                if value_type not of @Blockly.Blocks
-                    @Blockly.Blocks[value_type] =
-                        @instantiateDropDown(option)
-                    @Blockly.JavaScript[value_type] =
-                        @codeGenDropDown(option)
-                variable_type = "OPTIONS"
-                value = String(model.get(option.name))
-            else
-                value = String(model.get(option.name))
-                switch option.type
-                    when "String"
-                        value_type = "text"
-                        variable_type = "TEXT"
-                    when "Number"
-                        value_type = "math_number"
-                        variable_type = "NUM"
-                    when "Boolean"
-                        value_type = "logic_boolean"
-                        variable_type = "BOOL"
-                        value = value.toUpperCase()
-                    when "Colour"
-                        value_type = "colour_picker"
-                        variable_type = "COLOUR"
-                    when "File"
-                        value_type = "file_dropdown"
-                        variable_type = "File"
-                    else
-                        value_type = "text"
-                        variable_type = "TEXT"
-            childBlock = @Blockly.Block.obtain @Blockly.getMainWorkspace(),
-                value_type
-            childBlock.attr_name = option.name
-            childBlock.setFieldValue(value, variable_type)
-            childBlock.initSvg()
-            childBlock.render()
-            parentBlock.getInput(option.name)
-                .connection.connect(childBlock.outputConnection)
-            parentBlock.subViews[option.name] = new BlocklyValueView({
-                block: childBlock
-                model: model
-                type: variable_type
-                name: option.name
-                blocklyview: @
-            })
-        parentBlock.setCollapsed(true)
-        if y then parentBlock.moveBy(0, y*40)
-        parentBlock.subViews["self"] = new BlocklyBlockView({
-            block: parentBlock
+        @subViews[type] = new BlocklyBlockView({
+            type: type
+            model: model
+            blocklyview: @
+            y: y
+        })
             model: model
             blocklyview: @
         })
