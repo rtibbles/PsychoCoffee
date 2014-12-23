@@ -249,7 +249,10 @@ module.exports = class BlocklyView extends DropableView
 
     drop: (event, ui) =>
         model = super(event, ui)
-        @insertModelBlock(model)
+        if model.file_object?
+            @insertFileObject(model)
+        else
+            @insertModelBlock(model)
 
     generateCode: =>
         @Blockly.JavaScript.workspaceToCode()
@@ -581,6 +584,11 @@ module.exports = class BlocklyView extends DropableView
             blocklyview: @
             y: y
         })
+
+    insertFileObject: (model) =>
+        new BlocklyValueView({
+            value: model.get("name")
+            type: "File"
             model: model
             blocklyview: @
         })
