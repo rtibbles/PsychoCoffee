@@ -1,12 +1,11 @@
 'use strict'
 
 generator = require "../utils/trialObjectKind_generator"
-ExperimentEditView = require '../views/ExperimentEditView'
+HomeView = require '../views/HomeView'
 
 # The application bootstrapper.
 PsychoEdit =
     initialize: ->
-        Backbone.Associations.EVENTS_NC = true
         dispatcher = _.extend({}, Backbone.Events, cid: "dispatcher")
         _.each [ Backbone.Collection::,
             Backbone.Model::,
@@ -17,7 +16,7 @@ PsychoEdit =
         @global_dispatcher = dispatcher
         @global_dispatcher.eventDataTransfer = {}
         @trialObjects = generator()
-        @editView = new ExperimentEditView
+        @homeView = new HomeView
 
 
 module.exports = PsychoEdit
