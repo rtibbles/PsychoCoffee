@@ -96,7 +96,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
 
     startPreview: =>
         if @trialPreview
-            if @trialPreview.close
+            if @trialPreview.close?
                 @trialPreview.close()
             else
                 @trialPreview.remove()

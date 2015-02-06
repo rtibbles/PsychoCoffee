@@ -7,7 +7,7 @@ class Model extends VisualTrialObject.Model
     objectOptions: ->
         super().concat(
             [
-                    name: "ry"
+                    name: "rx"
                     default: 24
                     type: "Number"
                 ,
