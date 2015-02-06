@@ -87,9 +87,6 @@ class Model extends Backbone.AssociatedModel
     name: ->
         @get("name") or @id
 
-    save: (key, val, options) ->
-        @set "id", random.seededguid()
-
     set: (key, val, options) ->
         super
         if key == "name"
