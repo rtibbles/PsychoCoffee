@@ -24,9 +24,9 @@ module.exports = class BlockView extends HandlerView
         @trialdatamodel =
             @datamodel.get("trialdatalogs").add({})
         @trialView.datamodel = @trialdatamodel
+        @trialView.editor = true
         @trialView.render()
         @trialView.appendTo("#trials")
-        @trialView.editor = true
         @trialView
 
     startBlock: ->

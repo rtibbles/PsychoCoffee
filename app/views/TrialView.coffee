@@ -81,7 +81,7 @@ module.exports = class TrialView extends HandlerView
             @canvas.off("after:render")
 
     registerTimeout: =>
-        if @model.get "timeout"
+        if @model.get("timeout") > 0
             @clock.delayedTrigger @model.get("timeout"), @, @endTrial
 
     endTrial: ->
