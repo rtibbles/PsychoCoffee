@@ -31,7 +31,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         "click .pause": "pausePreview"
 
     initialize: ->
-        @model = new Experiment.Model({
+        @model = @model or new Experiment.Model({
             name: "My Test Experiment"
             blocks: [
                 {

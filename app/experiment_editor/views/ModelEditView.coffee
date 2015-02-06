@@ -51,6 +51,7 @@ module.exports = class ModelEditView extends ModalView
         if ready
             @model.set attrs
             @model.new = false
+            @trigger "attributes_set"
             @remove()
 
     getRenderData: ->
