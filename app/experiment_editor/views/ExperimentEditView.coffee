@@ -29,28 +29,9 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
     events:
         "click .play": "playPreview"
         "click .pause": "pausePreview"
+        "click #save_experiment": "saveExperiment"
 
     initialize: ->
-        @model = @model or new Experiment.Model({
-            name: "My Test Experiment"
-            blocks: [
-                {
-                    name: "this"
-                    trialObjects: [
-                        {
-                            name: "audioTest"
-                            subModelTypeAttribute: "AudioTrialObject"
-                            file: "/sounds/test.mp3"
-                        },
-                        {
-                            name: "textTest"
-                            subModelTypeAttribute: "TextVisualTrialObject"
-                            text: "This is here"
-                        }
-                    ]
-                }
-            ]
-            })
         @listenTo @global_dispatcher, "editBlock", @editBlock
         @appendTo("#editor_window")
         @render()
@@ -144,4 +125,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
     animateScrubBar: _.throttle(
         (fraction) ->
             $(".progress-bar.scrub").css("width", 100*fraction + "%")
-        , 50)
+        , 10)
+
+    saveExperiment: ->
+        @model.save()
