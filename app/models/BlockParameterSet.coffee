@@ -1,10 +1,10 @@
 'use strict'
 
-Base = require('./Base')
+NestedBase = require './NestedBase'
 Random = require 'utils/random'
 Parameter = require './Parameter'
 
-class Model extends Base.Model
+class Model extends NestedBase.Model
 
     defaults:
         randomized: false
@@ -21,9 +21,9 @@ class Model extends Base.Model
         collectionType: Parameter.Collection
     ]
 
-    setTrialParameters: (user_id="",\
-                            trials_wanted=null,\
-                            experimentParameterSet={}) ->
+    setTrialParameters: (user_id = "",\
+                            trials_wanted = null,\
+                            experimentParameterSet = {}) ->
         parameterObjectList = []
         parameterNameList = []
         blockParameterSet = {}
@@ -100,7 +100,7 @@ class Model extends Base.Model
             min_length: min_length
             parameterObjectList: parameterObjectList
 
-class Collection extends Base.Collection
+class Collection extends NestedBase.Collection
     model: Model
 
 module.exports =

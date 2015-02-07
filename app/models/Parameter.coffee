@@ -1,9 +1,9 @@
 'use strict'
 
-Base = require('./Base')
+NestedBase = require './NestedBase'
 Random = require 'utils/random'
 
-class Model extends Base.Model
+class Model extends NestedBase.Model
 
     ###
     Parameter attributes can be of three basic returnTypes:
@@ -37,9 +37,9 @@ class Model extends Base.Model
         parameters: []
         parameterizedAttributes: {}
 
-    returnParameterList: (user_id="",\
-                            trials_wanted=null,\
-                            injectedParameters={}) ->
+    returnParameterList: (user_id = "",\
+                            trials_wanted = null,\
+                            injectedParameters = {}) ->
         for attribute, name of @get "parameterizedAttributes"
             if name of injectedParameters
                 @set attribute, injectedParameters[name]
@@ -94,7 +94,7 @@ class Model extends Base.Model
                 user_id + "shuffleListArrays" + @id + index
         return list
 
-class Collection extends Base.Collection
+class Collection extends NestedBase.Collection
     model: Model
 
 module.exports =

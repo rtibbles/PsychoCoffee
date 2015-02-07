@@ -1,8 +1,8 @@
 'use strict'
 
-Base = require './Base'
+NestedBase = require './NestedBase'
 
-class Model extends Base.Model
+class Model extends NestedBase.Model
 
     preLoadFile: (queue) =>
         if not queue

@@ -2,9 +2,9 @@
 
 nestedModules = require '../utils/nestedModules'
 
-Base = require('./Base')
+NestedBase = require './NestedBase'
 
-class Model extends Base.Model
+class Model extends NestedBase.Model
 
     objectOptions: ->
         # Lists additional parameters for object
@@ -49,7 +49,7 @@ class Model extends Base.Model
         ])
 
 
-class Collection extends Base.Collection
+class Collection extends NestedBase.Collection
     model: (attrs, options) ->
         try
             modelType = attrs["subModelTypeAttribute"] or

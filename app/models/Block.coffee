@@ -1,10 +1,10 @@
 'use strict'
 
-Base = require './Base'
+NestedBase = require './NestedBase'
 TrialObject = require './TrialObject'
 BlockParameterSet = require './BlockParameterSet'
 
-class Model extends Base.Model
+class Model extends NestedBase.Model
 
     requiredParameters: ->
         super.concat(
@@ -43,7 +43,7 @@ class Model extends Base.Model
     createTrialObject: (options) ->
         @get("trialObjects").create(options)
 
-class Collection extends Base.Collection
+class Collection extends NestedBase.Collection
     model: Model
 
 module.exports =

@@ -87,14 +87,6 @@ class Model extends Backbone.AssociatedModel
     name: ->
         @get("name") or @id
 
-    set: (key, val, options) ->
-        super
-        if key == "name"
-            @id = val
-        if _.isObject key
-            if "name" of key
-                @id = key["name"]
-
 class Collection extends Backbone.Collection
     url: "none"
     local: true
