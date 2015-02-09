@@ -37,9 +37,6 @@ module.exports = class FileManagerView extends View
             clickable: @$(".fileinput")[0]
         )
 
-        for model in @collection.models
-            @addFileView model
-
         @$("#previews").dropdown('toggle')
          
         @listenTo @dropzone, "totaluploadprogress", @updateProgressBar
@@ -48,17 +45,20 @@ module.exports = class FileManagerView extends View
 
         @listenTo @dropzone, "queuecomplete", @queueComplete
 
+        _.defer @addAllFileViews
+
     updateProgressBar: (progress) =>
         @$("#total-progress .progress-bar").width(progress + "%")
 
     uploadSuccess: (file) =>
         @$(file.previewElement).remove()
-        model = @collection.add
-            name: file.name
-            extension: file.name.split('.').pop()
-        model.preLoadFile()
-        if @single
-            @$(".fileinput").html(file.name).attr("value", file.name)
+        if not @collection.get(file.name)?
+            model = @collection.add
+                name: file.name
+                extension: file.name.split('.').pop()
+            model.preLoadFile()
+            if @single
+                @$(".fileinput").html(file.name).attr("value", file.name)
 
     removeAllFiles: =>
         @dropzone.removeAllFiles(true)
@@ -70,3 +70,7 @@ module.exports = class FileManagerView extends View
         view = new FileItemView model: model
         view.render()
         view.appendTo("#filelist")
+
+    addAllFileViews: =>
+        for model in @collection.models
+            @addFileView model
