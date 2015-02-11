@@ -1,7 +1,5 @@
 'use strict'
 
-random = require 'utils/random'
-
 class Model extends Backbone.AssociatedModel
     defaults: ->
         defaults = {}
