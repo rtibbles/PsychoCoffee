@@ -2,6 +2,7 @@
 
 generator = require "../utils/trialObjectKind_generator"
 HomeView = require '../views/HomeView'
+Session = require '../models/Session'
 
 # The application bootstrapper.
 PsychoEdit =
@@ -15,8 +16,11 @@ PsychoEdit =
             _.extend proto, global_dispatcher: dispatcher
         @global_dispatcher = dispatcher
         @global_dispatcher.eventDataTransfer = {}
+        @API = "/api"
+        @session = new Session
         @trialObjects = generator()
-        @homeView = new HomeView
 
+        @session.checkAuth complete: =>
+            @homeView = new HomeView
 
 module.exports = PsychoEdit

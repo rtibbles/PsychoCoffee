@@ -11,10 +11,10 @@ module.exports = class LoginView extends View
         "click .login-btn": "login"
 
     login: ->
-        username = @$("#username").val()
+        email = @$("#email").val()
         password = @$("#password").val()
         user = new User
-            username: username
+            email: email
             password: password
         user.save().success =>
             PsychoEdit.user = user

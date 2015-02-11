@@ -2,7 +2,8 @@
 
 module.exports = class Collection extends Backbone.Collection
 
-    url: "/api/experiments"
+    url: ->
+        PsychoEdit.API + "/experiments"
     model: PsychoCoffee.Experiment.Model
     apiFilters: ["id", "title"]
 
