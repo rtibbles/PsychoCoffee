@@ -13,9 +13,11 @@ module.exports = class LoginView extends View
     login: ->
         email = @$("#email").val()
         password = @$("#password").val()
-        user = new User
+        PsychoEdit.session.login
             email: email
             password: password
-        user.save().success =>
-            PsychoEdit.user = user
-            @global_dispatcher.trigger "login"
+        ,
+            success: (res) =>
+                @global_dispatcher.trigger "login"
+            error: (mod, res) =>
+                @$("#email, #password").animate border: "2px solid red"

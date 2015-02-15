@@ -19,7 +19,7 @@ module.exports = class HomeView extends View
 
     render: (model) ->
         super
-        if not PsychoEdit.user?
+        if PsychoEdit.session.get("user_id")==""
             loginView = new LoginView
             loginView.render()
             loginView.appendTo("#main")
