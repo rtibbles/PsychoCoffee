@@ -67,9 +67,10 @@ module.exports = modelGenerator = (collection, authMethods=[]) ->
         if payload.uId?
             query.uId = payload.uId
         payload = objectAssign Model.payload(request), payload
-        Model.update query, payload, {}, (err, result) ->
+        delete payload._id
+        Model.update query, payload, {fullResult: true}, (err, result) ->
             if _.isEmpty(result) and query.uId?
-                reply(boom.forbidden("You do not have permission to update this resource."))
+                return reply(boom.forbidden("You do not have permission to update this resource."))
             Model.handleResponse(err, result, reply)
 
     Model.del = (request, reply, payload={}) ->
@@ -77,7 +78,6 @@ module.exports = modelGenerator = (collection, authMethods=[]) ->
         query._id = Model.ObjectId request.params.id
         if payload.uId?
             query.uId = payload.uId
-        payload = objectAssign Model.payload(request), payload
         Model.remove query, {}, (err, result) ->
             if result == 0 and query.uId?
                 reply(boom.forbidden("You do not have permission to delete this resource."))
