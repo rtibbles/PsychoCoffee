@@ -144,19 +144,7 @@ module.exports = (server) ->
                         if not err?
                             return reply({error:null,message:'Updated successfully', patched: true})
 
-            User.login = (request, reply) ->
-                collection = db.collection "users"
-                username = request.payload.username
-                password = request.payload.password
-                collection.findOne "email": username, (err, user) ->
-                    if err
-                        reply boom.badRequest(err)
-                    if user
-                        bcrypt.compare password, user.password, (err, isValid) ->
-                            if isValid
-                                reply user
-                    else
-                        reply boom.badRequest("User not found")
+    auth.register(server)
 
             # Add additional PATCH method for experimentdatahandler
             server.route
@@ -165,8 +153,3 @@ module.exports = (server) ->
                 config:
                     handler: ExperimentDataHandler.patch
 
-            server.route
-                method: "POST"
-                path: "/api/users/login"
-                config:
-                    handler: User.login
