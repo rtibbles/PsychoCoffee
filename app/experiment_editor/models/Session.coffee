@@ -46,9 +46,6 @@ module.exports = class Session extends Backbone.Model
             contentType: 'application/json'
             dataType: 'json'
             type: 'POST'
-            beforeSend: (xhr) ->
-                token = $('meta[name="csrf-token"]').attr('content')
-                if token? then xhr.setRequestHeader('X-CSRF-Token', token)
             data:  JSON.stringify _.omit(opts, 'method')
             success: (res) =>
                 if not res.error?

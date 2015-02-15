@@ -7,6 +7,10 @@ Session = require '../models/Session'
 # The application bootstrapper.
 PsychoEdit =
     initialize: ->
+        $.ajaxSetup
+            beforeSend: (xhr) ->
+                token = $('meta[name="csrf-token"]').attr('content')
+                if token? then xhr.setRequestHeader('X-CSRF-Token', token)
         dispatcher = _.extend({}, Backbone.Events, cid: "dispatcher")
         _.each [ Backbone.Collection::,
             Backbone.Model::,
