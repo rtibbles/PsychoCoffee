@@ -1,5 +1,6 @@
 hapi = require 'hapi'
 path = require 'path'
+dataconfig = require './api/dataconfig'
 
 api = require './api/api'
 
@@ -18,6 +19,13 @@ app.route
         directory:
             path: 'public'
             index: true
+
+app.route
+    method: 'GET'
+    path: '/media/{param*}'
+    handler:
+        directory:
+            path: dataconfig.filestore.root
 
 # boot scripts mount components like REST API
 api app
