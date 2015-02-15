@@ -1,6 +1,6 @@
 fs = require 'fs'
+dataconfig = require './dataconfig'
 DiffTools = require '../app/utils/diff'
-dataconfig = require './datasource'
 toothache = require 'toothache'
 Joi = require 'joi'
 mongodb = require 'mongodb'

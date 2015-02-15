@@ -29,3 +29,6 @@ module.exports =
         <Or>
         "provider": 'filesystem'
         "root": '/tmp/storage'
+    session:
+        "password": "password"
+        "cookie": "cookie"
