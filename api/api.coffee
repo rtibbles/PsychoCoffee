@@ -70,3 +70,9 @@ module.exports = (server) ->
         path: "/api/experimentdatahandlers/{id}"
         config:
             handler: ExperimentDataHandler.patch
+
+    server.route
+        method: "GET"
+        path: "/validate/{activation_id}"
+        config:
+            handler: User.verifyEmail

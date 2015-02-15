@@ -40,7 +40,7 @@ sendVerificationEmail = (result, callback) ->
             """
             html: """
             Please click the following link:
-            <a href="http:/psyc.io/validate?id=#{ result.activation_id }">Activate account</a>
+            <a href="http:/psyc.io/validate/#{ result.activation_id }">Activate account</a>
             This will activate your account for use.
             Regards,
             #{ dataconfig.email.sender.name }
@@ -70,5 +70,19 @@ User.create = (request, reply, payload={}) ->
                     User.insert value, (err, result) ->
                         sendVerificationEmail result, (err, result) ->
                             User.handleResponse(err, result, reply)
+
+User.verifyEmail = (request, reply) ->
+    User.findOne activation_id: request.params.activation_id, (err, result) ->
+        if err
+            reply err
+        else
+            result.active = true
+            id = result._id
+            delete result._id
+            User.findByIdAndUpdate id, result, (err, result) ->
+                if err
+                    reply err
+                else
+                    reply "Email successfully verified"
 
 module.exports = User
