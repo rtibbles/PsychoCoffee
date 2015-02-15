@@ -35,6 +35,8 @@ login = (request, reply) ->
     validate email, password, (err, isValid, user) ->
         if err
             reply boom.badRequest(err)
+        else if not user.active
+            reply boom.unauthorized("Account not verified")
         else if isValid
             request.auth.session.set user
             reply user: _.omit(user, ['password'])
