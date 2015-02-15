@@ -12,13 +12,32 @@ app = new hapi.Server
 
 app.connection port: 3000
 
+
+app.views
+    relativeTo: __dirname
+    path:  'api/templates'
+    engines:
+        hbs: require 'handlebars'
+
+app.register register: require('crumb'), options: restful: true, (err) ->
+    if err
+        throw err
+
+app.route
+    method: 'GET'
+    path: '/'
+    handler: (request, reply) ->
+        return reply.view 'editor'
+
+
 app.route
     method: 'GET'
     path: '/{param*}'
     handler:
         directory:
             path: 'public'
-            index: true
+
+app.ro
 
 app.route
     method: 'GET'
