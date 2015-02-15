@@ -6,6 +6,7 @@ mongoModels = require 'hapi-mongo-models'
 User = require './models/User'
 Experiment = require './models/Experiment'
 ExperimentDataHandler = require './models/ExperimentDataHandler'
+fileupload = require './fileupload'
 
 
 defineREST = (server, model, model_name, mode='try', routes=[]) ->
@@ -57,6 +58,7 @@ module.exports = (server) ->
                  console.log 'Failed to connect to database'
 
     auth.register(server)
+    fileupload(server)
 
     defineREST server, User, "users", 'required'
     defineREST server, Experiment, "experiments", 'required'

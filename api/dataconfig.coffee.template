@@ -7,27 +7,6 @@ module.exports =
         "password": "<password>"
         "database": "<databasename>"
     filestore:
-        "name": "myfile"
-        "connector": "loopback-component-storage"
-        <Choose>
-        "provider": 'amazon'
-        "key": '...'
-        "keyId": '...'
-        <Or>
-        "provider": 'rackspace'
-        "username": '...'
-        "apiKey": '...'
-        <Or>
-        "provider": 'azure'
-        "storageAccount": "test-storage-account"
-        "storageAccessKey": "test-storage-access-key"
-        <Or>
-        "provider": 'openstack'
-        "username": 'your-user-name'
-        "password": 'your-password'
-        "authUrl": 'https://your-identity-service'
-        <Or>
-        "provider": 'filesystem'
         "root": '/tmp/storage'
     session:
         "password": "password"

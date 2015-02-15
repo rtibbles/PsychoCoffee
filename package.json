@@ -32,6 +32,8 @@
     "hapi-mongo-models": "^1.1.0",
     "javascript-brunch": "~1.7.0",
     "joi": "~5.1.0",
+    "mkdirp": "^0.5.0",
+    "node-uuid": "^1.4.2",
     "object-assign": "^2.0.0",
     "serve-favicon": "~2.0.1",
     "stylus-brunch": "~1.8.1",

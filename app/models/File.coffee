@@ -18,13 +18,10 @@ class Model extends NestedBase.Model
             @trigger "loaded"
 
     downloadURL: ->
-        @containerURL() + "/download/" + @get("name")
+        "/media/" + @get("file_id")
 
     deleteURL: ->
-        @containerURL() + "/files/" + @get("name")
-
-    containerURL: ->
-        "/api/containers/" + "test"#@collection.parents[0].id
+        "/files/" + @get("file_id")
 
 class Collection extends Backbone.Collection
 
@@ -32,8 +29,7 @@ class Collection extends Backbone.Collection
         @models.forEach (model) -> model.preLoadFile(queue)
 
     url: ""
-    containerURL: ->
-        "/api/containers/" + "test"#@parents[0].id
+
     local: true
     model: Model
 

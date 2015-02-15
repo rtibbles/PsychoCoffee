@@ -8,6 +8,12 @@ class FileItemView extends DraggableView
 
     template: ItemTemplate
 
+    event:
+        "click .fileitem": "selectFile"
+
+    selectFile: ->
+        return true
+
 
 module.exports = class FileManagerView extends View
     template: ManagerTemplate
@@ -27,7 +33,7 @@ module.exports = class FileManagerView extends View
     render: ->
         super
         @dropzone = new Dropzone(@$("#fileupload")[0],
-            url: "/api/containers/test/upload"
+            url: "/files"
             thumbnailWidth: 80
             thumbnailHeight: 80
             parallelUploads: 20
@@ -55,6 +61,7 @@ module.exports = class FileManagerView extends View
         if not @collection.get(file.name)?
             model = @collection.add
                 name: file.name
+                file_id: JSON.parse(file.xhr.response).file_id
                 extension: file.name.split('.').pop()
             model.preLoadFile()
             if @single
