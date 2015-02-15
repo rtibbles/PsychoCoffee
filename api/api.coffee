@@ -1,155 +1,71 @@
 fs = require 'fs'
 dataconfig = require './dataconfig'
-DiffTools = require '../app/utils/diff'
-toothache = require 'toothache'
 Joi = require 'joi'
 mongodb = require 'mongodb'
-bcrypt = require 'bcrypt'
-boom = require 'boom'
+auth = require './auth'
+mongoModels = require 'hapi-mongo-models'
+User = require './models/User'
+Experiment = require './models/Experiment'
+ExperimentDataHandler = require './models/ExperimentDataHandler'
 
-defineREST = (plugin, model, model_name) ->
-    # Create
-    plugin.route
+
+defineREST = (server, model, model_name, mode='try', routes=[]) ->
+
+    default_routes = [
         method: "POST"
-        path: "/api/#{ model_name }",
-        config:
-            handler: model.create
-
-    # Get a resource, must use "id" parameter to refer to mongo"s "_id" field
-    plugin.route
+        path: "/api/#{ model_name }"
+        handler: model.create
+    ,
         method: "GET"
         path: "/api/#{ model_name }/{id}"
-        config:
-            handler: model.get
-
-    # Get All
-    plugin.route
+        handler: model.get
+    ,
         method: "GET"
         path: "/api/#{ model_name }"
-        config:
-            handler: model.find
-
-    # Find, will search collection using payload for criteria
-    plugin.route
+        handler: model.findObjects
+    ,
         method: "POST"
         path: "/api/#{ model_name }/find"
-        config:
-            handler: model.find
-
-    # Update, must use "id" parameter to refer to mongo"s "_id" field
-    plugin.route
+        handler: model.findObjects
+    ,
         method: "PUT"
         path: "/api/#{ model_name }/{id}"
-        config:
-            handler: model.update
-
-    # Delete, must use "id" parameter to refer to mongo"s "_id" field
-    plugin.route
+        handler: model.updateObject
+    ,
         method: "DELETE"
         path: "/api/#{ model_name }/{id}"
-        config:
-            handler: model.del
+        handler: model.del
+    ]
+
+    routes = routes.concat default_routes
+
+    for route in routes
+        server.route
+            method: route.method
+            path: route.path
+            config: auth.config(route.handler, mode)
 
 module.exports = (server) ->
-    MongoClient = mongodb.MongoClient
-    MongoClient.connect "mongodb://#{ dataconfig.config.username }:#{ dataconfig.config.password }@#{ dataconfig.config.host }:#{ dataconfig.config.port }/#{ dataconfig.config.database }", (err, db) ->
-        if err?
-            throw err
-        else
-            console.log "Database connected at mongodb://#{ dataconfig.config.host }:#{ dataconfig.config.port }/#{ dataconfig.config.database }"
-            User = toothache
-                db: db
-                collection: 'users'
-                create:
-                    payload: Joi.object().keys 
-                        email: Joi.string().required()
-                        password: Joi.string().required()
-                    defaults:
-                        access: 'normal'
-                        activated: false
-                        uId: true
-                    bcrypt: 'password'
-                    date: 'created'
-                    access: "admin"
-                read:
-                    whitelist: ['email']
-                    blacklist: ['password']
-                    access: 'normal'
-                update:
-                    payload: Joi.object().keys
-                        email: Joi.string()
-                        password: Joi.string()
-                    bcrypt: 'password'
-                    date: 'updated'
-                    access: 'normal'
-                del:
-                    access: 'normal'
-                validationOpts:
-                    abortEarly: false
 
-            Experiment = toothache
-                db: db
-                collection: 'experiments'
-                create:
-                    payload: Joi.object().keys 
-                        name: Joi.string().required()
-                    defaults:
-                        access: 'normal'
-                        uId: true
-                    date: 'created'
-                    access: "normal"
-                read:
-                    access: 'normal'
-                update:
-                    date: 'updated'
-                    access: 'normal'
-                del:
-                    access: 'normal'
-                validationOpts:
-                    abortEarly: false
-                    allowUnknown: true
-
-            ExperimentDataHandler = toothache
-                db: db
-                collection: 'experimentdatahandlers'
-                create:
-                    payload: {}
-                    date: 'created'
-                    access: "normal"
-                read:
-                    access: 'normal'
-                update:
-                    date: 'updated'
-                    access: 'normal'
-                del:
-                    access: 'normal'
-                validationOpts:
-                    abortEarly: false
-                    allowUnknown: true
-
-            defineREST server, User, "user"
-            defineREST server, Experiment, "experiment"
-            defineREST server, ExperimentDataHandler, "experimentdatahandlers"
-
-            ExperimentDataHandler.patch = (request, reply) ->
-                collection = db.collection 'experimentdatahandlers'
-                resource_id = request.params.id
-                if request.method == 'get'
-                    payload = request.query
-                else
-                    payload = request.payload
-                collection.findOne "_id": mongodb.ObjectId(resource_id), (err, doc) ->
-                    update = DiffTools.Merge(doc, payload)
-                    collection.update "_id": mongodb.ObjectId(resource_id), {$set: update}, {}, (err, doc) ->
-                        if not err?
-                            return reply({error:null,message:'Updated successfully', patched: true})
+    mongoModels.BaseModel.connect
+        url: "mongodb://#{ dataconfig.config.username }:\
+#{ dataconfig.config.password }@\
+#{ dataconfig.config.host }:\
+#{ dataconfig.config.port }/\
+#{ dataconfig.config.database }"
+    , (err) ->
+             if err
+                 console.log 'Failed to connect to database'
 
     auth.register(server)
 
-            # Add additional PATCH method for experimentdatahandler
-            server.route
-                method: "PATCH"
-                path: "/api/experimentdatahandlers/{id}"
-                config:
-                    handler: ExperimentDataHandler.patch
+    defineREST server, User, "users", 'required'
+    defineREST server, Experiment, "experiments", 'required'
+    defineREST server, ExperimentDataHandler, "experimentdatahandlers", 'try'
 
+    # Add additional PATCH method for experimentdatahandler
+    server.route
+        method: "PATCH"
+        path: "/api/experimentdatahandlers/{id}"
+        config:
+            handler: ExperimentDataHandler.patch
