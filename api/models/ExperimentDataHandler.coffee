@@ -1,7 +1,7 @@
 Base = require './Base'
 DiffTools = require '../../app/utils/diff'
 
-ExperimentDataHandler = Base('experimentdatahandlers')
+ExperimentDataHandler = Base('experimentdatahandlers', ['findObjects', 'del'])
 
 ExperimentDataHandler.patch = (request, reply) ->
     resource_id = request.params.id

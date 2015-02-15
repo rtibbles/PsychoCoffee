@@ -1,5 +1,5 @@
 Base = require './Base'
 
-Experiment = Base('experiments')
+Experiment = Base('experiments', 'all')
 
 module.exports = Experiment

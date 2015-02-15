@@ -3,7 +3,13 @@ objectAssign = require 'object-assign'
 _ = require 'underscore'
 boom = require 'boom'
 
-module.exports = modelGenerator = (collection) ->
+allAuthMethods = ["create", "get", "findObjects", "updateObject", "del"]
+
+authWrapper = (method) ->
+    (request, reply) ->
+        method request, reply, uId: request.auth?.credentials?._id || false
+
+module.exports = modelGenerator = (collection, authMethods=[]) ->
 
     class Model extends mongoModels.BaseModel
         constructor: (attrs) ->
@@ -77,5 +83,10 @@ module.exports = modelGenerator = (collection) ->
                 reply(boom.forbidden("You do not have permission to delete this resource."))
             result = if result == 0 then 0 else {count: result}
             Model.handleResponse(err, result, reply)
+
+    authMethods = if authMethods == "all" then allAuthMethods else authMethods
+
+    for method in authMethods
+        Model[method] = authWrapper(Model[method])
 
     return Model
