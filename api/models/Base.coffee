@@ -9,13 +9,15 @@ authWrapper = (method) ->
     (request, reply) ->
         method request, reply, uId: request.auth?.credentials?._id || false
 
-module.exports = modelGenerator = (collection, authMethods=[]) ->
+module.exports = modelGenerator = (collection, authMethods=[], filterFields=[]) ->
 
     class Model extends mongoModels.BaseModel
         constructor: (attrs) ->
             objectAssign @, attrs
 
     Model._collection = collection
+
+    Model.filterFields = filterFields
 
     Model.payload = (request) ->
         if request.method == 'get'
@@ -30,6 +32,12 @@ module.exports = modelGenerator = (collection, authMethods=[]) ->
             plural = if _.isArray(result) then "s" else ""
             reply boom.notFound("Item#{plural} not found")
         else
+            if Model.filterFields.length > 0
+                if _.isArray(result)
+                    for i, item of result
+                        result[i] = _.pick item, Model.filterFields
+                else
+                    result = _.pick item, Model.filterFields
             reply result
 
     Model.create = (request, reply, payload={}) ->
