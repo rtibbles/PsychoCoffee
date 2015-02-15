@@ -1,7 +1,6 @@
 fs = require 'fs'
 dataconfig = require './dataconfig'
 Joi = require 'joi'
-mongodb = require 'mongodb'
 auth = require './auth'
 mongoModels = require 'hapi-mongo-models'
 User = require './models/User'
