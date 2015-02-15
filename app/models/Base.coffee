@@ -1,6 +1,9 @@
 'use strict'
 
 class Model extends Backbone.AssociatedModel
+
+    idAttribute: "_id"
+
     defaults: ->
         defaults = {}
         for option in @objectOptions()
