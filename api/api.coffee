@@ -9,41 +9,42 @@ ExperimentDataHandler = require './models/ExperimentDataHandler'
 fileupload = require './fileupload'
 
 
-defineREST = (server, model, model_name, mode='try', routes=[]) ->
+defineREST = (server, model, model_name, routes=[]) ->
 
     default_routes = [
         method: "POST"
         path: "/api/#{ model_name }"
-        handler: model.create
+        handler: "create"
     ,
         method: "GET"
         path: "/api/#{ model_name }/{id}"
-        handler: model.get
+        handler: "get"
     ,
         method: "GET"
         path: "/api/#{ model_name }"
-        handler: model.findObjects
+        handler: "findObjects"
     ,
         method: "POST"
         path: "/api/#{ model_name }/find"
-        handler: model.findObjects
+        handler: "findObjects"
     ,
         method: "PUT"
         path: "/api/#{ model_name }/{id}"
-        handler: model.updateObject
+        handler: "updateObject"
     ,
         method: "DELETE"
         path: "/api/#{ model_name }/{id}"
-        handler: model.del
+        handler: "del"
     ]
 
     routes = routes.concat default_routes
 
     for route in routes
+        mode = if route.handler in model.authMethods then "required" else "try"
         server.route
             method: route.method
             path: route.path
-            config: auth.config(route.handler, mode)
+            config: auth.config(model[route.handler], mode)
 
 module.exports = (server) ->
 
@@ -60,9 +61,9 @@ module.exports = (server) ->
     auth.register(server)
     fileupload(server)
 
-    defineREST server, User, "users", 'required'
-    defineREST server, Experiment, "experiments", 'required'
-    defineREST server, ExperimentDataHandler, "experimentdatahandlers", 'try'
+    defineREST server, User, "users"
+    defineREST server, Experiment, "experiments"
+    defineREST server, ExperimentDataHandler, "experimentdatahandlers"
 
     # Add additional PATCH method for experimentdatahandler
     server.route

@@ -97,4 +97,6 @@ module.exports = modelGenerator = (collection, authMethods=[], filterFields=[]) 
     for method in authMethods
         Model[method] = authWrapper(Model[method])
 
+    Model.authMethods = authMethods
+
     return Model
