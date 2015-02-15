@@ -6,6 +6,8 @@ User = require './User'
 
 module.exports = class Session extends Backbone.Model
 
+    remote: true
+
     defaults:
         logged_in: false
         user_id: ''
@@ -18,7 +20,7 @@ module.exports = class Session extends Backbone.Model
         return PsychoEdit.API + '/auth'
 
     updateSessionUser: (userData) ->
-        @user.set(_.pick(userData, _.keys(@user.defaults)))
+        @user.set(_.omit(userData, ["password"]))
 
 
     checkAuth: (callback, args) ->
@@ -26,7 +28,7 @@ module.exports = class Session extends Backbone.Model
             success: (mod, res) =>
                 if not res.error? and res.user?
                     @updateSessionUser(res.user)
-                    @set({ logged_in : true })
+                    @set({ user_id: @user.id, logged_in: true })
                     if 'success' of callback then callback.success(mod, res)
                 else
                     @set({ logged_in : false })
@@ -53,7 +55,7 @@ module.exports = class Session extends Backbone.Model
                     if opts.method in['login', 'signup']
 
                         @updateSessionUser( res.user || {} )
-                        @set({ user_id: res.user.id, logged_in: true })
+                        @set({ user_id: @user.id, logged_in: true })
                     else
                         @set({ logged_in: false })
 
@@ -65,7 +67,7 @@ module.exports = class Session extends Backbone.Model
             error: (mod, res) ->
                 if callback? and 'error' of callback
                     callback.error(res)
-        ).complete ->
+        ).complete (res) ->
             if callback? and 'complete' of callback
                 callback.complete(res)
 
