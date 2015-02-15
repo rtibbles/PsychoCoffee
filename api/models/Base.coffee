@@ -37,7 +37,7 @@ module.exports = modelGenerator = (collection, authMethods=[], filterFields=[]) 
                     for i, item of result
                         result[i] = _.pick item, Model.filterFields
                 else
-                    result = _.pick item, Model.filterFields
+                    result = _.pick result, Model.filterFields
             reply result
 
     Model.create = (request, reply, payload={}) ->
