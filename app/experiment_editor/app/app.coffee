@@ -1,8 +1,8 @@
 'use strict'
 
 generator = require "../utils/trialObjectKind_generator"
-HomeView = require '../views/HomeView'
 Session = require '../models/Session'
+MainRouter = require '../routers/MainRouter'
 
 # The application bootstrapper.
 PsychoEdit =
@@ -25,6 +25,8 @@ PsychoEdit =
         @trialObjects = generator()
 
         @session.checkAuth complete: =>
-            @homeView = new HomeView
+            @router = new MainRouter
+            Backbone.history.start pushState: true, root: "/"
+
 
 module.exports = PsychoEdit
