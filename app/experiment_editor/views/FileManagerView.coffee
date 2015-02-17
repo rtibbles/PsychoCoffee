@@ -41,6 +41,8 @@ module.exports = class FileManagerView extends View
             autoQueue: true
             previewsContainer: @$("#previews")[0]
             clickable: @$(".fileinput")[0]
+            headers:
+                "X-CSRF-Token": $('meta[name="csrf-token"]').attr('content')
         )
 
         @$("#previews").dropdown('toggle')
