@@ -25,14 +25,14 @@ app.register register: require('crumb'), options: restful: true, (err) ->
 
 app.route
     method: 'GET'
-    path: '/'
+    path: '/{param*}'
     handler: (request, reply) ->
         return reply.view 'editor'
 
 
 app.route
     method: 'GET'
-    path: '/{param*}'
+    path: '/static/{param*}'
     handler:
         directory:
             path: 'public'
