@@ -3,7 +3,7 @@
 CodeGeneratorView = require './CodeGeneratorView'
 Template = require '../templates/experimentedit'
 TitleTemplate = require '../templates/experimenttitle'
-Experiment = require '../../models/Experiment'
+Experiment = require '../models/Experiment'
 BlockEditView = require './BlockEditView'
 BlockListView = require './BlockListView'
 ModelEditView = require './ModelEditView'
@@ -17,7 +17,7 @@ class ExperimentTitleView extends View
         "click .title": "editExperiment"
 
     initialize: ->
-        @listenTo @model, "change", @render
+        @listenTo @model, "change:name", @render
 
     editExperiment: ->
         modelEditView = new ModelEditView({model: @model})
@@ -31,10 +31,11 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         "click .pause": "pausePreview"
         "click #save_experiment": "saveExperiment"
 
-    initialize: ->
-        @listenTo @global_dispatcher, "editBlock", @editBlock
-        @appendTo("#editor_window")
-        @render()
+    initialize: (options) ->
+        @model = new Experiment.Model _id: options.model_id
+        @model.fetch().success =>
+            @listenTo @global_dispatcher, "editBlock", @editBlock
+            @render()
     
     render: ->
         super

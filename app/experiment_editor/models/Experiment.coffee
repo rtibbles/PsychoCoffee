@@ -1,6 +1,13 @@
 'use strict'
 
-module.exports = class Collection extends Backbone.Collection
+class Model extends PsychoCoffee.Experiment.Model
+
+    remote: true
+
+    urlRoot: ->
+        PsychoEdit.API + "/experiments"
+
+class Collection extends Backbone.Collection
 
     url: ->
         PsychoEdit.API + "/experiments"
@@ -17,3 +24,7 @@ module.exports = class Collection extends Backbone.Collection
     filterFetch: (options={}) ->
         options.data = @params
         @fetch options
+
+module.exports =
+    Collection: Collection
+    Model: Model

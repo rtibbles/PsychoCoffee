@@ -2,8 +2,9 @@
 
 Template = require '../templates/experimentlist'
 ItemTemplate = require '../templates/experimentlistitem'
+HomeTemplate = require '../templates/home'
 View = require './View'
-Collection = require '../models/Experiment'
+Experiment = require '../models/Experiment'
 ModelEditView = require './ModelEditView'
 
 class ExperimentItemView extends View
@@ -17,7 +18,8 @@ class ExperimentItemView extends View
         @listenTo @model, "change", @render
 
     editExperiment: ->
-        @global_dispatcher.trigger("editExperiment", @model)
+        PsychoEdit.router.navigate "experiments/" + @model.id, trigger: true
+        return false
 
 module.exports = class ExperimentListView extends View
 
@@ -27,14 +29,16 @@ module.exports = class ExperimentListView extends View
         "click .add-experiment": "addExperiment"
 
     initialize: =>
-        @collection = new Collection
+        @collection = new Experiment.Collection
         @listenTo @collection, "add", @renderExperiment
         @collection.fetch()
 
     render: ->
-        super
+        @$el.html HomeTemplate()
+        @$("#main").append @template @getRenderData()
         for model in @collection.models
             @renderExperiment model
+        return @
 
     renderExperiment: (model) ->
         view = new ExperimentItemView model: model
