@@ -11,9 +11,8 @@ class Collection extends Backbone.Collection
     initialize: (options={}) ->
         @params = {}
         for apiFilter in @apiFilters
-            filterparam = "filter[where][#{apiFilter}]"
             if options[apiFilter]?
-                @params[filterparam] = options[apiFilter]
+                @params[apiFilter] = options[apiFilter]
 
     filterFetch: (options={}) ->
         options.data = @params

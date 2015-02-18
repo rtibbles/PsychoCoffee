@@ -37,8 +37,11 @@ module.exports = class ExperimentView extends HandlerView
             experiment_identifier: @model?.get("identifier")
             participant_id: @user_id
         if not @editor
-            @datacollection.filterFetch().then =>
-                @dataCollectionInitialized()
+            @datacollection.filterFetch
+                success: =>
+                    @dataCollectionInitialized()
+                error: =>
+                    @dataCollectionInitialized()
         else
             @dataCollectionInitialized()
 

@@ -25,6 +25,20 @@ module.exports = modelGenerator = (collection, authMethods=[], filterFields=[]) 
         else
             request.payload
 
+    Model.filter = (result) ->
+        if _.isArray(result)
+            for i, item of result
+                if Model.filterFields.length > 0
+                    result[i] = _.pick item, Model.filterFields
+                else
+                    result[i] = _.omit item, ["uId"]
+        else
+            if Model.filterFields.length > 0
+                result = _.pick result, Model.filterFields
+            else
+                result = _.omit result, ["uId"]
+        return result
+
     Model.handleResponse = (err, result, reply) ->
         if err
             reply err
@@ -32,12 +46,7 @@ module.exports = modelGenerator = (collection, authMethods=[], filterFields=[]) 
             plural = if _.isArray(result) then "s" else ""
             reply boom.notFound("Item#{plural} not found")
         else
-            if Model.filterFields.length > 0
-                if _.isArray(result)
-                    for i, item of result
-                        result[i] = _.pick item, Model.filterFields
-                else
-                    result = _.pick result, Model.filterFields
+            result = Model.filter(result)
             reply result
 
     Model.create = (request, reply, payload={}) ->
@@ -52,16 +61,20 @@ module.exports = modelGenerator = (collection, authMethods=[], filterFields=[]) 
 
     Model.findObjects = (request, reply, payload={}) ->
         payload = objectAssign Model.payload(request), payload
-        if _.isEmpty request.params
+        if _.isEmpty request.query
             Model.find payload, (err, result) ->
                 Model.handleResponse(err, result, reply)
         else
+            pagedFields = ["fields", "sort", "limit", "page"]
+            for key, value of request.query
+                if key not in pagedFields
+                    payload[key] = value
             Model.pagedFind(
                 payload,
-                request.params.fields,
-                request.params.sort,
-                request.params.limit,
-                request.params.page,
+                request.query.fields,
+                request.query.sort,
+                request.query.limit,
+                request.query.page,
                 (err, result) ->
                     data = result.data
                     data["_pages"] = result.pages
