@@ -75,7 +75,7 @@ User.verifyEmail = (request, reply) ->
     User.findOne activation_id: request.params.activation_id, (err, result) ->
         if err
             reply err
-        else
+        else if result?
             result.active = true
             id = result._id
             delete result._id
@@ -84,5 +84,7 @@ User.verifyEmail = (request, reply) ->
                     reply err
                 else
                     reply "Email successfully verified"
+        else
+            reply boom.notFound("User not found")
 
 module.exports = User
