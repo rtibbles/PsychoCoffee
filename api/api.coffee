@@ -7,6 +7,7 @@ User = require './models/User'
 Experiment = require './models/Experiment'
 ExperimentDataHandler = require './models/ExperimentDataHandler'
 fileupload = require './fileupload'
+_ = require 'underscore'
 
 
 defineREST = (server, model, model_name, routes=[]) ->
@@ -77,3 +78,17 @@ module.exports = (server) ->
         path: "/validate/{activation_id}"
         config:
             handler: User.verifyEmail
+
+    server.route
+        method: 'GET'
+        path: '/previewexperiment/{experiment_id}'
+        handler: (request, reply) ->
+            experiment_id = request.params.experiment_id
+            experiment = Experiment.findById experiment_id, (err, result) =>
+                if err
+                    reply err
+                else if _.isEmpty result
+                    reply boom.notFound("Experiment not found")
+                else
+                    result = Experiment.filter(result)
+                    return reply.view 'experiment_preview', experiment_model: JSON.stringify(result)
