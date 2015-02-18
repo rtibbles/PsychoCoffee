@@ -9,7 +9,7 @@ authWrapper = (method) ->
     (request, reply) ->
         method request, reply, uId: request.auth?.credentials?._id || false
 
-module.exports = modelGenerator = (collection, authMethods=[], filterFields=[]) ->
+modelGenerator = (collection, authMethods=[], filterFields=[]) ->
 
     class Model extends mongoModels.BaseModel
         constructor: (attrs) ->
@@ -118,3 +118,5 @@ module.exports = modelGenerator = (collection, authMethods=[], filterFields=[]) 
     Model.authMethods = authMethods
 
     return Model
+
+module.exports = modelGenerator
