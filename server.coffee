@@ -25,10 +25,15 @@ app.register register: require('crumb'), options: restful: true, (err) ->
 
 app.route
     method: 'GET'
-    path: '/{param*}'
+    path: '/u/{param*}'
     handler: (request, reply) ->
         return reply.view 'editor'
 
+app.route
+    method: 'GET'
+    path: '/'
+    handler: (request, reply) ->
+        reply.redirect '/u'
 
 app.route
     method: 'GET'
@@ -36,8 +41,6 @@ app.route
     handler:
         directory:
             path: 'public'
-
-app.ro
 
 app.route
     method: 'GET'

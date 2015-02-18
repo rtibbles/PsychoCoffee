@@ -26,7 +26,7 @@ PsychoEdit =
 
         @session.checkAuth complete: =>
             @router = new MainRouter
-            Backbone.history.start pushState: true, root: "/"
+            Backbone.history.start pushState: true, root: "/u/"
 
 
 module.exports = PsychoEdit
