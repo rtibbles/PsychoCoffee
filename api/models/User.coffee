@@ -13,7 +13,9 @@ transporter = nodemailer.createTransport
     auth: dataconfig.email.auth
     host: dataconfig.email.host
 
-User = Base('users', ['get', 'findObjects', 'updateObject', 'del'], ['email', '_id'])
+User = Base('users',
+    ['get', 'findObjects', 'updateObject', 'del'],
+    ['email', '_id'])
 
 User.schema = Joi.object().keys
     email: Joi.string().required()
@@ -30,7 +32,8 @@ sendVerificationEmail = (result, callback) ->
         mailOptions =
             to: result.email
             subject: "Please confirm your email address"
-            from: "#{ dataconfig.email.sender.name }, <#{dataconfig.email.sender.address}>"
+            from: "#{ dataconfig.email.sender.name }, \
+            <#{dataconfig.email.sender.address}>"
             text: """
             Please copy the following link into your browser:
             http:/psyc.io/validate?id=#{ result.activation_id }
@@ -40,7 +43,8 @@ sendVerificationEmail = (result, callback) ->
             """
             html: """
             Please click the following link:
-            <a href="http:/psyc.io/validate/#{ result.activation_id }">Activate account</a>
+            <a href="http:/psyc.io/validate/#{ result.activation_id }">\
+            Activate account</a>
             This will activate your account for use.
             Regards,
             #{ dataconfig.email.sender.name }

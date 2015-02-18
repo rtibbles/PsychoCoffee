@@ -11,7 +11,8 @@ fileUploadHandler = (request, reply) ->
         file_id = uuid.v1().split("-").join("/") +
             "." + name.split('.').pop()
         mkdirp dataconfig.filestore.root +
-            "/" + file_id.split("/").slice(0, -1).join("/"),
+            "/" + file_id.split("/").slice(0, -1).join("/")
+        ,
             (err, made) ->
                 if err
                     reply err
@@ -20,7 +21,7 @@ fileUploadHandler = (request, reply) ->
                     file = fs.createWriteStream path
 
                     file.on 'error', (err) ->
-                        console.error(err) 
+                        console.error(err)
 
                     data.file.pipe(file)
 
@@ -37,7 +38,7 @@ module.exports = fileUpload = (server) ->
 
     config = auth.config(fileUploadHandler, 'required')
 
-    config.payload = 
+    config.payload =
         output: 'stream'
         parse: true
         allow: 'multipart/form-data'

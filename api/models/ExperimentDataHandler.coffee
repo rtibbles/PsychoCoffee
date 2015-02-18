@@ -16,6 +16,9 @@ ExperimentDataHandler.patch = (request, reply) ->
             update = DiffTools.Merge(doc, payload)
             @findByIdAndUpdate resource_id, update, {}, (err, doc) ->
                 if not err?
-                    return reply({error:null,message:'Updated successfully', patched: true})
+                    return reply
+                        error:null
+                        message:'Updated successfully'
+                        patched: true
 
 module.exports = ExperimentDataHandler

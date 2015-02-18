@@ -56,8 +56,8 @@ module.exports = (server) ->
 #{ dataconfig.config.port }/\
 #{ dataconfig.config.database }"
     , (err) ->
-             if err
-                 console.log 'Failed to connect to database'
+        if err
+            console.log 'Failed to connect to database'
 
     auth.register(server)
     fileupload(server)
@@ -84,11 +84,12 @@ module.exports = (server) ->
         path: '/previewexperiment/{experiment_id}'
         handler: (request, reply) ->
             experiment_id = request.params.experiment_id
-            experiment = Experiment.findById experiment_id, (err, result) =>
+            experiment = Experiment.findById experiment_id, (err, result) ->
                 if err
                     reply err
                 else if _.isEmpty result
                     reply boom.notFound("Experiment not found")
                 else
                     result = Experiment.filter(result)
-                    return reply.view 'experiment_preview', experiment_model: JSON.stringify(result)
+                    return reply.view 'experiment_preview',
+                        experiment_model: JSON.stringify(result)

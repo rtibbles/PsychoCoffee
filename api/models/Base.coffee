@@ -79,7 +79,8 @@ module.exports = modelGenerator = (collection, authMethods=[], filterFields=[]) 
                     data = result.data
                     data["_pages"] = result.pages
                     data["_items"] = result.items
-                    Model.handleResponse(err, data, reply)
+                    Model.handleResponse(err,
+                        data, reply)
                 )
 
     Model.updateObject = (request, reply, payload={}) ->
@@ -91,7 +92,9 @@ module.exports = modelGenerator = (collection, authMethods=[], filterFields=[]) 
         delete payload._id
         Model.update query, payload, {fullResult: true}, (err, result) ->
             if _.isEmpty(result) and query.uId?
-                return reply(boom.forbidden("You do not have permission to update this resource."))
+                return reply(
+                    boom.forbidden(
+                        "You do not have permission to update this resource."))
             Model.handleResponse(err, result, reply)
 
     Model.del = (request, reply, payload={}) ->
@@ -101,7 +104,9 @@ module.exports = modelGenerator = (collection, authMethods=[], filterFields=[]) 
             query.uId = payload.uId
         Model.remove query, {}, (err, result) ->
             if result == 0 and query.uId?
-                reply(boom.forbidden("You do not have permission to delete this resource."))
+                reply(
+                    boom.forbidden(
+                        "You do not have permission to delete this resource."))
             result = if result == 0 then 0 else {count: result}
             Model.handleResponse(err, result, reply)
 
