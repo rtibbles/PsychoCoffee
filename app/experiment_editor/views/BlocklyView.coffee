@@ -170,6 +170,7 @@ class BlocklyValueView extends Backbone.View
         @block.setFieldValue(@value, @variable_type)
         @block.initSvg()
         @block.render()
+        @block.ignoreForXml = true
         if @parentBlock?
             @parentBlock.getInput(@name)
                 .connection.connect(@block.outputConnection)
@@ -204,6 +205,7 @@ class BlocklyBlockView extends Backbone.View
                 parentBlock: @block
             })
         @block.setCollapsed(true)
+        @block.ignoreForXml = true
         if @y then @block.moveBy(0, @y*40)
         @listenTo @blocklyview, "change", @update
 
@@ -242,6 +244,14 @@ module.exports = class BlocklyView extends DropableView
         @trigger "blockly_ready"
 
     change: =>
+        xmlText = '<xml xmlns="http://www.w3.org/1999/xhtml">'
+        for block in @Blockly.mainWorkspace.getAllBlocks()
+            if not block.ignoreForXml and not block.parentBlock_?
+                blockXml = @Blockly.Xml.blockToDom_ block
+                blockXmlText = @Blockly.Xml.domToText blockXml
+                xmlText = xmlText += blockXmlText
+        xmlText += '</xml>'
+        @model.set "blocklyCode", xmlText
         @trigger "change"
 
     iframe$: (selector) ->
@@ -399,6 +409,11 @@ module.exports = class BlocklyView extends DropableView
             @createModelBlocks()
         else
             @listenToOnce @collection, "add", @createModelBlocks
+
+    insertBlocklyXML: ->
+        if @model.get("blocklyCode")?
+            xml = @Blockly.Xml.textToDom @model.get("blocklyCode")
+            @Blockly.Xml.domToWorkspace @Blockly.mainWorkspace, xml
 
     createModelBlocks: =>
         @registerModels()
