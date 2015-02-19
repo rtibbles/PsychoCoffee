@@ -60,7 +60,7 @@ User.create = (request, reply, payload={}) ->
     User.validate payload, (err, value) ->
         if err
             return reply boom.badRequest error: err
-        User.findOne email: value.result, (err, result) ->
+        User.find email: value.result, (err, result) ->
             if not _.isEmpty(result)
                 return reply boom.unauthorized("User already exists")
             bcrypt.genSalt 10, (err, salt) ->
@@ -76,10 +76,11 @@ User.create = (request, reply, payload={}) ->
                             User.handleResponse(err, result, reply)
 
 User.verifyEmail = (request, reply) ->
-    User.findOne activation_id: request.params.activation_id, (err, result) ->
+    User.find activation_id: request.params.activation_id, (err, result) ->
         if err
             reply err
-        else if result?
+        else if not _.isEmpty(result)
+            result = result[0]
             result.active = true
             id = result._id
             delete result._id

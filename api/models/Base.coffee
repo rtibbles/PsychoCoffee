@@ -56,8 +56,8 @@ modelGenerator = (collection, authMethods=[], filterFields=[]) ->
 
     Model.get = (request, reply, payload={}) ->
         payload._id = Model.ObjectId request.params.id
-        Model.findOne payload, (err, result) ->
-            Model.handleResponse(err, result, reply)
+        Model.find payload, (err, result) ->
+            Model.handleResponse(err, result[0] or {}, reply)
 
     Model.findObjects = (request, reply, payload={}) ->
         payload = objectAssign Model.payload(request), payload
