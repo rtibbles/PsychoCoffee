@@ -267,10 +267,10 @@ module.exports = class BlocklyView extends DropableView
     generateCode: =>
         @Blockly.JavaScript.workspaceToCode()
 
-    updateToolbox: ->
+    updateToolbox: =>
         @Blockly.updateToolbox(@toolboxTemplate(@toolbox))
 
-    nameSpaceBlocklyVariables: ->
+    nameSpaceBlocklyVariables: =>
         variables_get = @Blockly.JavaScript['variables_get']
         variables_set = @Blockly.JavaScript['variables_set']
         @Blockly.JavaScript['variables_get'] = (block) ->
@@ -280,7 +280,7 @@ module.exports = class BlocklyView extends DropableView
             code = variables_set block
             "window.Variables.#{code}"
 
-    addClockBlocks: ->
+    addClockBlocks: =>
         Blockly = @Blockly
         type_root = "PsychoCoffee_clock_"
         type = type_root + "trial_time"
@@ -335,7 +335,7 @@ module.exports = class BlocklyView extends DropableView
         @updateToolbox()
 
 
-    addDataModel: (dataModelName) ->
+    addDataModel: (dataModelName) =>
         Blockly = @Blockly
         type = "PsychoCoffee_dataHandler_#{dataModelName}"
         @Blockly.Blocks[type] =
@@ -358,7 +358,7 @@ module.exports = class BlocklyView extends DropableView
         @updateToolbox()
 
 
-    instantiateDropDown: (option) ->
+    instantiateDropDown: (option) =>
         Blockly = @Blockly
         init: ->
             @setOutput(true, option.type)
@@ -367,7 +367,7 @@ module.exports = class BlocklyView extends DropableView
                     'OPTIONS')
             @setColour 40
 
-    codeGenDropDown: (option) ->
+    codeGenDropDown: (option) =>
         Blockly = @Blockly
         (block) ->
             value = block.getFieldValue("OPTIONS")
@@ -375,7 +375,7 @@ module.exports = class BlocklyView extends DropableView
                 value = "'#{value}'"
             [value, 0]
 
-    instantiateFileDropDown: ->
+    instantiateFileDropDown: =>
         Blockly = @Blockly
         Blockly.Blocks["file_dropdown"] =
             init: ->
@@ -410,7 +410,7 @@ module.exports = class BlocklyView extends DropableView
         else
             @listenToOnce @collection, "add", @createModelBlocks
 
-    insertBlocklyXML: ->
+    insertBlocklyXML: =>
         if @model.get("blocklyCode")?
             xml = @Blockly.Xml.textToDom @model.get("blocklyCode")
             @Blockly.Xml.domToWorkspace @Blockly.mainWorkspace, xml
@@ -446,7 +446,7 @@ module.exports = class BlocklyView extends DropableView
                     for model in @collection.models))
         @updateToolbox()
 
-    instantiateModelEventBlock: ->
+    instantiateModelEventBlock: =>
         type = "PsychoCoffee_events"
         Blockly = @Blockly
         @Blockly.Blocks[type] =
@@ -476,7 +476,7 @@ module.exports = class BlocklyView extends DropableView
                         })"""
         return type
 
-    instantiateModelGetBlock: ->
+    instantiateModelGetBlock: =>
         type = "PsychoCoffee_get"
         Blockly = @Blockly
         @Blockly.Blocks[type] =
@@ -503,7 +503,7 @@ module.exports = class BlocklyView extends DropableView
                     '#{attr}')"""
         return type
 
-    instantiateModelSetBlock: ->
+    instantiateModelSetBlock: =>
         type = "PsychoCoffee_set"
         Blockly = @Blockly
         @Blockly.Blocks[type] =
@@ -533,7 +533,7 @@ module.exports = class BlocklyView extends DropableView
                     '#{attr}', #{value})"""
         return type
 
-    instantiateModelMethodBlock: ->
+    instantiateModelMethodBlock: =>
         type = "PsychoCoffee_method"
         Blockly = @Blockly
         @Blockly.Blocks[type] =
@@ -559,7 +559,7 @@ module.exports = class BlocklyView extends DropableView
                 "window.subViews['#{name}'].#{method}"
         return type
 
-    insertModelBlock: (model, y) ->
+    insertModelBlock: (model, y) =>
         type = "PsychoCoffee_" + model.get("name")
         Blockly = @Blockly
         @Blockly.Blocks[type] =
