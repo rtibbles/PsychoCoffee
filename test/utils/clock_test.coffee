@@ -57,7 +57,8 @@ framerateTests = (framerate) ->
     timedCheck = (frame, startTime) =>
         clocktime = @clock.timerElapsed() - startTime
         frametime = frame*@clock.tick
-        ok Math.abs(clocktime - frametime) < @clock.tick
+        ok Math.abs(clocktime - frametime) < @clock.tick,
+            "Failed tolerances on frame #{frame}"
 
     @clock.startTimer()
     ok typeof(@clock.timerStart) == "number"
