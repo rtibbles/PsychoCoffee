@@ -508,10 +508,10 @@ module.exports = class BlocklyView extends DropableView
                 name = block.getFieldValue("NAME")
                 event = block.getFieldValue("TRIGGERS")
                 code = Blockly.JavaScript.statementToCode(block, 'DO')
-                """window.trialView.listenTo(window.subViews['#{name}'],
-                    '#{event}', function() {
-                        #{code}
-                        })"""
+                "window.trialView.listenTo(window.subViews['#{name}'],\
+                    '#{event}', function() {\
+                        #{code}\
+                        })"
         return type
 
     instantiateModelGetBlock: =>
@@ -537,8 +537,8 @@ module.exports = class BlocklyView extends DropableView
             (block) ->
                 name = block.getFieldValue("NAME")
                 attr = block.getFieldValue("ATTRS")
-                """window.subViews['#{name}'].model.get(
-                    '#{attr}')"""
+                ["window.trialObjects['#{name}'].get('#{attr}')",
+                    Blockly.JavaScript.ORDER_ATOMIC]
         return type
 
     instantiateModelSetBlock: =>
@@ -567,8 +567,8 @@ module.exports = class BlocklyView extends DropableView
                 attr = block.getFieldValue("ATTRS")
                 value = Blockly.JavaScript.valueToCode(block, "VALUE",
                     Blockly.JavaScript.ORDER_ATOMIC) || '0'
-                """window.subViews['#{name}'].model.set(
-                    '#{attr}', #{value})"""
+                "window.trialObjects['#{name}'].set(\
+                    '#{attr}', #{value})"
         return type
 
     instantiateModelMethodBlock: =>
