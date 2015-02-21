@@ -225,9 +225,10 @@ class BlocklyBlockView extends Backbone.View
         @type = options.type
         @model = options.model
         @blocklyview = options.blocklyview
+        @Blockly = @blocklyview.Blockly
         @y = options.y
-        @block = @blocklyview.Blockly.Block.obtain(
-            @blocklyview.Blockly.getMainWorkspace(), @type)
+        @block = @Blockly.Block.obtain(
+            @Blockly.getMainWorkspace(), @type)
         @block.initSvg()
         @block.render()
         @block.subViews = {}
@@ -235,21 +236,35 @@ class BlocklyBlockView extends Backbone.View
             @model.objectOptions())
             if option.name == "name" or not @model.get(option.name)?
                 continue
-            @block.subViews[option.name] = new BlocklyValueView({
-                option: option
-                model: @model
-                blocklyview: @blocklyview
-                parentBlock: @block
-            })
+            @createSubView(option)
         @block.setCollapsed(true)
         @block.ignoreForXml = true
+        @block.view = @
         if @y then @block.moveBy(0, @y*40)
         @listenTo @blocklyview, "change", @update
+        @Blockly.addChangeListener @updateModel
+
+    createSubView: (option, name, block) =>
+        @block.subViews[option?.name or name] = new BlocklyValueView
+            option: option
+            name: name
+            block: block
+            model: @model
+            blocklyview: @blocklyview
+            parentBlock: @block
 
     update: =>
         if not @block.workspace
             @model.destroy()
             @remove()
+
+    updateModel: (event) =>
+        if _.last(event.srcElement.childNodes) == @block.getSvgRoot()
+            for input in @block.inputList
+                block = input.connection?.targetConnection?.sourceBlock_
+                if block
+                    if not block.view?
+                        @createSubView undefined, input.name, block
 
 module.exports = class BlocklyView extends DropableView
     template: Template
