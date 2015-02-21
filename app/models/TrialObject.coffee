@@ -19,6 +19,23 @@ class Model extends NestedBase.Model
                 value = @defaults[attr]
         return value
 
+    toJSON: (options) =>
+        attrs = _.clone(@attributes)
+        for key, value of attrs
+            if _.isFunction value
+                attrs[key] = value.toString()
+        return attrs
+
+    parse: (resp, options) ->
+        for key, value of resp
+            try
+                out = Function(value)()
+            catch e
+                true
+            if _.isFunction out
+                resp[key] = out
+        return resp
+
     setFunction: (key, val, options) =>
         if not key then return @
  
