@@ -74,7 +74,7 @@ class Model extends Backbone.AssociatedModel
                 map[parameter.alias] = parameter.name
         return map
 
-    setFromObject: (object) ->
+    setFromObject: (object, omit=[]) ->
         attrs = _.pick(object, @allAliasNames())
         for alias, name of @aliasMap()
             if alias of attrs
@@ -83,6 +83,7 @@ class Model extends Backbone.AssociatedModel
         for key, value of attrs
             if value == @get key
                 delete attrs[key]
+        attrs = _.omit(attrs)
         @set attrs
 
     methods: ->

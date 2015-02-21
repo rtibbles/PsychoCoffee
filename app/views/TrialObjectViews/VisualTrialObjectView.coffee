@@ -10,7 +10,8 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
         @canvas = endpoints.canvas
         @object.setVisible false
         if @editor
-            @objectToModel()
+            @lockControls()
+            @listenTo @model, "change", @lockControls
             @object.on "modified", @objectToModel
         @canvas.add @object
 
@@ -19,9 +20,6 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
             @object.hasControls = false
             @object.hasBorders = false
             @object.lockMovementX = @object.lockMovementY = true
-        if @editor
-            @lockControls()
-            @listenTo @model, "change", @lockControls
         @object.setVisible true
         @addToClockChangeEvents("activated")
         @object.on "mousedown", (event) =>
@@ -36,15 +34,9 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
         super()
 
     objectToModel: (event) =>
-        console.log "objectToModel"
         @cancel_render = true
-        values = _.clone @object
-        aliasMap = @model.aliasMap()
-        for key, value of @lockPoints
-            if @object[key]
-                delete values[value]
-                delete values[aliasMap[value]]
-        @model.setFromObject(values)
+        omit = (value for key, value of @lockPoints when @object[key])
+        @model.setFromObject(@object)
 
     render: ->
         if not @cancel_render
@@ -63,6 +55,5 @@ module.exports = class VisualTrialObjectView extends TrialObjectView
         lockScalingY: "scaleY"
 
     lockControls: =>
-        if @editor
-            for key, value of @lockPoints
-                @object[key] = _.isFunction @model.attributes[value]
+        for key, value of @lockPoints
+            @object[key] = _.isFunction @model.attributes[value]
