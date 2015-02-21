@@ -119,6 +119,14 @@ toolbox =
     Functions:
         custom: "PROCEDURE"
 
+valueToModelConverter =
+    TEXT: String
+    NUM: Number
+    BOOL: Boolean
+    COLOUR: String
+    File: String
+
+
 class BlocklyValueView extends Backbone.View
 
     initialize: (options) ->
@@ -177,10 +185,39 @@ class BlocklyValueView extends Backbone.View
         @listenTo @model, "change:" + @name, @update
 
     update: =>
-        value = String(@model.get(@name))
-        if @variable_type == "BOOL"
-            value = value.toUpperCase()
-        @block.setFieldValue(value, @variable_type)
+        if not @setting
+            if @block.getFieldValue(@variable_type)?
+                value = String(@model.get(@name))
+                if @variable_type == "BOOL"
+                    value = value.toUpperCase()
+                if value != @block.getFieldValue(@variable_type)
+                    @block.setFieldValue(value, @variable_type)
+        else
+            @setting = false
+
+    updateBlock: (event) =>
+        if not @block?
+            @remove()
+        else if @model?
+            if not @block.parentBlock_?
+                @unbindModel()
+            else
+                parentSvg = @block.parentBlock_.getSvgRoot()
+                if _.last(event.srcElement.childNodes) == parentSvg
+                    @updateModelField()
+        else if @block.parentBlock_?
+            @bindModel()
+
+    updateModelField: (setting=true) =>
+        if @block.getFieldValue(@variable_type)?
+            value = @block.getFieldValue(@variable_type)
+            if @variable_type == "BOOL"
+                value = value.toLowerCase()
+            value = valueToModelConverter[@variable_type](value)
+            if @model.get(@name) != value
+                @setting = setting
+                @model.set(@name, value)
+                console.debug "Setting #{@name} to #{value}"
 
 class BlocklyBlockView extends Backbone.View
 
