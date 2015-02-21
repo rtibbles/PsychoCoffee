@@ -133,14 +133,29 @@ class BlocklyValueView extends Backbone.View
         @parentBlock = options.parentBlock
         @model = options.model
         @blocklyview = options.blocklyview
+        @Blockly = @blocklyview.Blockly
         @option = options.option
         @name = @option?.name or options.name
+        if @model.has("__Blockly_" + @name)
+            @listenToOnce @blocklyview, "insertXml", => @createBlock(options)
+            options.connect = true
+        else
+            options.connect = !options.block?
+            @createBlock(options)
+
+    createBlock: (options) =>
+        if @model.has("__Blockly_" + @name)
+            xml = @Blockly.Xml.textToDom "<xml>" +
+                @model.get("__Blockly_" + @name) + "</xml>"
+            xml = xml.childNodes[0]
+            options.block =
+                @Blockly.Xml.domToBlock @Blockly.getMainWorkspace(), xml
         if @option?.options
             @value_type = @option.name + "_drop_down"
             if @value_type not of @Blockly.Blocks
-                @blocklyview.Blockly.Blocks[@value_type] =
+                @Blockly.Blocks[@value_type] =
                     @instantiateDropDown(@option)
-                @blocklyview.Blockly.JavaScript[@value_type] =
+                @Blockly.JavaScript[@value_type] =
                     @codeGenDropDown(@option)
             @variable_type = "OPTIONS"
             @value = String(@model.get(@option.name))
@@ -171,18 +186,40 @@ class BlocklyValueView extends Backbone.View
                 else
                     @value_type = "text"
                     @variable_type = "TEXT"
-        @block = @blocklyview.Blockly.Block.obtain(
-            @blocklyview.Blockly.getMainWorkspace(), @value_type
-            )
-        @block.attr_name = @name
-        @block.setFieldValue(@value, @variable_type)
-        @block.initSvg()
-        @block.render()
-        @block.ignoreForXml = true
-        if @parentBlock?
+        if options.block?
+            @block = options.block
+            @updateModelField(false)
+        else
+            @block = @Blockly.Block.obtain(
+                @Blockly.getMainWorkspace(), @value_type
+                )
+            @block.attr_name = @name
+            @block.setFieldValue(@value, @variable_type)
+            @block.initSvg()
+            @block.render()
+        if @parentBlock? and options.connect
+            if options.block?
+                @parentBlock.setCollapsed(false)
             @parentBlock.getInput(@name)
                 .connection.connect(@block.outputConnection)
+            @parentBlock.setCollapsed(true)
+        @block.ignoreForXml = true
+        @block.view = @
         @listenTo @model, "change:" + @name, @update
+        @Blockly.addChangeListener @updateBlock
+
+    bindModel: =>
+        input = _.find @block.parentBlock_.inputList, (x) =>
+            x.connection == @block.outputConnection.targetConnection
+        @model = @block.parentBlock_.view.model
+        @name = input.name
+        @listenTo @model, "change:" + @name, @update
+
+    unbindModel: =>
+        @stopListening @model
+        delete @block.ignoreForXml
+        delete @model
+        delete @name
 
     update: =>
         if not @setting
@@ -218,6 +255,42 @@ class BlocklyValueView extends Backbone.View
                 @setting = setting
                 @model.set(@name, value)
                 console.debug "Setting #{@name} to #{value}"
+        else
+            timer = _.some @block.getDescendants(), (x) ->
+                x.type.search("PsychoCoffee_clock_get") == 0 or
+                x.type.search("PsychoCoffee_clock_trial_time") == 0
+            variables = _.filter @block.getDescendants(), (x) ->
+                x.type.search("variables_get") == 0
+            trialObjects = _.filter @block.getDescendants(), (x) ->
+                x.type.search("PsychoCoffee_get") == 0
+            if _.some(trialObjects, (x) =>
+                (@name == x.getFieldValue("ATTRS") and
+                @model.get("name") == x.getFieldValue("NAME"))
+                )
+                alert """
+                    You have included a self reference in this property.
+                    Please change it and don't do it again.
+                    """
+                return
+            variables = variables.map (x) ->
+                modelPath: ["Variables"]
+                trigger : "change:" + x.getFieldValue("VAR")
+            trialObjects = trialObjects.map (x) ->
+                modelPath: ["trialObjects", x.getFieldValue("NAME")]
+                trigger : "change:" + x.getFieldValue("ATTRS")
+            listeners = variables.concat trialObjects
+            if timer
+                listeners.push
+                    modelPath: "clock"
+                    trigger: "tick"
+            code = @Blockly.JavaScript.blockToCode @block
+            code = "return " + code[0]
+            blockXml = @Blockly.Xml.blockToDom_ @block
+            blockXmlText = @Blockly.Xml.domToText blockXml
+            @model.set "__Blockly_" + @name, blockXmlText
+            @model.setFunction @name, Function(code), listeners: listeners
+
+
 
 class BlocklyBlockView extends Backbone.View
 
