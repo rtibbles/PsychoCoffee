@@ -80,6 +80,9 @@ class Model extends Backbone.AssociatedModel
             if alias of attrs
                 attrs[name] = attrs[alias]
                 delete attrs[alias]
+        for key, value of attrs
+            if value == @get key
+                delete attrs[key]
         @set attrs
 
     methods: ->
