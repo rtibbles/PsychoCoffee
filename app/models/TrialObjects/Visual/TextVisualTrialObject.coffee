@@ -9,7 +9,7 @@ class Model extends VisualTrialObject.Model
         super().concat(
             [
                 name: "text"
-                default: ""
+                default: " "
                 type: "String"
             ])
 
