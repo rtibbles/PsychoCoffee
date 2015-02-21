@@ -8,6 +8,9 @@ module.exports = class TrialView extends HandlerView
 
     initialize: (options) =>
         super
+        window.trialObjects = {}
+        for model in @model.get("trialObjects").models
+            window.trialObjects[model.get("name")] = model
         @registerAllSubViews()
 
     registerAllSubViews: =>
