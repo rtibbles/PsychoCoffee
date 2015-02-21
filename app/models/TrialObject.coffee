@@ -6,6 +6,58 @@ NestedBase = require './NestedBase'
 
 class Model extends NestedBase.Model
 
+    initialize: ->
+        @parseAllListeners()
+        @listenTo @, "change:__listeners", @parseAllListeners
+
+    get: (attr) ->
+        value = super(attr)
+        if _.isFunction(value)
+            try
+                value = value.call(@)
+            catch e
+                value = @defaults[attr]
+        return value
+
+    setFunction: (key, val, options) =>
+        if not key then return @
+ 
+        if typeof key == 'object'
+            throw new Error(
+                "setFunction can only set single key/value pairs at this time")
+
+        @set key, val, options
+
+        listeners = options.listeners or []
+
+        @setListeners key, listeners
+        @parseListeners key, listeners
+
+    setListeners: (key, listeners) =>
+        store = @get("__listeners") or {}
+        store[key] = listeners
+        @set "__listeners", store, silent: true
+
+    parseAllListeners: =>
+        @stopListening()
+        @listenList = {}
+        for key, value of @get("__listeners") or {}
+            @parseListeners(key, value)
+
+    parseListeners: (key, listeners) =>
+        for listener in listeners
+            object = window
+            trigger = listener.trigger
+            if listener.path? and trigger?
+                for slug in listener.path
+                    object = object[slug]
+                @listenTo object, trigger, =>
+                    @trigger "change:" + key
+                if not listenList[key]?
+                    listenList[key] = []
+                @listenList[key].push [object, trigger]
+
+
     objectOptions: ->
         # Lists additional parameters for object
         super().concat(
