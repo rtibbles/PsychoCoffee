@@ -267,7 +267,6 @@ module.exports = class BlocklyView extends DropableView
 
     blocklyReady: (Blockly) =>
         @Blockly = Blockly
-        @Blockly.addChangeListener @change
         @Blockly.registeredModels = []
         @Blockly.registeredEvents = {}
         @Blockly.registeredAttrs = {}
@@ -282,8 +281,8 @@ module.exports = class BlocklyView extends DropableView
 
     change: =>
         xmlText = '<xml xmlns="http://www.w3.org/1999/xhtml">'
-        for block in @Blockly.mainWorkspace.getAllBlocks()
-            if not block.ignoreForXml and not block.parentBlock_?
+        for block in @Blockly.mainWorkspace.getTopBlocks()
+            if not block.ignoreForXml
                 blockXml = @Blockly.Xml.blockToDom_ block
                 blockXmlText = @Blockly.Xml.domToText blockXml
                 xmlText = xmlText += blockXmlText
@@ -448,9 +447,11 @@ module.exports = class BlocklyView extends DropableView
             @listenToOnce @collection, "add", @createModelBlocks
 
     insertBlocklyXML: =>
+        @trigger "insertXml"
         if @model.get("blocklyCode")?
             xml = @Blockly.Xml.textToDom @model.get("blocklyCode")
             @Blockly.Xml.domToWorkspace @Blockly.mainWorkspace, xml
+        @Blockly.addChangeListener @change
 
     createModelBlocks: =>
         @registerModels()
