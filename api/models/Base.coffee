@@ -50,8 +50,13 @@ modelGenerator = (collection, authMethods=[], filterFields=[]) ->
             reply result
 
     Model.create = (request, reply, payload={}) ->
-        payload = objectAssign Model.payload(request), payload
-        Model.insert payload, (err, result) ->
+        request_payload = Model.payload(request)
+        if _.isArray request_payload
+            for i, payload_item of request_payload
+                request_payload[i] = objectAssign payload_item, payload
+        else
+            request_payload = objectAssign request_payload, payload
+        Model.insert request_payload, (err, result) ->
             Model.handleResponse(err, result, reply)
 
     Model.get = (request, reply, payload={}) ->
