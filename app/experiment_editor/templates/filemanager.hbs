@@ -1,16 +1,16 @@
-<div class="col-md-8 dropdown" id="fileupload">
-  <button id="fileLabel" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">{{ file_title }}<span class="caret"></span></button>
-  <div class="dropdown-menu" id="fileModal" role="menu" aria-labelledby="fileLabel">
-    <div id="filepane" class="row">
+<div class="col-md-8" id="fileupload">
+  <button id="fileLabel" class="btn btn-success" type="button" >{{ file_title }}<span class="caret"></span></button>
+  <div id="fileModal" style="display: none;">
+    <div id="filepane">
       <div class="btn btn-primary"><span class="glyphicon glyphicon-circle-arrow-left"></span>Back</div>
-      <ul id="filelist">
+      <ul class="filelist">
       </ul>
     </div>
     <div id="actions" class="row">
 
       <div class="col-md-4">
         <!-- The fileinput-button span is used to style the file input field as button -->
-        <span class="btn btn-success fileinput dz-clickable">
+        <span id="{{id}}" class="btn btn-success fileinput dz-clickable">
             <i class="glyphicon glyphicon-plus"></i>
             <span>Add files...</span>
         </span>
@@ -29,7 +29,7 @@
         </span>
       </div>
     </div>
-    <div class="table table-striped files modal-body" id="previews">
+    <div class="table table-striped files" id="previews">
       <span class="glyphicon glyphicon-upload"></span>
     </div>
   </div>

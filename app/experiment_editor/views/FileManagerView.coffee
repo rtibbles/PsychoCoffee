@@ -4,22 +4,21 @@ ManagerTemplate = require '../templates/filemanager'
 ItemTemplate = require '../templates/fileitem'
 PreviewTemplate = require '../templates/filepreview'
 
-class FileItemView extends DraggableView
+class FileItemView extends View
 
     template: ItemTemplate
-
-    event:
-        "click .fileitem": "selectFile"
-
-    selectFile: ->
-        return true
-
 
 module.exports = class FileManagerView extends View
     template: ManagerTemplate
 
     events:
         "click .cancel": "removeAllFiles"
+        "click #fileLabel": "toggleFilePane"
+        "click .fileitem": "selectFile"
+
+    selectFile: ->
+        @$(".fileitem").toggleClass('selected btn-info btn-warning')
+        @$(".fileinput").attr("value", @$(".fileitem.selected").attr("value"))
 
     initialize: (options) ->
         @file_title = if options.single then "Select File" else "Manage Files"
@@ -66,8 +65,6 @@ module.exports = class FileManagerView extends View
                 file_id: JSON.parse(file.xhr.response).file_id
                 extension: file.name.split('.').pop()
             model.preLoadFile()
-            if @single
-                @$(".fileinput").html(file.name).attr("value", file.name)
 
     removeAllFiles: =>
         @dropzone.removeAllFiles(true)
@@ -78,8 +75,11 @@ module.exports = class FileManagerView extends View
     addFileView: (model) ->
         view = new FileItemView model: model
         view.render()
-        view.appendTo("#filelist")
+        @$(".filelist").append view.el
 
     addAllFileViews: =>
         for model in @collection.models
             @addFileView model
+
+    toggleFilePane: ->
+        @$("#fileModal").toggle()

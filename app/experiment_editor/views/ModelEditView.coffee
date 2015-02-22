@@ -26,7 +26,7 @@ module.exports = class ModelEditView extends ModalView
                 field_id: item.id
             })
             subViews[item.id].render()
-            $(item).replaceWith(subViews[item.id].el)
+            @$(item).replaceWith(subViews[item.id].el)
     deleteModel: ->
         @model.destroy()
         @remove()
