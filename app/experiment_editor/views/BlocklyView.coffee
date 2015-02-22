@@ -332,6 +332,8 @@ class BlocklyBlockView extends Backbone.View
 
     updateModel: (event) =>
         if _.last(event.srcElement.childNodes) == @block.getSvgRoot()
+            if @model.get("name") != @block.getFieldValue("name")
+                @model.set "name", @block.getFieldValue("name")
             for input in @block.inputList
                 block = input.connection?.targetConnection?.sourceBlock_
                 if block
@@ -690,7 +692,15 @@ module.exports = class BlocklyView extends DropableView
         @Blockly.Blocks[type] =
             init: ->
                 @setColour 40
-                @appendDummyInput().appendField(model.get("name"))
+                @appendDummyInput().appendField(
+                    new Blockly.FieldTextInput(model.get("name"), (name) ->
+                        modelnames =
+                            (item[0] for item in Blockly.registeredModels)
+                        if name != model.get("name") and name in modelnames
+                            model.get("name")
+                        else
+                            name
+                        ), "name")
                 @appendDummyInput().appendField(model.get("type"))
                     .setAlign(Blockly.ALIGN_RIGHT)
                 for option in model.requiredParameters().concat(
