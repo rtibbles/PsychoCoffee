@@ -9,6 +9,8 @@ class Model extends PsychoCoffee.Experiment.Model
 
 class Collection extends Backbone.Collection
 
+    remote: true
+
     url: ->
         PsychoEdit.API + "/experiments"
 
