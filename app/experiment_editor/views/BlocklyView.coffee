@@ -198,8 +198,7 @@ class BlocklyValueView extends Backbone.View
             @block.initSvg()
             @block.render()
         if @parentBlock? and options.connect
-            if options.block?
-                @parentBlock.setCollapsed(false)
+            @parentBlock.setCollapsed(false)
             @parentBlock.getInput(@name)
                 .connection.connect(@block.outputConnection)
             @parentBlock.setCollapsed(true)
