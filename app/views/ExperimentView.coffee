@@ -43,12 +43,19 @@ module.exports = class ExperimentView extends HandlerView
                 error: =>
                     @dataCollectionInitialized()
         else
+            @datacollection.add
+                participant_id: @user_id
+                saveInterval: @model.get("saveInterval")
+                experiment_identifier: @model.get("identifier")
             @dataCollectionInitialized()
 
 
     dataCollectionInitialized: =>
         @datamodel = @datacollection.getOrCreateParticipantModel(@user_id,
             @model)
+        if @editor
+            # Prevent any data saving to server during editing
+            @datamodel.save = -> @
         @datamodel.set("parameters", @datamodel.get("parameters") or
             @model.returnParameters(@user_id))
         window.Variables = @datamodel.get("parameters")
