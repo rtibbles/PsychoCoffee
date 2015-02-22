@@ -253,7 +253,6 @@ class BlocklyValueView extends Backbone.View
             if @model.get(@name) != value
                 @setting = setting
                 @model.set(@name, value)
-                console.debug "Setting #{@name} to #{value}"
         else
             timer = _.some @block.getDescendants(), (x) ->
                 x.type.search("PsychoCoffee_clock_get") == 0 or
@@ -384,7 +383,7 @@ module.exports = class BlocklyView extends DropableView
 
     drop: (event, ui) =>
         model = super(event, ui)
-        if model.file_object?
+        if model.has("file_id")
             @insertFileObject(model)
         else
             @insertModelBlock(model)
