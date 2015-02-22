@@ -15,6 +15,7 @@ module.exports = class ModelEditView extends ModalView
     initialize: (options) ->
         super
         @deleteable = options.deleteable
+        @validators = options.validators or {}
 
     render: ->
         super
@@ -40,10 +41,14 @@ module.exports = class ModelEditView extends ModalView
         ready = true
         for item in @$("input, span.fileinput")
             attrs[item.id] = item.value or @$(item).attr("value")
-            if item.required and attrs[item.id] == ""
+            if @validators[item.id]?
+                valid = @validators[item.id](attrs[item.id])
+            if (item.required and attrs[item.id] == "") or not valid
+                message =
+                    if valid then "required" else "duplicate"
                 @$(item).css("border", "2px solid red").popover
                     content: "<span class='label label-warning'>
-                        required</span>"
+                        #{message}</span>"
                     trigger: 'focus'
                     html: true
                 @$(item).popover('show')

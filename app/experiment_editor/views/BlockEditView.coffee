@@ -91,6 +91,9 @@ module.exports = class BlockEditView extends CodeGeneratorView
         @newTrialObject.new = true
         modelEditView = new ModelEditView
             model: @newTrialObject
+            validators:
+                name: (name) =>
+                    not (name and @model.get("trialObjects").get(name)?)
         modelEditView.render()
         @listenTo @newTrialObject, "change:name", @addModelToBlockly
 
