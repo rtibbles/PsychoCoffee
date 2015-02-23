@@ -7,6 +7,7 @@ Experiment = require '../models/Experiment'
 BlockEditView = require './BlockEditView'
 BlockListView = require './BlockListView'
 ModelEditView = require './ModelEditView'
+VariableEditView = require './VariableEditView'
 View = require './View'
 
 class ExperimentTitleView extends View
@@ -30,6 +31,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         "click .play": "playPreview"
         "click .pause": "pausePreview"
         "click #save_experiment": "saveExperiment"
+        "click #variables": "editVariables"
 
     initialize: (options) ->
         @model = new Experiment.Model _id: options.model_id
@@ -61,6 +63,12 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
                 _.throttle(@startPreview, 5000)
             @listenTo @blockmodel, "nested-change",
                 @frameAdvance
+
+    editVariables: ->
+        @variableEditView = new VariableEditView
+            model: @model
+            blockmodel: @blockmodel
+        @variableEditView.render()
     
     initializePreview: =>
         @frame = 0

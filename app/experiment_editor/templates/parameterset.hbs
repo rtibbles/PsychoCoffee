@@ -1,0 +1,49 @@
+<div class="panel panel-default">
+  <div class="panel-heading" role="tab" id="heading{{type}}">
+    <div class="row">
+      <div class="col-md-6">
+        <h4 class="panel-title text-capitalize">
+          <a data-toggle="collapse" data-parent="#accordion" href="#{{type}}" aria-expanded="false" aria-controls="{{type}}">
+            {{title}}
+          </a>
+        </h4>
+        <br>
+        <label>
+          Randomized: <input type="checkbox" id="experiment_randomized"{{#if model.randomized}}checked{{/if}}>
+        </label>
+      </div>
+      <div class="col-md-6">
+        {{description}}
+      </div>
+    </div>
+  </div>
+  <div id="{{type}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{type}}">
+      <div class="panel-body">
+        <table class="table table-bordered parameters">
+          <thead>
+            <tr>
+              {{#each parameters}}
+                  <th>
+                    <input class="form-control" type="text" id="{{this.parameterName}}" value="{{this.parameterName}}"></input>
+                    <label>
+                      Randomized: <input type="checkbox" id="experiment_randomized"{{#if model.randomized}}checked{{/if}}>
+                    </label>
+                  </th>
+              {{/each}}
+              <th><input class="form-control" type="text" id="__newParameter" placeholder="New Variable"></input></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each rows}}
+              <tr>
+                {{#each this}}
+                  <td>
+                    <input class="form-control {{this.parameterName}} {{#if this.null}}null{{/if}}" type="text" value="{{this.value}}"></input>
+                  </td>
+                {{/each}}
+              </tr>
+            {{/each}}
+        </table>
+      </div>
+  </div>
+</div>
