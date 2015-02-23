@@ -383,6 +383,7 @@ module.exports = class BlocklyView extends DropableView
 
     drop: (event, ui) =>
         model = super(event, ui)
+        console.log model
         if model.has("file_id")
             @insertFileObject(model)
         else
@@ -395,14 +396,19 @@ module.exports = class BlocklyView extends DropableView
         @Blockly.updateToolbox(@toolboxTemplate(@toolbox))
 
     nameSpaceBlocklyVariables: =>
-        variables_get = @Blockly.JavaScript['variables_get']
-        variables_set = @Blockly.JavaScript['variables_set']
+        Blockly = @Blockly
         @Blockly.JavaScript['variables_get'] = (block) ->
-            [code, order] = variables_get block
-            ["window.Variables.#{code}", order]
+            code = Blockly.JavaScript.variableDB_.getName(
+                block.getFieldValue('VAR'),
+                Blockly.Variables.NAME_TYPE)
+            ["window.Variables.get('#{code}')",
+            Blockly.JavaScript.ORDER_ATOMIC]
         @Blockly.JavaScript['variables_set'] = (block) ->
-            code = variables_set block
-            "window.Variables.#{code}"
+            argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
+                Blockly.JavaScript.ORDER_ASSIGNMENT) or '0'
+            varName = Blockly.JavaScript.variableDB_.getName(
+                block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE)
+            "window.Variables.set('#{varName}', #{argument0})"
 
     addClockBlocks: =>
         Blockly = @Blockly
@@ -735,6 +741,7 @@ module.exports = class BlocklyView extends DropableView
         })
 
     insertFileObject: (model) =>
+        console.log model
         new BlocklyValueView({
             value: model.get("name")
             type: "File"
