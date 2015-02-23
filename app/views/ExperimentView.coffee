@@ -9,6 +9,7 @@ ProgressBarView = require './ProgressBarView'
 stringHash = require 'utils/stringHash'
 fingerprint = require 'utils/fingerprint'
 urlParse = require 'utils/urlParse'
+Variables = require '../models/Variables'
 
 module.exports = class ExperimentView extends HandlerView
     template: Template
@@ -30,6 +31,7 @@ module.exports = class ExperimentView extends HandlerView
         @blockSelector = options.selector or @defaultNextBlock
         @files = @model?.get("files") or new Backbone.Collection
         @clock = new clock.Clock()
+        window.Variables = new Variables.Model
         @refreshTime()
         @render()
         @appendTo("#app")
@@ -58,7 +60,7 @@ module.exports = class ExperimentView extends HandlerView
             @datamodel.save = -> @
         @datamodel.set("parameters", @datamodel.get("parameters") or
             @model.returnParameters(@user_id))
-        window.Variables = @datamodel.get("parameters")
+        window.Variables.set @datamodel.get("parameters")
         if @model.get("subjectPool") == "AMT"
             @datamodel.set
                 assignment_id: @assignment_id

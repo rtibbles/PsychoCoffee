@@ -38,7 +38,7 @@ module.exports = class BlockView extends HandlerView
             @logEvent "block_start", date_time: date_time
         @datamodel.set "block_id", @model.id
         @datamodel.set "parameters", @parameters
-        window.Variables = _.extend(window.Variables, @parameters)
+        window.Variables.set @parameters
         @datamodel.set("trial", @datamodel.get("trial") or 0)
         @model.setTrialParameters @datamodel.get("trial")
         if @model.get "trialParameters" then @showTrial() else @endBlock()

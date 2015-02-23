@@ -42,8 +42,8 @@ module.exports = class TrialView extends HandlerView
             @datamodel.set "start_time", date_time
             @logEvent "trial_start", date_time: date_time
         @datamodel.set "trial_id", @model.id
-        @datamodel.set "parameters", @model.get("parameters")
-        window.Variables = _.extend(window.Variables, @parameters)
+        @datamodel.set "parameters", @model.get("trialParameters")
+        window.Variables.set @model.get("trialParameters")
         window.clock = @clock
         @setWindowTrialObjects()
         @createCanvas()
