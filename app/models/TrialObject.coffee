@@ -6,6 +6,8 @@ NestedBase = require './NestedBase'
 
 class Model extends NestedBase.Model
 
+    fileAttr: "file"
+
     initialize: ->
         @parseAllListeners()
         @listenTo @, "change:__listeners", @parseAllListeners

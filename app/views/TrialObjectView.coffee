@@ -18,14 +18,14 @@ module.exports = class TrialObjectView extends View
         if not @files.get(@model.get("file"))
             console.debug "File #{@model.get("file")} not found"
             return
-        if @files.get(@model.get("file"))?.loaded
+        if @files.get(@model.get(@model.fileAttr))?.loaded
             @setFileObject()
         else
-            @listenToOnce @files.get @model.get "file",
+            @listenToOnce @files.get @model.get(@model.fileAttr),
                 "loaded", @setFileObject
 
     setFileObject: =>
-        @file_object = @files.get(@model.get("file")).file_object
+        @file_object = @files.get(@model.get(@model.fileAttr)).file_object
         @render()
 
     startRender: =>

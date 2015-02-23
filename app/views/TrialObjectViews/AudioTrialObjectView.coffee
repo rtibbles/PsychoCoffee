@@ -19,4 +19,4 @@ module.exports = class AudioTrialObjectView extends TrialObjectView
 
     render: =>
         if not @object
-            @object = createjs.Sound.createInstance @model.get("name")
+            @object = createjs.Sound.createInstance @model.getFile()

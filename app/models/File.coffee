@@ -12,7 +12,7 @@ class Model extends NestedBase.Model
         queue.on "fileload", @postFileLoad
 
     postFileLoad: (data) =>
-        if data.item.src.split("/").pop() == @get("name")
+        if data.item.src.search(@get("file_id")) > -1
             @file_object = data.result
             @loaded = true
             @trigger "loaded"
