@@ -9,15 +9,10 @@ class Model extends NestedBase.Model
     defaults:
         randomized: false
         trialParameters: []
-        blockParameters: []
 
     relations: [
         type: Backbone.Many
         key: 'trialParameters'
-        collectionType: Parameter.Collection
-    ,
-        type: Backbone.Many
-        key: 'blockParameters'
         collectionType: Parameter.Collection
     ]
 
@@ -26,26 +21,14 @@ class Model extends NestedBase.Model
                             experimentParameterSet = {}) ->
         parameterObjectList = []
         parameterNameList = []
-        blockParameterSet = {}
         
-        # Collect block parameters to inject into trialParameters at generation
-        for model in @get("blockParameters").models
-            # Block Parameters are intended to be constant across a block
-            # Block Parameters are always randomized.
-            blockParameterSet[model.get("parameterName")] =
-                Random.seeded_shuffle(
-                    model.returnParameterList(user_id
-                        null
-                        experimentParameterSet)
-                    user_id + "blockParameterSet" + @id)[0]
-
         # Collect trial parameters
         parameterSet = {}
         for model in @get("trialParameters").models
             parameterList = model.returnParameterList(
                 user_id
                 trials_wanted
-                blockParameterSet)
+                experimentParameterSet)
             parameterSet[model.get("parameterName")] = parameterList
             min_length = Math.min(min_length, parameterList.length) or
                 parameterList.length
@@ -77,15 +60,6 @@ class Model extends NestedBase.Model
             parameterSet[key] = parameterList
             parameterNameList.push key
 
-        # Now that we have a set length for trials, generate lists of block
-        # parameters to allow them to be passed in with the trial parameters.
-        for key, value of blockParameterSet
-            parameterList = []
-            for i in [0...min_length]
-                parameterList.push value
-            parameterSet[key] = parameterList
-            parameterNameList.push key
-
         for i in [0...min_length]
             parameters =
                 _.object parameterNameList,
@@ -96,7 +70,6 @@ class Model extends NestedBase.Model
             parameterObjectList = Random.seeded_shuffle parameterObjectList,
                 user_id + "parameterObjectList" + @id
         @set
-            blockParameterSet: blockParameterSet
             min_length: min_length
             parameterObjectList: parameterObjectList
 
