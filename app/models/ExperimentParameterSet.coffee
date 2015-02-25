@@ -1,6 +1,6 @@
 'use strict'
 
-Base = require('./Base')
+Base = require './Base'
 Random = require 'utils/random'
 Parameter = require './Parameter'
 
@@ -28,8 +28,7 @@ class Model extends Base.Model
             experimentParameterSet[model.get("parameterName")] =
                 Random.seeded_shuffle(
                     model.returnParameterList(user_id
-                        null
-                        experimentParameterSet)
+                        null)
                     user_id + "experimentParameterSet" + @id)[0]
 
         return experimentParameterSet

@@ -33,16 +33,37 @@ class Model extends NestedBase.Model
         dataType: ""
         returnType: "fixedList"
         randomized: false
-        parameterName: "Untitled Parameter"
         parameters: []
         parameterizedAttributes: {}
 
+    requiredParameters: ->
+        super().concat([
+            name: "returnType"
+            default: "fixedList"
+            type: "String"
+        ,
+            name: "dataType"
+            default: "String"
+            type: "String"
+            options: [
+                "String"
+                "Array"
+                "Number"
+                "Colour"
+                "Boolean"
+            ]
+        ,
+            name: "randomized"
+            default: false
+            type: "Boolean"
+        ,
+            name: "parameters"
+            default: []
+            type: "Array"
+        ])
+
     returnParameterList: (user_id = "",\
-                            trials_wanted = null,\
-                            injectedParameters = {}) ->
-        for attribute, name of @get "parameterizedAttributes"
-            if name of injectedParameters
-                @set attribute, injectedParameters[name]
+                            trials_wanted = null) ->
         switch @get "returnType"
             when "fixedList"
                 data = @fixedList(user_id, trials_wanted)
@@ -51,7 +72,7 @@ class Model extends NestedBase.Model
             when "generatorFn"
                 data = @generatorFn(user_id, trials_wanted)
             else console.log "ParameterSet returnType undefined!"
-        if @get("dataType") == "array"
+        if @get("dataType") == "Array"
             if @get "shuffled"
                 data = @shuffleListArrays(user_id, data)
         return data

@@ -17,8 +17,7 @@ class Model extends NestedBase.Model
     ]
 
     setTrialParameters: (user_id = "",\
-                            trials_wanted = null,\
-                            experimentParameterSet = {}) ->
+                            trials_wanted = null) ->
         parameterObjectList = []
         parameterNameList = []
         
@@ -27,8 +26,7 @@ class Model extends NestedBase.Model
         for model in @get("trialParameters").models
             parameterList = model.returnParameterList(
                 user_id
-                trials_wanted
-                experimentParameterSet)
+                trials_wanted)
             parameterSet[model.get("parameterName")] = parameterList
             min_length = Math.min(min_length, parameterList.length) or
                 parameterList.length
