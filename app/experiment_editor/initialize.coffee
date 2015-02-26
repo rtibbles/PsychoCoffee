@@ -7,6 +7,7 @@ Handlebars.registerHelper 'modelinput', (context, options) ->
 
     type = context.type
     value = context.value
+    options = context.options
 
     switch context.type
         when "Number"
@@ -20,14 +21,22 @@ Handlebars.registerHelper 'modelinput', (context, options) ->
             type = "file"
         else type = "text"
 
-
-    ret = ret + "<span class='input-group-addon'>" +
-        context.name + "</span><input type='" +
-        type + "' class='form-control' id='" +
-        context.name + "' value='" +
-        value + "'" +
-        if context.required then "required='required'" else ""
-    ret = ret + "/>"
+    ret = ret + "<span class='input-group-addon'>#{context.name}</span>"
+    if options?
+        ret += "<select type='"
+    else
+        ret += "<input type='"
+    ret += "#{type}' class='form-control' id='#{context.name}'"
+    ret += if context.required then " required='required'" else ""
+    if options?
+        ret += ">"
+        for option in options
+            ret += "<option value='#{option}'" +
+                if option == context.default then " selected" else ""
+            ret += ">#{option}</option>"
+        ret += "</select>"
+    else
+        ret +=  " value='#{value}'/>"
 
     return ret + "</div><br>"
 
