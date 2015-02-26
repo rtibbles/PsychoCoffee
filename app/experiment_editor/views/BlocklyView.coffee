@@ -383,7 +383,6 @@ module.exports = class BlocklyView extends DropableView
 
     drop: (event, ui) =>
         model = super(event, ui)
-        console.log model
         if model.has("file_id")
             @insertFileObject(model)
         else

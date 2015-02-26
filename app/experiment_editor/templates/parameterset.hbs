@@ -23,7 +23,7 @@
       <thead>
       <tr>
         {{#each this}}
-          {{#if @first}}<th class="first"{{else}}<td{{/if}}>{{this.name}}</t{{#if @first}}h{{else}}d{{/if}}>
+          {{#if @first}}<th class="first"{{else}}<td dataname="{{this.name}}"{{/if}}>{{this.name}}</t{{#if @first}}h{{else}}d{{/if}}>
         {{/each}}
       </tr>
       <tr>

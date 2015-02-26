@@ -1,10 +1,10 @@
 'use strict'
 
 ModelEditView = require './ModelEditView'
-View = require './View'
+DropableView = require './DropableView'
 Template = require '../templates/parameterset'
 
-module.exports = class ParameterSetEditView extends View
+module.exports = class ParameterSetEditView extends DropableView
     template: Template
 
     events:
@@ -34,8 +34,31 @@ module.exports = class ParameterSetEditView extends View
                 next_cell.focus()
                 next_cell.click()
         @$('.parameter-table td').on 'change', @updateData
+        @$('thead td').draggable(
+            start: @dragStart
+            end: @dragEnd
+            helper: "clone"
+            iframeFix: true
+            zIndex: 1000
+            )
 
+    dragStart: (event, ui) =>
+        name = $(event.target).attr("dataname")
+        model = @collection.indexBy("name")[name]
+        if model?
+            $(event.target).draggable("widget").data("id", model.id)
+            @global_dispatcher.eventDataTransfer[model.id] = model
+        event?.stopPropagation()
 
+    dragEnd: (event, ui) =>
+        ui.helper.remove()
+        event?.stopPropagation()
+
+    drop: (event, ui) =>
+        model = super(event, ui)
+        if model.collection != @collection
+            model.collection.remove model
+        @collection.add model
 
     updateData: (event, newValue) =>
         dataType = $(event.target).attr("datatype")
