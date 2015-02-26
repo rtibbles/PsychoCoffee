@@ -11,6 +11,7 @@ module.exports = class ParameterSetEditView extends View
         "click .add-variable": "addVariable"
         "change td": "updateData"
         "change .randomize": "updateRandomize"
+        "change .datatype": "updateDataType"
 
     initialize: (options) ->
         @type = options.type
@@ -76,6 +77,11 @@ module.exports = class ParameterSetEditView extends View
         name = $(event.target).attr("dataname")
         checked = $(event.target).prop("checked")
         @collection.indexBy("name")[name].set("randomized", checked)
+
+    updateDataType: (event) =>
+        name = $(event.target).attr("dataname")
+        datatype = $(event.target).val()
+        @collection.indexBy("name")[name].set("dataType", datatype)
 
     addVariable: ->
         model = @collection.create()
