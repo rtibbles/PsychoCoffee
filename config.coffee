@@ -28,7 +28,8 @@ exports.config =
           'vendor/scripts/common/seedrandom.min.js',
           'vendor/scripts/common/md5.js',
           'vendor/scripts/editor_blockly/blockly_compressed.js',
-          'vendor/scripts/editor_blockly/blocks_compressed.js'
+          'vendor/scripts/editor_blockly/blocks_compressed.js',
+          'vendor/scripts/experiment_editor/jquery-ui.js'
         ]
     stylesheets: 
       joinTo: 
