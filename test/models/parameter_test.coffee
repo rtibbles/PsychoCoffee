@@ -4,15 +4,12 @@ module "Parameter Model Tests",
         @parameter = new PsychoCoffee.Parameter.Model
 
 test "Default values", ->
-    expect 6
+    expect 4
 
     equal @parameter.get("randomized"), false
     equal @parameter.get("returnType"), "fixedList"
-    equal @parameter.get("dataType"), ""
-    equal @parameter.get("parameterName"), "Untitled Parameter"
+    equal @parameter.get("dataType"), "String"
     deepEqual @parameter.get("parameters"), []
-    deepEqual @parameter.get("parameterizedAttributes"), {}
-
 
 test "Methods", ->
     expect 1

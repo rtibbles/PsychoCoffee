@@ -4,9 +4,8 @@ module "ExperimentParameterSet Model Tests",
         @experimentParameterSet = new PsychoCoffee.ExperimentParameterSet.Model
 
 test "Default values", ->
-    expect 2
+    expect 1
 
-    equal @experimentParameterSet.get("randomized"), false
     ok @experimentParameterSet.get("experimentParameters") instanceof
         PsychoCoffee.Parameter.Collection
 
