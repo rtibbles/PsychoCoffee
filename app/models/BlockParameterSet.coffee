@@ -49,15 +49,6 @@ class Model extends NestedBase.Model
 
         if not min_length? or min_length==0 then min_length = 1
 
-        # Now that we have a set length for trials, generate lists of experiment
-        # parameters to allow them to be passed in with the trial parameters.
-        for key, value of experimentParameterSet
-            parameterList = []
-            for i in [0...min_length]
-                parameterList.push value
-            parameterSet[key] = parameterList
-            parameterNameList.push key
-
         for i in [0...min_length]
             parameters =
                 _.object parameterNameList,

@@ -29,19 +29,8 @@ class Model extends NestedBase.Model
     dataType, for example, an Array dataType is allowed to be shuffled.
     ###
 
-    defaults:
-        dataType: ""
-        returnType: "fixedList"
-        randomized: false
-        parameters: []
-        parameterizedAttributes: {}
-
     requiredParameters: ->
         super().concat([
-            name: "returnType"
-            default: "fixedList"
-            type: "String"
-        ,
             name: "dataType"
             default: "String"
             type: "String"
@@ -51,15 +40,23 @@ class Model extends NestedBase.Model
                 "Number"
                 "Colour"
                 "Boolean"
+                "File"
             ]
         ,
             name: "randomized"
             default: false
             type: "Boolean"
-        ,
+        ])
+
+    fixedItems: ->
+        super().concat([
             name: "parameters"
             default: []
             type: "Array"
+        ,
+            name: "returnType"
+            default: "fixedList"
+            type: "String"
         ])
 
     returnParameterList: (user_id = "",\

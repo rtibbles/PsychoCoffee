@@ -7,7 +7,6 @@ Parameter = require './Parameter'
 class Model extends Base.Model
 
     defaults:
-        randomized: false
         experimentParameters: []
 
     relations: [
