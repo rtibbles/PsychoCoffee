@@ -39,20 +39,23 @@ module.exports = class ModelEditView extends ModalView
     setAttributes: ->
         attrs = {}
         ready = true
-        for item in @$("input, span.fileinput")
-            attrs[item.id] = item.value or @$(item).attr("value")
+        for item in @$("input, span.fileinput, select")
+            attrs[item.id] = item.value or @$(item).val()
             if @validators[item.id]?
                 valid = @validators[item.id](attrs[item.id])
-            if (item.required and attrs[item.id] == "") or not valid
-                message =
-                    if valid then "required" else "duplicate"
-                @$(item).css("border", "2px solid red").popover
-                    content: "<span class='label label-warning'>
-                        #{message}</span>"
-                    trigger: 'focus'
-                    html: true
-                @$(item).popover('show')
-                ready = false
+            else
+                valid = true
+            if @$(item).attr("type") != "checkbox"
+                if (item.required and attrs[item.id] == "") or not valid
+                    message =
+                        if valid then "required" else "duplicate"
+                    @$(item).css("border", "2px solid red").popover
+                        content: "<span class='label label-warning'>
+                            #{message}</span>"
+                        trigger: 'focus'
+                        html: true
+                    @$(item).popover('show')
+                    ready = false
         if ready
             @model.set attrs
             @model.new = false
