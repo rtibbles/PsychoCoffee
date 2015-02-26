@@ -376,7 +376,16 @@ module.exports = class BlocklyView extends DropableView
                 xmlText = xmlText += blockXmlText
         xmlText += '</xml>'
         @model.set "blocklyCode", xmlText
+        @checkVariables()
         @trigger "change"
+
+    checkVariables: =>
+        registeredVariables = @getAllVariableNames()
+        for variable in @Blockly.Variables.allVariables()
+            if variable not in registeredVariables
+                console.log variable
+                @model.get("parameterSet").get("trialParameters").create
+                    name: variable
 
     iframe$: (selector) ->
         @$('iframe').contents().find(selector)
@@ -394,7 +403,13 @@ module.exports = class BlocklyView extends DropableView
     updateToolbox: =>
         @Blockly.updateToolbox(@toolboxTemplate(@toolbox))
 
+    getAllVariableNames: =>
+        _.map(@model.get("parameterSet").get("trialParameters").models
+            .concat(@model.collection.parents[0].get("parameterSet")
+                .get("experimentParameters").models), (x) -> x.get("name"))
+
     nameSpaceBlocklyVariables: =>
+        variable_names = @getAllVariableNames()
         Blockly = @Blockly
         @Blockly.JavaScript['variables_get'] = (block) ->
             code = Blockly.JavaScript.variableDB_.getName(
@@ -408,6 +423,17 @@ module.exports = class BlocklyView extends DropableView
             varName = Blockly.JavaScript.variableDB_.getName(
                 block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE)
             "window.Variables.set('#{varName}', #{argument0})"
+        for name in variable_names
+            block = @Blockly.Block.obtain(
+                @Blockly.getMainWorkspace(), "variables_get")
+            block.setFieldValue(name, "VAR")
+            block.initSvg()
+            block.render()
+            block.setEditable(false)
+            block.setMovable(false)
+            block.setDisabled(true)
+            block.moveBy(-500, -500)
+            block.ignoreForXml = true
 
     addClockBlocks: =>
         Blockly = @Blockly
