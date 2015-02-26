@@ -9,13 +9,15 @@ class BlockItemView extends View
     template: ItemTemplate
 
     events:
-        "click .block": "editBlock"
+        "click .block": "click"
+
+    click: (event) ->
+        PsychoEdit.router.editSubItem @model.get("name")
+        return false
 
     initialize: ->
         @listenTo @model, "change", @render
 
-    editBlock: ->
-        this.global_dispatcher.trigger("editBlock", @model)
 
 module.exports = class BlockListView extends View
     template: Template

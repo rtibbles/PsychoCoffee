@@ -31,12 +31,12 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         "click .play": "playPreview"
         "click .pause": "pausePreview"
         "click #save_experiment": "saveExperiment"
-        "click #variables": "editVariables"
+        "click .variables": "variables"
 
     initialize: (options) ->
-        @model = new Experiment.Model _id: options.model_id
+        @model_id = options.model_id
+        @model = new Experiment.Model _id: @model_id
         @model.fetch().success =>
-            @listenTo @global_dispatcher, "editBlock", @editBlock
             @render()
     
     render: ->
@@ -48,8 +48,19 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         @blockListView = new BlockListView({collection: @model.get("blocks")})
         @$("#blocks-container").append @blockListView.el
         @blockListView.render()
+        @rendered = true
+        @trigger "rendered"
 
-    editBlock: (model) ->
+    editBlock: (model_id) ->
+        if @rendered
+            @showEditBlock(model_id)
+        else
+            @listenToOnce @, "rendered", => @showEditBlock(model_id)
+
+
+    showEditBlock: (model_id) =>
+        @variableEditView?.remove()
+        model = @model.get("blocks").get(model_id)
         if model != @blockmodel
             @blockmodel = model
             @blockEditView?.remove()
@@ -60,15 +71,31 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             @blockEditView.appendTo("#blockedit")
             @initializePreview()
             @listenTo @blockmodel, "change",
-                _.throttle(@startPreview, 5000)
+                _.throttle(@startPreview, 100)
             @listenTo @blockmodel, "nested-change",
                 @frameAdvance
 
-    editVariables: ->
-        @variableEditView = new VariableEditView
-            model: @model
-            blockmodel: @blockmodel
-        @variableEditView.render()
+    variables: ->
+        PsychoEdit.router.editSubItem @blockmodel.get("name"), "variables"
+        return false
+
+    editVariables: (block_id) ->
+        if @rendered
+            @showEditVariables(block_id)
+        else
+            @listenToOnce @, "rendered", => @showEditVariables(block_id)
+
+    showEditVariables: (block_id) =>
+        @blockEditView?.remove()
+        model = @model.get("blocks").get(block_id)
+        if model != @blockmodel
+            @blockmodel = model
+            @variableEditView?.remove()
+            @variableEditView = new VariableEditView
+                model: @model
+                blockmodel: @blockmodel
+            @variableEditView.render()
+            @variableEditView.appendTo("#blockedit")
     
     initializePreview: =>
         @frame = 0

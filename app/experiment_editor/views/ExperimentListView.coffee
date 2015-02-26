@@ -18,7 +18,8 @@ class ExperimentItemView extends View
         @listenTo @model, "change", @render
 
     editExperiment: ->
-        PsychoEdit.router.navigate "experiments/" + @model.id, trigger: true
+        PsychoEdit.router.navigate "experiments/" + @model.id + "/",
+            trigger: true
         return false
 
 module.exports = class ExperimentListView extends View

@@ -40,5 +40,8 @@ Handlebars.registerHelper 'modelinput', (context, options) ->
 
     return ret + "</div><br>"
 
+Backbone.history.relativeUrl = (fragment) ->
+    Backbone.history.root + Backbone.history.fragment + fragment
+
 $ ->
     PsychoEdit.initialize()
