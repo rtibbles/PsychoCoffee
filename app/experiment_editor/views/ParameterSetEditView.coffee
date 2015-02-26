@@ -32,32 +32,42 @@ module.exports = class ParameterSetEditView extends View
             if next_cell.length > 0
                 next_cell.focus()
                 next_cell.click()
-        @$('.parameter-table td').on 'validate', (evt, newValue) ->
-            dataType = $(evt.target).attr("datatype")
-            console.log dataType
-            switch dataType
-                when "Number"
-                    return not isNaN(Number(newValue))
-                when "Boolean"
-                    return newValue == "true" or newValue == "false"
-                when "String"
-                    return typeof newValue == "string"
-                when "Colour"
-                    return /#[A-Fa-f0-9]{6}$/.test(newValue)
-                when "Array"
-                    return _.isArray(newValue)
-                when "File"
-                    return PsychoEdit.files.get(newValue)?
+        @$('.parameter-table td').on 'change', @updateData
 
 
-    updateData: (event) =>
+
+    updateData: (event, newValue) =>
+        dataType = $(event.target).attr("datatype")
+        switch dataType
+            when "Number"
+                newValue = Number(newValue)
+                valid = not isNaN(newValue)
+            when "Boolean"
+                valid = true
+                if newValue == "true"
+                    newValue = true
+                else if newValue == "false"
+                    newValue = false
+                else
+                    valid = false
+            when "String"
+                valid = typeof newValue == "string"
+            when "Colour"
+                valid = /#[A-Fa-f0-9]{6}$/.test(newValue)
+            when "Array"
+                newValue = $.parseJSON(newValue)
+                valid = _.isArray(newValue)
+            when "File"
+                valid = PsychoEdit.files.get(newValue)?
+        if not valid
+            return false
         name = $(event.target).attr("dataname")
         index = Number($(event.target).attr("dataindex"))
         model = @collection.indexBy("name")[name]
         parameters = model.get("parameters")
         while index >= parameters.length
             parameters.push ""
-        parameters[index] = $(event.target).text()
+        parameters[index] = newValue
         model.set "parameters", parameters
         @render()
         @$("[dataname=#{name}][dataindex=#{index + 1}]").focus().click()
@@ -92,6 +102,10 @@ module.exports = class ParameterSetEditView extends View
                 name: model.get("name")
                 randomizable: true
                 randomized: model.get("randomized")
+                dataTypes: _.map _.find(model.requiredParameters(), (x) ->
+                    x.name == "dataType").options, (x) ->
+                    name: x
+                    selected: x == model.get("dataType")
             length = model.get("parameters").length
             max_length = if length > max_length then length else max_length
         rows.push row

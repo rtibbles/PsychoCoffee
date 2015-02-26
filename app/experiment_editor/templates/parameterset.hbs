@@ -29,7 +29,9 @@
       <tr>
         {{#each this}}
           <th>
-            {{#if this.randomizable}}<label class="label label-success randomized-label">Randomized <input type="checkbox" class="form-input randomize" dataname="{{this.name}}"{{#if this.randomized}}checked{{/if}}></label>{{/if}}
+            <div class="form-inline">
+            {{#if this.randomizable}}<label class="parameterset-label">Randomized <input type="checkbox" class="form-input randomize" dataname="{{this.name}}"{{#if this.randomized}}checked{{/if}}></label>{{/if}}{{#if this.dataTypes}}<label class="parameterset-label">Data Type</label><select class="form-control datatype" dataname="{{this.name}}">{{#each this.dataTypes}}<option value="{{this.name}}"{{#if this.selected}} selected{{/if}}>{{this.name}}</option>{{/each}}</select>{{/if}}
+            </div>
           </th>
         {{/each}}
       </tr>
