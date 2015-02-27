@@ -8,8 +8,9 @@ module.exports = class MainRouter extends Backbone.Router
         "experiments/": "experimentList"
         "login/": "login"
         "experiments/:experiment/": "experiment"
-        "experiments/:experiment/blocks/:block/": "block"
+        "experiments/:experiment/blocks/:block/": "blocks"
         "experiments/:experiment/variables/(:block/)": "variables"
+        "experiments/:experiment/files/(:block/)": "files"
         "": "redirect"
 
     redirect: ->
@@ -55,12 +56,16 @@ module.exports = class MainRouter extends Backbone.Router
         @navigate "experiments/#{@editView.model_id}/#{type}/#{block_id}",
             trigger: true
 
-    block: (experiment, block) ->
+    triggerSubItem: (experiment, block, editFn) ->
         if @experiment(experiment) then return true
         block = decodeURIComponent(block)
-        @editView.editBlock(block)
+        @editView[editFn](block)
+
+    blocks: (experiment, block) ->
+        @triggerSubItem(experiment, block, "editBlock")
 
     variables: (experiment, block) ->
-        if @experiment(experiment) then return true
-        block = decodeURIComponent(block)
-        @editView.editVariables(block)
+        @triggerSubItem(experiment, block, "editVariables")
+
+    files: (experiment, block) ->
+        @triggerSubItem(experiment, block, "editFiles")
