@@ -1,36 +1,33 @@
 <div class="col-md-8" id="fileupload">
-  <button id="fileLabel" class="btn btn-success" type="button" >{{ file_title }}<span class="caret"></span></button>
-  <div id="fileModal" style="display: none;">
-    <div id="filepane">
-      <div class="btn btn-primary"><span class="glyphicon glyphicon-circle-arrow-left"></span>Back</div>
-      <ul class="filelist">
-      </ul>
-    </div>
-    <div id="actions" class="row">
+  <div id="filepane">
+    <div class="btn btn-primary"><span class="glyphicon glyphicon-circle-arrow-left"></span>Back</div>
+    <ul class="filelist">
+    </ul>
+  </div>
+  <div id="actions" class="row">
 
-      <div class="col-md-4">
-        <!-- The fileinput-button span is used to style the file input field as button -->
-        <span id="{{id}}" class="btn btn-success fileinput dz-clickable">
-            <i class="glyphicon glyphicon-plus"></i>
-            <span>Add files...</span>
-        </span>
-        <button type="reset" class="btn btn-warning cancel">
-            <i class="glyphicon glyphicon-ban-circle"></i>
-            <span>Cancel upload</span>
-        </button>
-      </div>
+    <div class="col-md-4">
+      <!-- The fileinput-button span is used to style the file input field as button -->
+      <span id="{{id}}" class="btn btn-success fileinput dz-clickable">
+          <i class="glyphicon glyphicon-plus"></i>
+          <span>Add files...</span>
+      </span>
+      <button type="reset" class="btn btn-warning cancel">
+          <i class="glyphicon glyphicon-ban-circle"></i>
+          <span>Cancel upload</span>
+      </button>
+    </div>
 
-      <div class="col-md-8">
-        <!-- The global file processing state -->
-        <span class="fileupload-process">
-          <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress=""></div>
-          </div>
-        </span>
-      </div>
+    <div class="col-md-8">
+      <!-- The global file processing state -->
+      <span class="fileupload-process">
+        <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress=""></div>
+        </div>
+      </span>
     </div>
-    <div class="table table-striped files" id="previews">
-      <span class="glyphicon glyphicon-upload"></span>
-    </div>
+  </div>
+  <div class="table table-striped files" id="previews">
+    <span class="glyphicon glyphicon-upload"></span>
   </div>
 </div>

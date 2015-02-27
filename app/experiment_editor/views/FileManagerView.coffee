@@ -1,6 +1,7 @@
 View = require './View'
 DraggableView = require './DraggableView'
 ManagerTemplate = require '../templates/filemanager'
+SelectTemplate = require '../templates/fileselect'
 ItemTemplate = require '../templates/fileitem'
 PreviewTemplate = require '../templates/filepreview'
 
@@ -19,8 +20,10 @@ module.exports = class FileManagerView extends View
     selectFile: ->
         @$(".fileitem").toggleClass('selected btn-info btn-warning')
         @$(".fileinput").attr("value", @$(".fileitem.selected").attr("value"))
+        @toggleFilePane()
 
     initialize: (options) ->
+        @single = options.single
         @file_title = if options.single then "Select File" else "Manage Files"
         @field_id = options.field_id
         @collection = PsychoEdit.files
@@ -30,7 +33,11 @@ module.exports = class FileManagerView extends View
         return id: @field_id, file_title: @file_title
 
     render: ->
-        super
+        if @single
+            @$el.html SelectTemplate @getRenderData()
+            @$("#fileModal").append ManagerTemplate(@getRenderData())
+        else
+            super
         @dropzone = new Dropzone(@$("#fileupload")[0],
             url: "/files"
             thumbnailWidth: 80

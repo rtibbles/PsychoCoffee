@@ -40,7 +40,7 @@ module.exports = class ModelEditView extends ModalView
         attrs = {}
         ready = true
         for item in @$("input, span.fileinput, select")
-            attrs[item.id] = item.value or @$(item).val()
+            attrs[item.id] = @$(item).val() or @$(item).attr("value")
             if @validators[item.id]?
                 valid = @validators[item.id](attrs[item.id])
             else

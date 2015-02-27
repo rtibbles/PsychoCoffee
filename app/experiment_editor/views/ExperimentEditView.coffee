@@ -8,6 +8,7 @@ BlockEditView = require './BlockEditView'
 BlockListView = require './BlockListView'
 ModelEditView = require './ModelEditView'
 VariableEditView = require './VariableEditView'
+FileManagerView = require './FileManagerView'
 View = require './View'
 
 class ExperimentTitleView extends View
@@ -125,6 +126,32 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         if not @$(".variables-tab").hasClass("active")
             @$(".block-nav li").removeClass("active")
             @$(".variables-tab").addClass("active")
+
+    editFiles: (block_id) ->
+        if @rendered
+            @showEditFiles(block_id)
+        else
+            @listenToOnce @, "rendered", => @showEditFiles(block_id)
+
+    showEditFiles: (block_id) =>
+        for key, value of @tabViews
+            value?.$el.hide()
+        model = @model.get("blocks").get(block_id)
+        new_model_check = model != @blockmodel
+        no_view_check = not @tabViews["fileView"]?
+        if new_model_check or no_view_check
+            @blockmodel = model
+            @tabViews["fileView"]?.remove()
+            @tabViews["fileView"] = new FileManagerView
+                model: @model
+                blockmodel: @blockmodel
+            @tabViews["fileView"].render()
+            @tabViews["fileView"].appendTo("#blockedit")
+        else
+            @tabViews["fileView"]?.$el.show()
+        if not @$(".files-tab").hasClass("active")
+            @$(".block-nav li").removeClass("active")
+            @$(".files-tab").addClass("active")
     
     removePreview: =>
         if @tabViews["experimentPreview"]
