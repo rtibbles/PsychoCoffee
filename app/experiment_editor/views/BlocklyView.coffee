@@ -383,7 +383,6 @@ module.exports = class BlocklyView extends DropableView
         registeredVariables = @getAllVariableNames()
         for variable in @Blockly.Variables.allVariables()
             if variable not in registeredVariables
-                console.log variable
                 @model.get("parameterSet").get("trialParameters").create
                     name: variable
 

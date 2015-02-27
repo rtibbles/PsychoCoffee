@@ -31,7 +31,9 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         "click .play": "playPreview"
         "click .pause": "pausePreview"
         "click #save_experiment": "saveExperiment"
-        "click .variables": "variables"
+        "click .variables-tab": "variables"
+        "click .blocks-tab": "blocks"
+        "click .files-tab": "files"
 
     initialize: (options) ->
         @model_id = options.model_id
@@ -59,9 +61,11 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
 
 
     showEditBlock: (model_id) =>
-        @variableEditView?.remove()
+        @variableEditView?.$el.hide()
         model = @model.get("blocks").get(model_id)
-        if model != @blockmodel
+        new_model_check = model != @blockmodel
+        no_view_check = not @blockEditView?
+        if new_model_check or no_view_check
             @blockmodel = model
             @blockEditView?.remove()
             @blockEditView = new BlockEditView
@@ -74,9 +78,25 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
                 _.throttle(@startPreview, 100)
             @listenTo @blockmodel, "nested-change",
                 @frameAdvance
+        else
+            @blockEditView?.$el.show()
+            @experimentPreview?.$el.show()
+        if not @$(".blocks-tab").hasClass("active")
+            @$(".block-nav li").removeClass("active")
+            @$(".blocks-tab").addClass("active")
+
 
     variables: ->
-        PsychoEdit.router.editSubItem @blockmodel.get("name"), "variables"
+        @subItemRoute("variables")
+
+    blocks: ->
+        @subItemRoute("blocks")
+
+    files: ->
+        @subItemRoute("files")
+
+    subItemRoute: (item) ->
+        PsychoEdit.router.editSubItem @blockmodel.get("name"), item
         return false
 
     editVariables: (block_id) ->
@@ -86,9 +106,12 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             @listenToOnce @, "rendered", => @showEditVariables(block_id)
 
     showEditVariables: (block_id) =>
-        @blockEditView?.remove()
+        @blockEditView?.$el.hide()
+        @experimentPreview?.$el.hide()
         model = @model.get("blocks").get(block_id)
-        if model != @blockmodel
+        new_model_check = model != @blockmodel
+        no_view_check = not @variableEditView?
+        if new_model_check or no_view_check
             @blockmodel = model
             @variableEditView?.remove()
             @variableEditView = new VariableEditView
@@ -96,15 +119,24 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
                 blockmodel: @blockmodel
             @variableEditView.render()
             @variableEditView.appendTo("#blockedit")
+        else
+            @variableEditView?.$el.show()
+        if not @$(".variables-tab").hasClass("active")
+            @$(".block-nav li").removeClass("active")
+            @$(".variables-tab").addClass("active")
     
-    initializePreview: =>
-        @frame = 0
+    removePreview: =>
         if @experimentPreview
+            @stopListening @experimentPreview
             if @experimentPreview.close
                 @experimentPreview.close()
             else
                 @experimentPreview.remove()
         delete @experimentPreview
+
+    initializePreview: =>
+        @frame = 0
+        @removePreview()
         @experimentPreview = new PsychoCoffee.ExperimentView({
             model: @model
             editor: true
