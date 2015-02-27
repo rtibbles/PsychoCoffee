@@ -40,6 +40,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         @model = new Experiment.Model _id: @model_id
         @model.fetch().success =>
             @render()
+        @tabViews = {}
     
     render: ->
         super
@@ -59,28 +60,28 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         else
             @listenToOnce @, "rendered", => @showEditBlock(model_id)
 
-
     showEditBlock: (model_id) =>
-        @variableEditView?.$el.hide()
+        for key, value of @tabViews
+            value?.$el.hide()
         model = @model.get("blocks").get(model_id)
         new_model_check = model != @blockmodel
         no_view_check = not @blockEditView?
         if new_model_check or no_view_check
             @blockmodel = model
-            @blockEditView?.remove()
-            @blockEditView = new BlockEditView
+            @tabViews["blockEditView"]?.remove()
+            @tabViews["blockEditView"] = new BlockEditView
                 model: @blockmodel
                 files: @model.get("files")
-            @blockEditView.render()
-            @blockEditView.appendTo("#blockedit")
+            @tabViews["blockEditView"].render()
+            @tabViews["blockEditView"].appendTo("#blockedit")
             @initializePreview()
             @listenTo @blockmodel, "change",
                 _.throttle(@startPreview, 100)
             @listenTo @blockmodel, "nested-change",
                 @frameAdvance
         else
-            @blockEditView?.$el.show()
-            @experimentPreview?.$el.show()
+            @tabViews["blockEditView"]?.$el.show()
+            @tabViews["experimentPreview"]?.$el.show()
         if not @$(".blocks-tab").hasClass("active")
             @$(".block-nav li").removeClass("active")
             @$(".blocks-tab").addClass("active")
@@ -106,42 +107,42 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             @listenToOnce @, "rendered", => @showEditVariables(block_id)
 
     showEditVariables: (block_id) =>
-        @blockEditView?.$el.hide()
-        @experimentPreview?.$el.hide()
+        for key, value of @tabViews
+            value?.$el.hide()
         model = @model.get("blocks").get(block_id)
         new_model_check = model != @blockmodel
-        no_view_check = not @variableEditView?
+        no_view_check = not @tabViews["variableEditView"]?
         if new_model_check or no_view_check
             @blockmodel = model
-            @variableEditView?.remove()
-            @variableEditView = new VariableEditView
+            @tabViews["variableEditView"]?.remove()
+            @tabViews["variableEditView"] = new VariableEditView
                 model: @model
                 blockmodel: @blockmodel
-            @variableEditView.render()
-            @variableEditView.appendTo("#blockedit")
+            @tabViews["variableEditView"].render()
+            @tabViews["variableEditView"].appendTo("#blockedit")
         else
-            @variableEditView?.$el.show()
+            @tabViews["variableEditView"]?.$el.show()
         if not @$(".variables-tab").hasClass("active")
             @$(".block-nav li").removeClass("active")
             @$(".variables-tab").addClass("active")
     
     removePreview: =>
-        if @experimentPreview
-            @stopListening @experimentPreview
-            if @experimentPreview.close
-                @experimentPreview.close()
+        if @tabViews["experimentPreview"]
+            @stopListening @tabViews["experimentPreview"]
+            if @tabViews["experimentPreview"].close
+                @tabViews["experimentPreview"].close()
             else
-                @experimentPreview.remove()
-        delete @experimentPreview
+                @tabViews["experimentPreview"].remove()
+        delete @tabViews["experimentPreview"]
 
     initializePreview: =>
         @frame = 0
         @removePreview()
-        @experimentPreview = new PsychoCoffee.ExperimentView({
+        @tabViews["experimentPreview"] = new PsychoCoffee.ExperimentView({
             model: @model
             editor: true
         })
-        @listenToOnce @experimentPreview, "loaded", @startPreview
+        @listenToOnce @tabViews["experimentPreview"], "loaded", @startPreview
 
     startPreview: =>
         if @trialPreview
@@ -150,7 +151,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             else
                 @trialPreview.remove()
         delete @trialPreview
-        @trialPreview = @experimentPreview.previewBlock @blockmodel
+        @trialPreview = @tabViews["experimentPreview"].previewBlock @blockmodel
         offset = $("#scrubber").offset()
         offset["top"] += $("#scrubber").height() + 5
         offset["left"] = $("#block-preview").offset()["left"]
