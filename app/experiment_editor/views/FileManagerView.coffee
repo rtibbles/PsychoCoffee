@@ -3,11 +3,23 @@ DraggableView = require './DraggableView'
 ManagerTemplate = require '../templates/filemanager'
 SelectTemplate = require '../templates/fileselect'
 ItemTemplate = require '../templates/fileitem'
+FolderTemplate = require '../templates/folderitem'
 PreviewTemplate = require '../templates/filepreview'
 
 class FileItemView extends View
 
+    tagName: "li"
+
     template: ItemTemplate
+
+class FolderItemView extends View
+
+    tagName: "li"
+
+    template: FolderTemplate
+
+    render: ->
+        @$el.html template(@model)
 
 module.exports = class FileManagerView extends View
     template: ManagerTemplate
@@ -15,11 +27,14 @@ module.exports = class FileManagerView extends View
     events:
         "click .cancel": "removeAllFiles"
         "click #fileLabel": "toggleFilePane"
-        "click .fileitem": "selectFile"
+        "click .item": "selectFile"
 
-    selectFile: ->
-        @$(".fileitem").toggleClass('selected btn-info btn-warning')
-        @$(".fileinput").attr("value", @$(".fileitem.selected").attr("value"))
+    selectFile: (event) ->
+        @$(event.target).toggleClass('selected')
+        values = @$(".item.selected").map(-> $(@).attr("value")).get()
+        if @single
+            values = values[0]
+        @$(".fileinput").attr("value", values or "")
         @toggleFilePane()
 
     initialize: (options) ->
@@ -59,7 +74,7 @@ module.exports = class FileManagerView extends View
 
         @listenTo @dropzone, "queuecomplete", @queueComplete
 
-        _.defer @addAllFileViews
+        _.defer @renderFileTree
 
     updateProgressBar: (progress) =>
         @$("#total-progress .progress-bar").width(progress + "%")
@@ -82,11 +97,44 @@ module.exports = class FileManagerView extends View
     addFileView: (model) ->
         view = new FileItemView model: model
         view.render()
-        @$(".filelist").append view.el
+        path = model.get('path') or "__"
+        @$("#p#{path}").append view.el
+
+    addFolderView: (object) ->
+        view = new FolderItemView model: object
+        view.render()
+        @$("#p#{object.path}").append view.el
 
     addAllFileViews: =>
         for model in @collection.models
             @addFileView model
+
+    renderFolders: =>
+        paths = _.uniq(
+            (model.get("path") or "__" for model in @collection.models))
+        @folders = {}
+        @tree = {}
+        for path in paths
+            node = @tree
+            folder_path = "__"
+            for slug in path.split("__")
+                if slug != ""
+                    folder =
+                        path: folder_path
+                        name: slug
+                        open: false
+                        children: {}
+                    folder_path += slug + "__"
+                    if not slug of node
+                        node[slug] = folder
+                        @folders[folder_path] = folder
+                    node = node[slug].children
+        for key, value of @folders
+            addFolderView(value)
+
+    renderFileTree: =>
+        @renderFolders()
+        @addAllFileViews()
 
     toggleFilePane: ->
         @$("#fileModal").toggle()

@@ -20,3 +20,46 @@
     background-color white
 .selected
     font-weight bold
+    background-color white
+
+ol.tree
+    padding 0 0 0 30px
+    width 300px
+
+    li
+        position relative
+        margin-left -15px
+        list-style none
+
+        label.folder-child
+            cursor pointer
+            display block
+            padding-left 37px
+
+            &+ ol
+                height 1em
+
+                &> li
+                    display none
+                    padding-left 1px
+
+            &.selected + ol
+                margin -1.25em 0 0 -44px
+                padding 1.563em 0 0 80px
+                height auto
+
+                &> li
+                    display block
+                    margin 0 0 0.125em
+
+                &> li:last-child
+                    margin 0 0 0.063em
+        label.folder
+            &+ ol
+                border-left 1px solid black
+                li
+                    margin-left -40px
+                li::before
+                    content: "―"
+            span
+                padding-right 5px
