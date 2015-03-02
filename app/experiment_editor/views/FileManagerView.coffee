@@ -189,7 +189,7 @@ module.exports = class FileManagerView extends View
             children[folder.get("name")] = folder
 
     addToFolder: (model) =>
-        folder = @folders[model.get('path') or "__"]
+        folder = @folders[model.get('path') or ""]
         children = folder.get("children")
         children[model.get("name")] = model
         folder.set("children", children)
@@ -200,10 +200,7 @@ module.exports = class FileManagerView extends View
             model: model
             parent: @
         view.render()
-        if model.has('path')
-            path = model.get('path')
-        else
-            path = "__"
+        path = model.get('path') or ""
         @fileViews[path + model.get('name')]?.remove()
         @fileViews[path + model.get('name')] = view
         if root
@@ -221,7 +218,8 @@ module.exports = class FileManagerView extends View
             node = @tree
             folder_path = ""
             slugs = path.split("__")
-            slugs.unshift("")
+            if slugs[0]
+                slugs.unshift("")
             for slug in slugs
                 if not (slug of node)
                     children = {}
