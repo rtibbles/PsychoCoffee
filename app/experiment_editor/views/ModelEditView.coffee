@@ -23,6 +23,7 @@ module.exports = class ModelEditView extends ModalView
         for item in @$("input[type=file]")
             subViews[item.id] = new FileManagerView({
                 single: true
+                selector: true
                 field_id: item.id
             })
             subViews[item.id].render()

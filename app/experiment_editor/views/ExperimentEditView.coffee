@@ -98,7 +98,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         @subItemRoute("files")
 
     subItemRoute: (item) ->
-        PsychoEdit.router.editSubItem @blockmodel.get("name"), item
+        PsychoEdit.router.editSubItem @blockmodel?.get("name"), item
         return false
 
     editVariables: (block_id) ->
