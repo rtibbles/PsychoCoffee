@@ -18,35 +18,51 @@
     position absolute
     border black solid 1px
     background-color white
-.selected
-    font-weight bold
-    background-color white
+
+#editor_window label.selected
+    background-color orange
+
+#editor_window .item-edit
+    display inline-block
+    width 80px
+    height 20px
 
 ol.tree
-    padding 0 0 0 30px
-    width 300px
-
+    .folder-expand
+        position absolute
+        left -45px
+    .edit
+        -ms-transform scale(0.9)
+        -moz-transform scale(0.9)
+        -webkit-transform scale(0.9)
+        -o-transform scale(0.9)
     li
         position relative
-        margin-left -15px
         list-style none
 
-        label.folder-child
+       label.folder
             cursor pointer
             display block
-            padding-left 37px
-
-            &+ ol
+            margin-left -15px
+            margin-right 5px
+            &~ ol
+                display none
                 height 1em
+                padding-left 0px
+                margin-left 30px
+                border-left 1px solid black
 
                 &> li
                     display none
                     padding-left 1px
+                    padding-top 10px
+                    padding-left -10px
+                li::before
+                    content: "―"
 
-            &.selected + ol
-                margin -1.25em 0 0 -44px
-                padding 1.563em 0 0 80px
+            &.open ~ ol
                 height auto
+                display block
 
                 &> li
                     display block
@@ -54,12 +70,8 @@ ol.tree
 
                 &> li:last-child
                     margin 0 0 0.063em
-        label.folder
-            &+ ol
-                border-left 1px solid black
-                li
-                    margin-left -40px
-                li::before
-                    content: "―"
+
             span
                 padding-right 5px
+        label.file
+            margin-left -5px
