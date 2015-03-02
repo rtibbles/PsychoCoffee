@@ -77,12 +77,21 @@ class FileItemView extends DraggableView
         if event.which == 13
             old_name = @model.get("name")
             new_name = @$(".item-edit").val()
-            if new_name != ""
+            if new_name != "" and /[a-zA-Z0-9]+$/.test(new_name)
                 @model.set
                     name: new_name
                     slug: new_name
                 if _.isFunction @editCallback
                     @editCallback()
+            else
+                @$(".item-edit").addClass("has-error")
+                    .popover
+                        content: "<span class='label label-warning'>\
+                            Please enter at least one \
+                            alphanumeric character</span>"
+                        trigger: 'focus'
+                        html: true
+                @$(".item-edit").popover("show")
 
     updateChildPaths: =>
         console.log "hello"
@@ -178,7 +187,7 @@ module.exports = class FileManagerView extends View
 
     addFolder: =>
         folder = new Backbone.Model
-            path: "__"
+            path: ""
             name: ""
             slug: ""
             open: true
