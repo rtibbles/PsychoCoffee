@@ -3,6 +3,7 @@
 ModelEditView = require './ModelEditView'
 DropableView = require './DropableView'
 Template = require '../templates/parameterset'
+FileManagerView = require './FileManagerView'
 
 module.exports = class ParameterSetEditView extends DropableView
     template: Template
@@ -41,6 +42,20 @@ module.exports = class ParameterSetEditView extends DropableView
             iframeFix: true
             zIndex: 1000
             )
+        subViews = {}
+        for item in @$("span.file-menu")
+            id = @$(item).attr("dataname")
+            subViews[id] = new FileManagerView({
+                selector: true
+                field_id: id
+            })
+            subViews[id].render()
+            @$(item).replaceWith(subViews[id].el)
+            @listenTo subViews[id], "closed", =>
+                model = @collection.get(id)
+                value = @$("span.fileinput").attr("value").split(",")
+                console.log value
+                model.set("parameters", value)
 
     dragStart: (event, ui) =>
         name = $(event.target).attr("dataname")
@@ -135,6 +150,7 @@ module.exports = class ParameterSetEditView extends DropableView
                     x.name == "dataType").options, (x) ->
                     name: x
                     selected: x == model.get("dataType")
+                files: model.get("dataType") == "File"
             length = model.get("parameters").length
             max_length = if length > max_length then length else max_length
         rows.push row
