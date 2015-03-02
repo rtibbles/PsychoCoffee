@@ -1,17 +1,13 @@
 <div class="col-md-8" id="fileupload">
   <div id="filepane">
-    <ol class="tree">
-      <li>
-        <label class="item folder" value="__"><span class="glyphicon glyphicon-folder-open"></span>All Files</label>
-          <ol class="filelist" id="p__">
-          </ol>
+    <ol class="tree" id="p-root">
 
     </ol>
   </div>
   <div id="actions" class="row">
 
-    <div class="col-md-4">
-      <!-- The fileinput-button span is used to style the file input field as button -->
+    <div class="col-md-6">
+      <button class="btn btn-success addfolder">Add Folder</button>
       <span id="{{id}}" class="btn btn-success fileinput dz-clickable">
           <i class="glyphicon glyphicon-plus"></i>
           <span>Add files...</span>
@@ -22,8 +18,7 @@
       </button>
     </div>
 
-    <div class="col-md-8">
-      <!-- The global file processing state -->
+    <div class="col-md-6">
       <span class="fileupload-process">
         <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
           <div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress=""></div>
