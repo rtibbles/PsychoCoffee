@@ -115,20 +115,23 @@ module.exports = class FileManagerView extends View
             @$(".item").removeClass('selected')
         @$(event.target).parent(".item").toggleClass('selected')
         values = @$(".item.selected").map(-> $(@).attr("value")).get()
-        if @single
-            values = values[0]
         for i, value of values
             if value.indexOf("path:") == 0
-                values[i] = @filesFromPath(value)
+                values[i] = @fileNamesFromPath(value)
         values = _.flatten values
+        if @single
+            values = values[0]
         @$(".fileinput").attr("value", values or "")
-        @toggleFilePane()
+        if @single
+            @toggleFilePane()
 
     initialize: (options) ->
         @single = options.single
         @selector = options.selector
-        select_text = "Select File" + if not @single then "s" else ""
-        @file_title = if @selector then select_text else "Manage Files"
+        if @selector
+            @open = false
+        @plural = "File" + if not @single then "s" else ""
+        @file_title = if @selector then "Select " + @plural else "Manage Files"
         @field_id = options.field_id
         @collection = PsychoEdit.files
         @fileViews = {}
@@ -139,7 +142,7 @@ module.exports = class FileManagerView extends View
         return id: @field_id, file_title: @file_title
 
     render: ->
-        if @single
+        if @selector
             @$el.html SelectTemplate @getRenderData()
             @$("#fileModal").append ManagerTemplate(@getRenderData())
         else
@@ -246,11 +249,12 @@ module.exports = class FileManagerView extends View
                 node = node[slug].attributes.children
         @addFileView(@tree[""], true)
 
-    filesFromPath: (path) =>
+    fileNamesFromPath: (path) =>
         if path.indexOf("path:") == 0
             path = path.slice(5)
-        @collection.filter (model) ->
-            (model.get("path") or "").indexOf(path) == 0
+        @collection.filter((model) ->
+            (model.get("path") or "").indexOf(path) == 0)
+            .map (model) -> model.get("name")
 
     filesFromParent: (path) =>
         @collection.filter (model) ->
@@ -258,3 +262,8 @@ module.exports = class FileManagerView extends View
 
     toggleFilePane: ->
         @$("#fileModal").toggle()
+        @open = not @open
+        @$("#fileLabel").text(
+            if @open then "Choose " + @plural else "Select " + @plural)
+        if not @open
+            @trigger "closed"
