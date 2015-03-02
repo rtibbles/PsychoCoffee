@@ -1,1 +1,7 @@
-<label class="item file" value="{{name}}"><span class="glyphicon glyphicon-file"></span>{{ name }}</label>
+{{#unless children}}
+<label class="item file label label-primary" value="{{name}}"><span class="glyphicon glyphicon-file"></span><span class="name">{{ name }}</span></label>
+{{else}}
+<button class="folder-expand btn btn-xs btn-info"><span class="glyphicon glyphicon-{{#if open}}minus{{else}}plus{{/if}}" value="p{{ path }}{{slug}}"></span></button><label class="label label-success item folder {{#if open}}open{{/if}}" value="path:{{ path }}{{slug}}"><span class="glyphicon glyphicon-folder-{{#if open}}open{{else}}close{{/if}}"></span><span class="name">{{ name }}</span></label>{{#if slug}}<button class="edit btn btn-xs btn-danger"><span class="glyphicon glyphicon-edit"></span></button>{{/if}}
+<ol class="filelist" id="p{{ path }}{{slug}}">
+</ol>
+{{/unless}}
