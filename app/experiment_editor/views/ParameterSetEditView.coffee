@@ -28,7 +28,7 @@ module.exports = class ParameterSetEditView extends DropableView
         @$("#table-edit").keydown (e) ->
             if e.which == 13
                 $("td:focus").trigger("enter_pressed")
-        @$("td").on "enter_pressed", (e) =>
+        @$("td").on "enter_pressed", (e) ->
             target = $(e.target)
             next_cell = target.parent().next().children().eq(target.index())
             if next_cell.length > 0
@@ -65,7 +65,7 @@ module.exports = class ParameterSetEditView extends DropableView
             @global_dispatcher.eventDataTransfer[model.id] = model
         event?.stopPropagation()
 
-    dragEnd: (event, ui) =>
+    dragEnd: (event, ui) ->
         ui.helper.remove()
         event?.stopPropagation()
 

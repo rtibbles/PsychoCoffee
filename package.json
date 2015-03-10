@@ -54,7 +54,6 @@
     "karma-benchmark-reporter": "~0.1.0",
     "benchmark": "~1.0.0",
     "coffeelint-brunch": "~1.7.0",
-    "loopback-explorer": "~1.2.9",
     "karma-sauce-launcher": "~0.2.10",
     "sinon": "~1.12.1",
     "sinon-qunit": "~2.0.0",
