@@ -247,6 +247,13 @@ module.exports = class FileManagerView extends View
                     node[slug] = folder
                     @folders[folder_path] = folder
                 node = node[slug].attributes.children
+        if not @tree[""]
+            @tree[""] = new Backbone.Model
+                path: ""
+                name: "All Files"
+                slug: ""
+                open: true
+                children: {}
         @addFileView(@tree[""], true)
 
     fileNamesFromPath: (path) =>
