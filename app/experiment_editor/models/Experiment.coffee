@@ -4,6 +4,11 @@ class Model extends PsychoCoffee.Experiment.Model
 
     remote: true
 
+    parse: (response) ->
+        if _.isArray response
+            response = response[0]
+        return response
+
     urlRoot: ->
         PsychoEdit.API + "/experiments"
 
@@ -14,7 +19,7 @@ class Collection extends Backbone.Collection
     url: ->
         PsychoEdit.API + "/experiments"
 
-    model: PsychoCoffee.Experiment.Model
+    model: Model
     apiFilters: ["id", "title"]
 
     initialize: (options={}) ->
