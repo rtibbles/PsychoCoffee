@@ -46,14 +46,19 @@ class FileItemView extends DraggableView
                         old_children = old_folder.get("children")
                         delete old_children[model.get("name")]
                         old_folder.set "children", old_children
-                        new_path = @model.get("path") + @model.get("slug")
-                        model.set("path", new_path)
                         children = @model.get("children")
                         children[model.get("name")] = model
                         @model.set "children", children
+                        @recurseUpdateFilePath(model, @model)
                         @model.trigger "change"
                         model.trigger "change"
                         old_folder.trigger "change"
+
+    recurseUpdateFilePath: (node, parent) =>
+        new_path = parent.get("path") + parent.get("slug")
+        node.set("path", new_path)
+        for key, child of node.get("children") or {}
+            @recurseUpdateFilePath(child, node)
 
     toggleFolder: (event) =>
         value = @$(event.target).filter("span").attr("value") or
@@ -94,7 +99,6 @@ class FileItemView extends DraggableView
                 @$(".item-edit").popover("show")
 
     updateChildPaths: =>
-        console.log "hello"
         previous = @model.previous("slug")
         now = @model.get("slug")
         for key, child of @model.get("children")

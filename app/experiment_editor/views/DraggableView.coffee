@@ -19,7 +19,8 @@ module.exports = class DraggableView extends View
     dragStart: (event, ui) =>
         console.log "Dragging #{@constructor.name}"
         if @model?
-            @global_dispatcher.eventDataTransfer[@model.id] = @model
+            id = @model.id or @model.get("name")
+            @global_dispatcher.eventDataTransfer[id] = @model
         event?.stopPropagation()
 
     dragEnd: (event, ui) =>
