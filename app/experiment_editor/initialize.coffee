@@ -1,5 +1,6 @@
 'use strict'
 
+Dropzone.autoDiscover = false
 window.PsychoEdit = require './app/app'
 
 Handlebars.registerHelper 'modelinput', (context, options) ->

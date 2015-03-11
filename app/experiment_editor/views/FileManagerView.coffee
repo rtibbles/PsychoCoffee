@@ -175,12 +175,18 @@ module.exports = class FileManagerView extends View
 
     uploadSuccess: (file) =>
         @$(file.previewElement).remove()
-        if not @collection.get(file.name)?
-            model = @collection.add
-                name: file.name
-                file_id: JSON.parse(file.xhr.response).file_id
-                extension: file.name.split('.').pop()
-            model.preLoadFile()
+        if @collection.get(file.name)?
+            i = 1
+            name = file.name.split('.').slice(0, -1).join('.')
+            extension = file.name.split('.').pop()
+            while @collection.get(name + "_" + i + "." + extension)?
+                i += 1
+            name = name + "_" + i + "." + extension
+        model = @collection.add
+            name: name
+            file_id: JSON.parse(file.xhr.response).file_id
+            extension: extension
+        model.preLoadFile()
 
     removeAllFiles: =>
         @dropzone.removeAllFiles(true)
