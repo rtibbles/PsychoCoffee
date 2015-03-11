@@ -1,6 +1,6 @@
 fs = require 'fs'
 dataconfig = require './dataconfig'
-uuid = require 'node-uuid'
+md5 = require 'MD5'
 mkdirp = require 'mkdirp'
 auth = require './auth'
 
@@ -8,15 +8,21 @@ fileUploadHandler = (request, reply) ->
     data = request.payload
     if data.file
         name = data.file.hapi.filename
-        file_id = uuid.v1().split("-").join("/") +
-            "." + name.split('.').pop()
+        file_md5 = md5(data.file)
+        file_id = [
+            file_md5.slice(0,8)
+            file_md5.slice(8,12)
+            file_md5.slice(12,16)
+            file_md5.slice(16,20)
+            file_md5.slice(20)
+        ].join("/")
         mkdirp dataconfig.filestore.root +
             "/" + file_id.split("/").slice(0, -1).join("/")
         ,
             (err, made) ->
                 if err
                     reply err
-                else if made
+                else
                     path = dataconfig.filestore.root + "/" + file_id
                     file = fs.createWriteStream path
 
@@ -31,8 +37,6 @@ fileUploadHandler = (request, reply) ->
                             file_id: file_id
                             headers: data.file.hapi.headers
                         reply(ret)
-                else
-                    reply error: "Sorry, nothing happened."
 
 module.exports = fileUpload = (server) ->
 
