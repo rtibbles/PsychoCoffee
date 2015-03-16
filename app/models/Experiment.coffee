@@ -2,16 +2,10 @@
 
 Base = require('./Base')
 Block = require('./Block')
-fingerprint = require 'utils/fingerprint'
-random = require 'utils/random'
 ExperimentParameterSet = require './ExperimentParameterSet'
 File = require './File'
 
 class Model extends Base.Model
-
-    initialize: ->
-        super
-        random.seedGUID fingerprint()
 
     requiredParameters: ->
         super().concat(
