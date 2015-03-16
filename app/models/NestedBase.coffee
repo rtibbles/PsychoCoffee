@@ -16,6 +16,9 @@ class Collection extends Base.Collection
 
     model: Model
 
+    getById: (model_id) =>
+        @get(model_id) or @find (model) -> model.get("name") == model_id
+
 module.exports =
     Model: Model
     Collection: Collection
