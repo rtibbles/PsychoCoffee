@@ -11,7 +11,7 @@ module.exports = class DraggableView extends View
         @$el.draggable(
             start: @dragStart
             end: @dragEnd
-            helper: "clone"
+            helper: @returnElements or "clone"
             iframeFix: true
             zIndex: 1000
             ).data("id", @model.id or @model.get("name"))
