@@ -5,6 +5,7 @@ SelectTemplate = require '../templates/fileselect'
 ItemTemplate = require '../templates/fileitem'
 PreviewTemplate = require '../templates/filepreview'
 
+
 class FileItemView extends DraggableView
 
     events:
@@ -27,10 +28,23 @@ class FileItemView extends DraggableView
             greedy: true
         _.defer @renderChildren
 
+    returnElements: =>
+        if @$(".selected").length == 0
+            selected = @$el
+        else
+            selected = $('.selected')
+        container = $('<div/>').attr('id', 'draggingContainer')
+        container.append(selected.clone())
+        container.data("ids", @model.id or @model.get("name"))
+
     renderChildren: =>
         if @model.has("children")
             for key, child of @model.get("children")
                 @parent.addFileView child
+
+    dragStart: (event, ui) =>
+        super(event, ui)
+        @parent.$(".selected").trigger "mousedown"
 
     drop: (event, ui) =>
         if ui
@@ -186,6 +200,8 @@ module.exports = class FileManagerView extends View
             while @collection.get(name + "_" + i + "." + extension)?
                 i += 1
             name = name + "_" + i + "." + extension
+        else
+            name = file.name
         model = @collection.add
             name: name
             file_id: JSON.parse(file.xhr.response).file_id
@@ -264,11 +280,10 @@ module.exports = class FileManagerView extends View
                 slug: ""
                 open: true
                 children: {}
+            @folders[""] = @tree[""]
         @addFileView(@tree[""], true)
 
     fileNamesFromPath: (path) =>
-        if path.indexOf("path:") == 0
-            path = path.slice(5)
         @collection.filter((model) ->
             (model.get("path") or "").indexOf(path) == 0)
             .map (model) -> model.get("name")
