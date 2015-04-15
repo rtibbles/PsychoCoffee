@@ -361,6 +361,7 @@ module.exports = class BlocklyView extends DropableView
         @Blockly.registeredMethods = {}
         @nameSpaceBlocklyVariables()
         @instantiateFileDropDown()
+        @insertEndBlocks()
         @updateToolbox()
         @iframe$('body').on "dragleave", @dragLeave
         @iframe$('body').on "dragenter", @dragEnter
@@ -765,10 +766,27 @@ module.exports = class BlocklyView extends DropableView
         })
 
     insertFileObject: (model) =>
-        console.log model
         new BlocklyValueView({
             value: model.get("name")
             type: "File"
             model: model
             blocklyview: @
         })
+
+    insertEndBlocks: =>
+        endblocks = ["Trial", "Block", "Experiment"]
+        endblockdropdown = endblocks.map((item) -> [item, item])
+        type = "PsychoCoffee_end"
+        Blockly = @Blockly
+        @Blockly.Blocks[type] =
+            init: ->
+                @setColour 40
+                modedropdown = new Blockly.FieldDropdown(endblockdropdown)
+                @setPreviousStatement(true)
+                @appendDummyInput().appendField("End #{name}")
+                    .appendField(modedropdown, 'MODE')
+        @Blockly.JavaScript[type] =
+            (block) ->
+                name = block.getFieldValue('MODE')
+                "window.#{name.toLowerCase()}View.end#{name}()"
+        @addToToolbox(type, "Flow Statements")

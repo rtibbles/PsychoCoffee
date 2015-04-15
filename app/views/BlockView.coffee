@@ -20,6 +20,7 @@ module.exports = class BlockView extends HandlerView
             delete @subViews["trialView"]
             @instantiateSubView(@model,
                 "TrialView", "trialView", editor: @editor)
+        window.blockView = @
         window.trialView = @trialView = @subViews["trialView"]
         @trialdatamodel =
             @datamodel.get("trialdatalogs").add({})
@@ -38,6 +39,7 @@ module.exports = class BlockView extends HandlerView
             @logEvent "block_start", date_time: date_time
         @datamodel.set "block_id", @model.id
         @datamodel.set "parameters", @parameters
+        window.blockView = @
         window.Variables.set @parameters
         @datamodel.set("trial", @datamodel.get("trial") or 0)
         @model.setTrialParameters @datamodel.get("trial")

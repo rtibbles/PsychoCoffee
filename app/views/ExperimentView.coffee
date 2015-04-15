@@ -31,6 +31,7 @@ module.exports = class ExperimentView extends HandlerView
         @blockSelector = options.selector or @defaultNextBlock
         @files = @model?.get("files") or new Backbone.Collection
         @clock = new clock.Clock()
+        window.experimentView = @
         window.Variables = new Variables.Model
         @refreshTime()
         @render()
