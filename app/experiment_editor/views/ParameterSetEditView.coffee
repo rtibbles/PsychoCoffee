@@ -9,7 +9,7 @@ module.exports = class ParameterSetEditView extends DropableView
     template: Template
 
     events:
-        "click .add-variable": "addVariable"
+        # "click .add-variable": "addVariable"
         "change td": "updateData"
         "change .randomize": "updateRandomize"
         "change .datatype": "updateDataType"
@@ -23,25 +23,35 @@ module.exports = class ParameterSetEditView extends DropableView
 
     render: ->
         super
-        @$(".parameter-table").editableTableWidget
-            editor: $("<input id='table-edit'>")
-        @$("#table-edit").keydown (e) ->
-            if e.which == 13
-                $("td:focus").trigger("enter_pressed")
-        @$("td").on "enter_pressed", (e) ->
-            target = $(e.target)
-            next_cell = target.parent().next().children().eq(target.index())
-            if next_cell.length > 0
-                next_cell.focus()
-                next_cell.click()
-        @$('.parameter-table td').on 'change', @updateData
-        @$('thead td').draggable(
-            start: @dragStart
-            end: @dragEnd
-            helper: "clone"
-            iframeFix: true
-            zIndex: 1000
-            )
+        @dropzone = new Dropzone(@$("#parameters")[0],
+            url: "/files"
+            acceptedFiles: ".csv"
+            createImageThumbnails: false
+            maxFiles: 1
+            parallelUploads: 1
+            autoProcessQueue: false
+            addedfile: @parseCSV
+            clickable: @$(".add-variable")[0]
+        )
+        # @$(".parameter-table").editableTableWidget
+        #     editor: $("<input id='table-edit'>")
+        # @$("#table-edit").keydown (e) ->
+        #     if e.which == 13
+        #         $("td:focus").trigger("enter_pressed")
+        # @$("td").on "enter_pressed", (e) ->
+        #     target = $(e.target)
+        #     next_cell = target.parent().next().children().eq(target.index())
+        #     if next_cell.length > 0
+        #         next_cell.focus()
+        #         next_cell.click()
+        # @$('.parameter-table td').on 'change', @updateData
+        # @$('thead td').draggable(
+        #     start: @dragStart
+        #     end: @dragEnd
+        #     helper: "clone"
+        #     iframeFix: true
+        #     zIndex: 1000
+        #     )
         subViews = {}
         for item in @$("span.file-menu")
             id = @$(item).attr("dataname")
@@ -56,6 +66,29 @@ module.exports = class ParameterSetEditView extends DropableView
                 value = @$("span.fileinput").attr("value").split(",")
                 console.log value
                 model.set("parameters", value)
+
+    parseCSV: (file) =>
+        Papa.parse(file,
+            complete: (results) =>
+                # First three rows are reserved for variable name
+                # Randomization and Variable Type
+                data = results.data
+                headers = data[0]
+                randomized = data[1]
+                dataTypes = data[2]
+                parameters = data.slice(3)
+                @collection.reset()
+                parameters = parameters[0].map((col, i) ->
+                    return parameters.map((row) ->
+                        return row[i]))
+                for i in [0...headers.length]
+                    @collection.create
+                        name: headers[i]
+                        randomized: randomized[i]
+                        dataType: dataTypes[i]
+                        parameters: parameters[i]
+                return @collection
+        )
 
     dragStart: (event, ui) =>
         name = $(event.target).attr("dataname")
