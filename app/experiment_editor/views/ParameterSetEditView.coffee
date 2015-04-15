@@ -84,7 +84,7 @@ module.exports = class ParameterSetEditView extends DropableView
                 for i in [0...headers.length]
                     @collection.create
                         name: headers[i]
-                        randomized: randomized[i]
+                        randomized: Boolean(randomized[i])
                         dataType: dataTypes[i]
                         parameters: parameters[i]
                 return @collection
