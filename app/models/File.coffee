@@ -7,7 +7,7 @@ class Model extends NestedBase.Model
     preLoadFile: (queue) =>
         if not queue
             queue = new createjs.LoadQueue true
-        if not queue.getItem(@get("name"))
+        if not queue.getItem(@get("file_id"))
             queue.loadFile src: @downloadURL()
         queue.on "fileload", @postFileLoad
 
