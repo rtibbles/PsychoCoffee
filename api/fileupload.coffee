@@ -8,6 +8,7 @@ fileUploadHandler = (request, reply) ->
     data = request.payload
     if data.file
         name = data.file.hapi.filename
+        extension = name.split(".").slice(-1)
         file_md5 = md5(data.file)
         file_id = [
             file_md5.slice(0,8)
@@ -15,7 +16,7 @@ fileUploadHandler = (request, reply) ->
             file_md5.slice(12,16)
             file_md5.slice(16,20)
             file_md5.slice(20)
-        ].join("/")
+        ].join("/") + "." + extension
         mkdirp dataconfig.filestore.root +
             "/" + file_id.split("/").slice(0, -1).join("/")
         ,
@@ -23,7 +24,7 @@ fileUploadHandler = (request, reply) ->
                 if err
                     reply err
                 else
-                    path = dataconfig.filestore.root + "/" + file_id
+                    path = "#{dataconfig.filestore.root}/#{file_id}"
                     file = fs.createWriteStream path
 
                     file.on 'error', (err) ->
@@ -34,6 +35,7 @@ fileUploadHandler = (request, reply) ->
                     data.file.on 'end', (err) ->
                         ret =
                             name: name
+                            extension: extension
                             file_id: file_id
                             headers: data.file.hapi.headers
                         reply(ret)
