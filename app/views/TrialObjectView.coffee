@@ -15,13 +15,13 @@ module.exports = class TrialObjectView extends View
         return
 
     waitForFileObject: =>
-        if not @files.get(@model.get("file"))
+        if not @files.get(@model.get(@model.fileAttr))
             console.debug "File #{@model.get("file")} not found"
             return
         if @files.get(@model.get(@model.fileAttr))?.loaded
             @setFileObject()
         else
-            @listenToOnce @files.get @model.get(@model.fileAttr),
+            @listenToOnce @files.get(@model.get(@model.fileAttr)),
                 "loaded", @setFileObject
 
     setFileObject: =>
@@ -29,7 +29,7 @@ module.exports = class TrialObjectView extends View
         @render()
 
     startRender: =>
-        if @model.get("file")
+        if @model.get(@model.fileAttr)
             @waitForFileObject()
         else
             @render()
