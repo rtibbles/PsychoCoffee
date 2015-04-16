@@ -4,6 +4,8 @@ NestedBase = require './NestedBase'
 
 class Model extends NestedBase.Model
 
+    idAttribute: "file_id"
+
     preLoadFile: (queue) =>
         if not queue
             queue = new createjs.LoadQueue true
