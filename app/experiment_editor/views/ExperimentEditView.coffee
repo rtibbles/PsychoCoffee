@@ -64,7 +64,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
     showEditBlock: (model_id) =>
         for key, value of @tabViews
             value?.$el.hide()
-        model = @model.get("blocks").getById(model_id)
+        model = @model.get("blocks").get(model_id)
         new_model_check = model != @blockmodel
         no_view_check = not @blockEditView?
         if new_model_check or no_view_check
@@ -110,7 +110,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
     showEditVariables: (block_id) =>
         for key, value of @tabViews
             value?.$el.hide()
-        model = @model.get("blocks").getById(block_id)
+        model = @model.get("blocks").get(block_id)
         new_model_check = model != @blockmodel
         no_view_check = not @tabViews["variableEditView"]?
         if new_model_check or no_view_check
@@ -136,7 +136,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
     showEditFiles: (block_id) =>
         for key, value of @tabViews
             value?.$el.hide()
-        model = @model.get("blocks").getById(block_id)
+        model = @model.get("blocks").get(block_id)
         new_model_check = model != @blockmodel
         no_view_check = not @tabViews["fileView"]?
         if new_model_check or no_view_check
