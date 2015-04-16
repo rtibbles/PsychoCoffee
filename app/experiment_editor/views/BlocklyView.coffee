@@ -537,7 +537,9 @@ module.exports = class BlocklyView extends DropableView
                 @setOutput(true, "File")
                 @appendDummyInput()
                     .appendField(new Blockly.FieldDropdown(->
-                        output = ([file.get("name"), file.get("name")]\
+                        output = ([
+                            (file.get("path") or "") + file.get("name"),
+                            file.get("file_id")]\
                             for file in PsychoEdit.files.models)
                         output =
                             if output.length > 0 then output else [["", ""]]

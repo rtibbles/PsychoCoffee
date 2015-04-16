@@ -281,7 +281,7 @@ module.exports = class FileManagerView extends View
     fileNamesFromPath: (path) =>
         @collection.filter((model) ->
             (model.get("path") or "").indexOf(path) == 0)
-            .map (model) -> model.get("name")
+            .map (model) -> model.get("file_id")
 
     filesFromParent: (path) =>
         @collection.filter (model) ->
