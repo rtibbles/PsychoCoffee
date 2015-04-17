@@ -171,9 +171,7 @@ module.exports = class FileManagerView extends View
             thumbnailHeight: 80
             parallelUploads: 20
             previewTemplate: PreviewTemplate()
-            autoQueue: false
             previewsContainer: @$("#previews")[0]
-            removedfile: ->
             clickable: @$(".fileinput")[0]
             headers:
                 "X-CSRF-Token": $('meta[name="csrf-token"]').attr('content')
@@ -187,11 +185,9 @@ module.exports = class FileManagerView extends View
 
         @listenTo @dropzone, "queuecomplete", @queueComplete
 
-        @listenTo @dropzone, "addedfile", @setFileDestination
-
         _.defer @renderFileTree
 
-    setFileDestination: =>
+    setFileDestination: (callback) =>
         if not @file_destination?
             if _.keys(@folders).length == 1
                 @file_destination = ""
@@ -206,10 +202,9 @@ module.exports = class FileManagerView extends View
                 else
                     @file_destination = values[0].slice(5)
         if @file_destination?
-            @dropzone.processFiles(@dropzone.files)
-            @alerted = false
+            callback()
         else
-            @listenToOnce @, "file_select", @setFileDestination
+            @listenToOnce @, "file_select", => @setFileDestination(callback)
 
 
 
@@ -217,17 +212,18 @@ module.exports = class FileManagerView extends View
         @$("#total-progress .progress-bar").width(progress + "%")
 
     uploadSuccess: (file) =>
-        @$(file.previewElement).remove()
-        file_id = JSON.parse(file.xhr.response).file_id
-        if not @collection.get(file_id)?
-            name = file.name
-            extension = file.name.split('.').pop()
-            model = @collection.add
-                name: name
-                file_id: file_id
-                extension: extension
-                path: @file_destination
-            model.preLoadFile()
+        @setFileDestination =>
+            @$(file.previewElement).remove()
+            file_id = JSON.parse(file.xhr.response).file_id
+            if not @collection.get(file_id)?
+                name = file.name
+                extension = file.name.split('.').pop()
+                model = @collection.add
+                    name: name
+                    file_id: file_id
+                    extension: extension
+                    path: @file_destination
+                model.preLoadFile()
 
     removeAllFiles: =>
         @dropzone.removeAllFiles(true)
@@ -235,6 +231,7 @@ module.exports = class FileManagerView extends View
     queueComplete: =>
         @dropzone.removeAllFiles()
         delete @file_destination
+        delete @alerted
         @updateProgressBar(0)
 
     addFolder: =>
