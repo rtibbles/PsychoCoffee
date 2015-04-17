@@ -5,7 +5,6 @@ SelectTemplate = require '../templates/fileselect'
 ItemTemplate = require '../templates/fileitem'
 PreviewTemplate = require '../templates/filepreview'
 
-
 class FileItemView extends DraggableView
 
     events:
@@ -142,6 +141,7 @@ module.exports = class FileManagerView extends View
         @$(".fileinput").attr("value", values or "")
         if @single
             @toggleFilePane()
+        @trigger "file_select"
 
     initialize: (options) ->
         @single = options.single
@@ -171,8 +171,9 @@ module.exports = class FileManagerView extends View
             thumbnailHeight: 80
             parallelUploads: 20
             previewTemplate: PreviewTemplate()
-            autoQueue: true
+            autoQueue: false
             previewsContainer: @$("#previews")[0]
+            removedfile: ->
             clickable: @$(".fileinput")[0]
             headers:
                 "X-CSRF-Token": $('meta[name="csrf-token"]').attr('content')
@@ -186,7 +187,31 @@ module.exports = class FileManagerView extends View
 
         @listenTo @dropzone, "queuecomplete", @queueComplete
 
+        @listenTo @dropzone, "addedfile", @setFileDestination
+
         _.defer @renderFileTree
+
+    setFileDestination: =>
+        if not @file_destination?
+            if _.keys(@folders).length == 1
+                @file_destination = ""
+            else
+                values = @$(".item.selected").map(-> $(@).attr("value")).get()
+                values = _.filter(values, (value) ->
+                    value.indexOf("path:") == 0)
+                if values.length != 1
+                    if not @alerted
+                        alert("Please select at most one folder to upload to.")
+                        @alerted = true
+                else
+                    @file_destination = values[0].slice(5)
+        if @file_destination?
+            @dropzone.processFiles(@dropzone.files)
+            @alerted = false
+        else
+            @listenToOnce @, "file_select", @setFileDestination
+
+
 
     updateProgressBar: (progress) =>
         @$("#total-progress .progress-bar").width(progress + "%")
@@ -201,12 +226,15 @@ module.exports = class FileManagerView extends View
                 name: name
                 file_id: file_id
                 extension: extension
+                path: @file_destination
             model.preLoadFile()
 
     removeAllFiles: =>
         @dropzone.removeAllFiles(true)
 
     queueComplete: =>
+        @dropzone.removeAllFiles()
+        delete @file_destination
         @updateProgressBar(0)
 
     addFolder: =>
@@ -279,6 +307,8 @@ module.exports = class FileManagerView extends View
         @addFileView(@tree[""], true)
 
     fileNamesFromPath: (path) =>
+        if path.indexOf("path:") == 0
+            path = path.slice(5)
         @collection.filter((model) ->
             (model.get("path") or "").indexOf(path) == 0)
             .map (model) -> model.get("file_id")
