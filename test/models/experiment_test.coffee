@@ -12,10 +12,6 @@ test "Default values", ->
         PsychoCoffee.ExperimentParameterSet.Model
     ok @experiment.get("blocks") instanceof PsychoCoffee.Block.Collection
 
-test "Initialize", ->
-    expect 1
-    ok PsychoCoffee.random.GUIDseed?
-
 test "Methods", ->
     expect 2
     
