@@ -36,9 +36,9 @@ class Model extends VisualTrialObject.Model
                     default: "left"
                     type: "String"
                     options: [
-                        ["left", "LEFT"]
-                        ["right", "RIGHT"]
-                        ["center", "CENTER"]
+                        ["left", "left"]
+                        ["right", "right"]
+                        ["center", "center"]
                     ]
             ])
 

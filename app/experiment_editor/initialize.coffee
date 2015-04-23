@@ -32,9 +32,9 @@ Handlebars.registerHelper 'modelinput', (context, options) ->
     if options?
         ret += ">"
         for option in options
-            ret += "<option value='#{option}'" +
-                if option == context.default then " selected" else ""
-            ret += ">#{option}</option>"
+            ret += "<option value='#{option[1]}'" +
+                if option[1] == context.default then " selected" else ""
+            ret += ">#{option[1]}</option>"
         ret += "</select>"
     else
         ret +=  " value='#{value}'/>"

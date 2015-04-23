@@ -125,6 +125,7 @@ valueToModelConverter =
     BOOL: Boolean
     COLOUR: String
     File: String
+    OPTIONS: String
 
 
 class BlocklyValueView extends Backbone.View
@@ -154,9 +155,9 @@ class BlocklyValueView extends Backbone.View
             @value_type = @option.name + "_drop_down"
             if @value_type not of @Blockly.Blocks
                 @Blockly.Blocks[@value_type] =
-                    @instantiateDropDown(@option)
+                    @blocklyview.instantiateDropDown(@option)
                 @Blockly.JavaScript[@value_type] =
-                    @codeGenDropDown(@option)
+                    @blocklyview.codeGenDropDown(@option)
             @variable_type = "OPTIONS"
             @value = String(@model.get(@option.name))
         else
@@ -769,7 +770,7 @@ module.exports = class BlocklyView extends DropableView
 
     insertFileObject: (model) =>
         new BlocklyValueView({
-            value: model.get("name")
+            value: model.get("file_id")
             type: "File"
             model: model
             blocklyview: @
