@@ -31,6 +31,15 @@ class Model extends VisualTrialObject.Model
                     name: "backgroundColor"
                     default: "#FFFFFF"
                     type: "Colour"
+                ,
+                    name: "justify"
+                    default: "left"
+                    type: "String"
+                    options: [
+                        ["left", "LEFT"]
+                        ["right", "RIGHT"]
+                        ["center", "CENTER"]
+                    ]
             ])
 
     name: ->

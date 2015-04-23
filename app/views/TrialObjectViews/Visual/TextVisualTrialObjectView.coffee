@@ -1,6 +1,7 @@
 'use strict'
 
 VisualTrialObjectView = require '../VisualTrialObjectView'
+wrapCanvasText = require 'utils/wrapCanvasText'
 Keys = require "utils/keys"
 
 module.exports = class TextVisualTrialObjectView extends VisualTrialObjectView
@@ -12,6 +13,14 @@ module.exports = class TextVisualTrialObjectView extends VisualTrialObjectView
         if not @object
             @object = new @object_type @model.get("text"),
                 @model.returnOptions()
+            if @canvas
+                @object = wrapCanvasText(
+                    @object
+                    @canvas
+                    @model.get("width")
+                    @model.get("height")
+                    @model.get("justify")
+                    )
         super
 
     addText: (options) ->
