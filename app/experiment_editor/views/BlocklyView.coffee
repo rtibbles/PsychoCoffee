@@ -349,6 +349,7 @@ module.exports = class BlocklyView extends DropableView
         super
         @toolbox = @defaultToolbox
         @subViews = {}
+        @scopedVariables = {}
 
     render: ->
         super
@@ -385,8 +386,9 @@ module.exports = class BlocklyView extends DropableView
         registeredVariables = @getAllVariableNames()
         for variable in @Blockly.Variables.allVariables()
             if variable not in registeredVariables
-                @model.get("parameterSet").get("trialParameters").create
-                    name: variable
+                if variable not of @scopedVariables
+                    @model.get("parameterSet").get("trialParameters").create
+                        name: variable
 
     iframe$: (selector) ->
         @$('iframe').contents().find(selector)
@@ -412,12 +414,16 @@ module.exports = class BlocklyView extends DropableView
     nameSpaceBlocklyVariables: =>
         variable_names = @getAllVariableNames()
         Blockly = @Blockly
+        view = @
         @Blockly.JavaScript['variables_get'] = (block) ->
-            code = Blockly.JavaScript.variableDB_.getName(
+            name = Blockly.JavaScript.variableDB_.getName(
                 block.getFieldValue('VAR'),
                 Blockly.Variables.NAME_TYPE)
-            ["window.Variables.get('#{code}')",
-            Blockly.JavaScript.ORDER_ATOMIC]
+            if name of view.scopedVariables
+                code = name
+            else
+                code = "window.Variables.get('#{name}')"
+            [code, Blockly.JavaScript.ORDER_ATOMIC]
         @Blockly.JavaScript['variables_set'] = (block) ->
             argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
                 Blockly.JavaScript.ORDER_ASSIGNMENT) or '0'
@@ -594,44 +600,63 @@ module.exports = class BlocklyView extends DropableView
         @Blockly.registeredModels = _.map @collection.models, (model) ->
             [model.get("name"), model.get("name")]
         @Blockly.registeredEvents = _.object(
-            ([model.get("name"), [trig, trig]\
+            ([model.get("name"), [trig["name"], JSON.stringify(trig)]\
                 for trig in model.triggers()] for model in @collection.models))
         @Blockly.registeredAttrs = _.object(
             ([model.get("name"), [name, name]\
                 for name in model.allParameterNames()]\
                     for model in @collection.models))
         @Blockly.registeredMethods = _.object(
-            ([model.get("name"), [method, method]\
+            ([model.get("name"), [method["name"], JSON.stringify(method)]\
                 for method in model.methods()]\
                     for model in @collection.models))
         @updateToolbox()
 
     instantiateModelEventBlock: =>
+        view = @
         type = "PsychoCoffee_events"
         Blockly = @Blockly
         @Blockly.Blocks[type] =
             init: ->
-                events =
-                    Blockly.registeredEvents[Blockly.registeredModels[0][0]]
+                self = @
+                @arguments_ = []
+                events = =>
+                    Blockly.registeredEvents[@getFieldValue("NAME") or
+                        Blockly.registeredModels[0][0]]
                 @setColour 40
                 @setInputsInline true
                 @appendDummyInput().appendField("when ")
                     .appendField(new Blockly.FieldDropdown(
-                        -> Blockly.registeredModels,
-                        (option) ->
-                            events = Blockly.registeredEvents[option]
-                            return undefined
-                            ), "NAME")
-                    .appendField(new Blockly.FieldDropdown(-> events),
-                        "TRIGGERS")
+                        -> Blockly.registeredModels), "NAME")
+                    .appendField(new Blockly.FieldDropdown(
+                        events), "TRIGGERS")
+                    .appendField('', 'PARAMS')
                 @appendStatementInput('DO').appendField('do')
+
+            updateParams_: ->
+                @arguments_ =
+                    JSON.parse(@getFieldValue("TRIGGERS")).arguments or []
+                view.scopedVariables = _.extend(
+                    view.scopedVariables, _.object(@arguments_, @arguments_))
+                paramString =
+                    if @arguments_.length then @arguments_.join(", ") else ''
+                @setFieldValue(paramString, 'PARAMS')
+
+            getVars: ->
+                @arguments_
+
+            setFieldValue: (newValue, name) ->
+                Blockly.Block.prototype.setFieldValue.call(@, newValue, name)
+                if name != "PARAMS" then @updateParams_()
+
         @Blockly.JavaScript[type] =
             (block) ->
                 name = block.getFieldValue("NAME")
-                event = block.getFieldValue("TRIGGERS")
+                event = JSON.parse(block.getFieldValue("TRIGGERS"))
+                params = block.getFieldValue("PARAMS")
                 code = Blockly.JavaScript.statementToCode(block, 'DO')
                 "window.trialView.listenTo(window.subViews['#{name}'],\
-                    '#{event}', function() {\
+                    '#{event.name}', function(#{params}) {\
                         #{code}\
                         })"
         return type
@@ -715,8 +740,8 @@ module.exports = class BlocklyView extends DropableView
         @Blockly.JavaScript[type] =
             (block) ->
                 name = block.getFieldValue("NAME")
-                method = block.getFieldValue("METHODS")
-                "window.subViews['#{name}'].#{method}"
+                method = JSON.parse(block.getFieldValue("METHODS"))
+                "window.subViews['#{name}'].#{method.name}"
         return type
 
     insertModelBlock: (model, y) =>
