@@ -26,6 +26,7 @@ module.exports = class TrialObjectView extends View
 
     setFileObject: =>
         @file_object = @files.get(@model.get(@model.fileAttr)).file_object
+        @file_path = @files.get(@model.get(@model.fileAttr)).downloadURL()
         @render()
 
     startRender: =>
@@ -71,3 +72,7 @@ module.exports = class TrialObjectView extends View
     registerEvents: (siblingViews) =>
         if @model.get("startWithTrial")
             @clock.delayedTrigger @model.get("delay"), @, @activate
+
+    proxyObjectEvents: (eventlist) =>
+        for eventtype in eventlist
+            @object.on(eventtype, => @trigger eventtype)

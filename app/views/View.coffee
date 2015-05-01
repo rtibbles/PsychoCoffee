@@ -48,3 +48,13 @@ module.exports = class View extends Backbone.View
 
     afterRender: ->
         return
+
+    close: ->
+        for key, value of @subViews
+            if _.isFunction value.close
+                value.close()
+            else
+                value.remove()
+        # If exists call method to remove any non-Backbone listeners
+        if @removeEventListeners
+            @removeEventListeners()

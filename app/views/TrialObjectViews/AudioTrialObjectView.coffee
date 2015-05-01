@@ -19,4 +19,27 @@ module.exports = class AudioTrialObjectView extends TrialObjectView
 
     render: =>
         if not @object
-            @object = createjs.Sound.createInstance @model.getFile()
+            @object = createjs.Sound.createInstance @file_path
+            @setEventListeners()
+
+    setEventListeners: =>
+        @proxyObjectEvents ["complete"]
+        @listenTo @, "complete", @deactivate
+
+    removeEventListeners: =>
+        if @object
+            @object.removeAllEventListeners()
+
+    close: =>
+        super
+        if @object
+            try
+                @object.destroy()
+            catch
+                delete @object
+
+    pause: =>
+        @object.pause()
+
+    resume: =>
+        @object.resume()
