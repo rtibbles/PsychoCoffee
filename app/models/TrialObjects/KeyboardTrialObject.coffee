@@ -12,7 +12,8 @@ class Model extends TrialObject.Model
 
     triggers: ->
         super().concat([
-                "keypress"
+                name: "keypress"
+                arguments: ["key", "shiftKey"]
             ])
 
 module.exports =

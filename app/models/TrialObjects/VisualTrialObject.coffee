@@ -68,7 +68,7 @@ class Model extends TrialObject.Model
     
     triggers: ->
         super().concat([
-                "click"
+                name: "click"
             ])
 
 module.exports =

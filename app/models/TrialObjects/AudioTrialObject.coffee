@@ -16,6 +16,18 @@ class Model extends TrialObject.Model
     name: ->
         @get("name") or @get("file")
 
+    triggers: ->
+        super().concat([
+            name: "complete"
+        ])
+
+    methods: ->
+        super().concat([
+            name: "pause"
+        ,
+            name: "resume"
+        ])
+
 module.exports =
     Model: Model
     Type: "Audio"

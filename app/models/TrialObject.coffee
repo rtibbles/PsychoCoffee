@@ -12,7 +12,7 @@ class Model extends NestedBase.Model
         @parseAllListeners()
         @listenTo @, "change:__listeners", @parseAllListeners
 
-    get: (attr) ->
+    get: (attr) =>
         value = super(attr)
         if _.isFunction(value)
             try
@@ -107,16 +107,16 @@ class Model extends NestedBase.Model
 
     triggers: ->
         [
-            "activated"
+            name: "activated"
         ,
-            "deactivated"
+            name: "deactivated"
         ]
 
     methods: ->
         super().concat([
-            "activate"
+            name: "activate"
         ,
-            "deactivate"
+            name: "deactivate"
         ])
 
 
