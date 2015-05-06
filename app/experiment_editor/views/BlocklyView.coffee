@@ -287,7 +287,9 @@ class BlocklyValueView extends Backbone.View
             blockXml = @Blockly.Xml.blockToDom_ @block
             blockXmlText = @Blockly.Xml.domToText blockXml
             @model.set "__Blockly_" + @name, blockXmlText
-            @model.setFunction @name, Function(code), listeners: listeners
+            @model.setFunction @name, Function(code),
+                listeners: listeners
+                silent: true
 
 
 
@@ -306,7 +308,7 @@ class BlocklyBlockView extends Backbone.View
         @block.subViews = {}
         for option in @model.requiredParameters().concat(
             @model.objectOptions())
-            if option.name == "name" or not @model.get(option.name)?
+            if option.name == "name" or not @model.attributes[option.name]?
                 continue
             @createSubView(option)
         @block.setCollapsed(true)
@@ -416,7 +418,7 @@ module.exports = class BlocklyView extends DropableView
         Blockly = @Blockly
         view = @
         @Blockly.JavaScript['variables_get'] = (block) ->
-            name = Blockly.JavaScript.variableDB_.getName(
+            name = Blockly.JavaScript.variableDB_?.getName(
                 block.getFieldValue('VAR'),
                 Blockly.Variables.NAME_TYPE)
             if name of view.scopedVariables
