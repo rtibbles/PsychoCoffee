@@ -11,7 +11,7 @@ module.exports = class TextVisualTrialObjectView extends VisualTrialObjectView
 
     render: ->
         if not @object
-            @object = new @object_type @model.get("text"),
+            @object = new @object_type @model.get("text") or "",
                 @model.returnOptions()
             if @canvas
                 @object = wrapCanvasText(
