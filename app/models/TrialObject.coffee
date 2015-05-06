@@ -31,9 +31,9 @@ class Model extends NestedBase.Model
     parse: (resp, options) ->
         for key, value of resp
             try
-                out = Function(value)()
+                out = Function("return #{value}")()
             catch e
-                true
+                out = ""
             if _.isFunction out
                 resp[key] = out
         return resp
