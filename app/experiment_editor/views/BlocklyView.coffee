@@ -122,7 +122,7 @@ toolbox =
 valueToModelConverter =
     TEXT: String
     NUM: Number
-    BOOL: Boolean
+    BOOL: (value) -> value == "true"
     COLOUR: String
     File: String
     OPTIONS: String
