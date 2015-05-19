@@ -33,25 +33,6 @@ module.exports = class ParameterSetEditView extends DropableView
             addedfile: @parseCSV
             clickable: @$(".add-variable")[0]
         )
-        # @$(".parameter-table").editableTableWidget
-        #     editor: $("<input id='table-edit'>")
-        # @$("#table-edit").keydown (e) ->
-        #     if e.which == 13
-        #         $("td:focus").trigger("enter_pressed")
-        # @$("td").on "enter_pressed", (e) ->
-        #     target = $(e.target)
-        #     next_cell = target.parent().next().children().eq(target.index())
-        #     if next_cell.length > 0
-        #         next_cell.focus()
-        #         next_cell.click()
-        # @$('.parameter-table td').on 'change', @updateData
-        # @$('thead td').draggable(
-        #     start: @dragStart
-        #     end: @dragEnd
-        #     helper: "clone"
-        #     iframeFix: true
-        #     zIndex: 1000
-        #     )
         subViews = {}
         for item in @$("span.file-menu")
             id = @$(item).attr("dataname")

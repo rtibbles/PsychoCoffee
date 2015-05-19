@@ -1,6 +1,9 @@
 # Base class for all views.
 module.exports = class View extends Backbone.View
 
+    initialize: ->
+        @subViews = {}
+
     template: ->
         return
 
@@ -18,3 +21,11 @@ module.exports = class View extends Backbone.View
 
     afterRender: ->
         return
+
+    close: ->
+        console.debug "Closing #{@constructor.name}"
+        for key, value of @subViews
+            if _.isFunction value.close
+                value.close()
+            else
+                value.remove()

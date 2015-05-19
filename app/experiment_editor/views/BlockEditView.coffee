@@ -55,10 +55,13 @@ module.exports = class BlockEditView extends CodeGeneratorView
         "click .addtrialobject": "addTrialObject"
     
     initialize: (options) ->
+        super
         @files = options.files
+        @experiment = options.experiment
 
     render: ->
         super
+        @listenToOnce @global_dispatcher, "psych_loaded", @initializePreview
         @toolbarView = new TrialObjectToolbarView
         @blocklyView = new BlocklyView
             model: @model
@@ -97,3 +100,68 @@ module.exports = class BlockEditView extends CodeGeneratorView
 
     generateCode: =>
         @model.set "flow", new Function(@blocklyView.generateCode())
+
+    initializePreview: (PsychoCoffee) =>
+        @PsychoCoffee = PsychoCoffee
+        @frame = 0
+        @subViews["experimentPreview"] = new @PsychoCoffee.ExperimentView({
+            model: @experiment
+            editor: true
+        })
+        @listenToOnce @subViews["experimentPreview"], "loaded", @createPreview
+
+    createPreview: =>
+        if @subViews["trialPreview"]
+            if @subViews["trialPreview"].close?
+                @subViews["trialPreview"].close()
+            else
+                @subViews["trialPreview"].remove()
+        delete @subViews["trialPreview"]
+        @subViews["trialPreview"] =
+            @subViews["experimentPreview"].previewBlock @model
+        @startPreview()
+        @listenTo @model, "change",
+            _.debounce(@startPreview, 500)
+        @listenTo @model, "nested-change",
+            @frameAdvance
+    
+    startPreview: =>
+        @$(".play").show()
+        @$(".pause").hide()
+        @updateFrame()
+        @subViews["trialPreview"].startTrial()
+        @frameAdvance()
+
+    frameAdvance: =>
+        if not @subViews["trialPreview"].clock.timerStart
+            @subViews["trialPreview"].clock.initTimer()
+        @subViews["trialPreview"].clock.advanceFrame()
+
+    playPreview: =>
+        if @subViews["trialPreview"].clock.pauseTimestamp
+            @subViews["trialPreview"].clock.resumeTimer()
+        else
+            @subViews["trialPreview"].clock.startTimer()
+        @listenTo @subViews["trialPreview"].clock, "tick", @updateFrame
+        @$(".play").hide()
+        @$(".pause").show()
+
+    pausePreview: =>
+        @subViews["trialPreview"].clock.pauseTimer()
+        @$(".play").show()
+        @$(".pause").hide()
+
+    updateFrame: (frame) =>
+        @frame = frame or @frame
+        duration = if @model.get("timeout") != 0\
+            then @model.get("timeout") else 20000
+        elapsed = @frame*@subViews["trialPreview"].clock.tick
+        if elapsed/duration <= 1
+            @animateScrubBar(elapsed/duration)
+        else
+            @pausePreview()
+
+    animateScrubBar: _.throttle(
+        (fraction) ->
+            $(".progress-bar.scrub").css("width", 100*fraction + "%")
+        , 10)

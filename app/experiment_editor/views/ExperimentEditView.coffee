@@ -69,17 +69,13 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         no_view_check = not @blockEditView?
         if new_model_check or no_view_check
             @blockmodel = model
-            @tabViews["blockEditView"]?.remove()
+            @tabViews["blockEditView"]?.close()
             @tabViews["blockEditView"] = new BlockEditView
                 model: @blockmodel
+                experiment: @model
                 files: @model.get("files")
             @tabViews["blockEditView"].render()
             @tabViews["blockEditView"].appendTo("#blockedit")
-            @initializePreview()
-            @listenTo @blockmodel, "change",
-                _.debounce(@startPreview, 500)
-            @listenTo @blockmodel, "nested-change",
-                @frameAdvance
         else
             @tabViews["blockEditView"]?.$el.show()
             @tabViews["experimentPreview"]?.$el.show()
@@ -115,7 +111,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         no_view_check = not @tabViews["variableEditView"]?
         if new_model_check or no_view_check
             @blockmodel = model
-            @tabViews["variableEditView"]?.remove()
+            @tabViews["variableEditView"]?.close()
             @tabViews["variableEditView"] = new VariableEditView
                 model: @model
                 blockmodel: @blockmodel
@@ -141,7 +137,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         no_view_check = not @tabViews["fileView"]?
         if new_model_check or no_view_check
             @blockmodel = model
-            @tabViews["fileView"]?.remove()
+            @tabViews["fileView"]?.close()
             @tabViews["fileView"] = new FileManagerView
                 model: @model
                 blockmodel: @blockmodel
@@ -153,77 +149,5 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             @$(".block-nav li").removeClass("active")
             @$(".files-tab").addClass("active")
     
-    removePreview: =>
-        if @tabViews["experimentPreview"]
-            @stopListening @tabViews["experimentPreview"]
-            if @tabViews["experimentPreview"].close
-                @tabViews["experimentPreview"].close()
-            else
-                @tabViews["experimentPreview"].remove()
-        delete @tabViews["experimentPreview"]
-
-    initializePreview: =>
-        @frame = 0
-        @removePreview()
-        @tabViews["experimentPreview"] = new PsychoCoffee.ExperimentView({
-            model: @model
-            editor: true
-        })
-        @listenToOnce @tabViews["experimentPreview"], "loaded", @createPreview
-
-    createPreview: =>
-        if @trialPreview
-            if @trialPreview.close?
-                @trialPreview.close()
-            else
-                @trialPreview.remove()
-        delete @trialPreview
-        @trialPreview = @tabViews["experimentPreview"].previewBlock @blockmodel
-    
-    startPreview: =>
-        offset = $("#scrubber").offset()
-        offset["top"] += $("#scrubber").height() + 5
-        offset["left"] = $("#block-preview").offset()["left"]
-        $("#trial-draw").offset(offset)
-        @$(".play").show()
-        @$(".pause").hide()
-        @updateFrame()
-        @trialPreview.startTrial()
-        @frameAdvance()
-
-    frameAdvance: =>
-        if not @trialPreview.clock.timerStart
-            @trialPreview.clock.initTimer()
-        @trialPreview.clock.advanceFrame()
-
-    playPreview: =>
-        if @trialPreview.clock.pauseTimestamp
-            @trialPreview.clock.resumeTimer()
-        else
-            @trialPreview.clock.startTimer()
-        @listenTo @trialPreview.clock, "tick", @updateFrame
-        @$(".play").hide()
-        @$(".pause").show()
-
-    pausePreview: =>
-        @trialPreview.clock.pauseTimer()
-        @$(".play").show()
-        @$(".pause").hide()
-
-    updateFrame: (frame) =>
-        @frame = frame or @frame
-        duration = if @blockmodel.get("timeout") != 0\
-            then @blockmodel.get("timeout") else 20000
-        elapsed = @frame*@trialPreview.clock.tick
-        if elapsed/duration <= 1
-            @animateScrubBar(elapsed/duration)
-        else
-            @pausePreview()
-
-    animateScrubBar: _.throttle(
-        (fraction) ->
-            $(".progress-bar.scrub").css("width", 100*fraction + "%")
-        , 10)
-
     saveExperiment: ->
         @model.save()
