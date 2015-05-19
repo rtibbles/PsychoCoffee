@@ -77,7 +77,7 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             @tabViews["blockEditView"].appendTo("#blockedit")
             @initializePreview()
             @listenTo @blockmodel, "change",
-                _.throttle(@startPreview, 100)
+                _.debounce(@startPreview, 500)
             @listenTo @blockmodel, "nested-change",
                 @frameAdvance
         else
@@ -169,9 +169,9 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             model: @model
             editor: true
         })
-        @listenToOnce @tabViews["experimentPreview"], "loaded", @startPreview
+        @listenToOnce @tabViews["experimentPreview"], "loaded", @createPreview
 
-    startPreview: =>
+    createPreview: =>
         if @trialPreview
             if @trialPreview.close?
                 @trialPreview.close()
@@ -179,6 +179,8 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
                 @trialPreview.remove()
         delete @trialPreview
         @trialPreview = @tabViews["experimentPreview"].previewBlock @blockmodel
+    
+    startPreview: =>
         offset = $("#scrubber").offset()
         offset["top"] += $("#scrubber").height() + 5
         offset["left"] = $("#block-preview").offset()["left"]
