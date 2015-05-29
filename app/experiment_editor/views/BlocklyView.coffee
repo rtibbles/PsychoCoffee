@@ -287,7 +287,7 @@ class BlocklyValueView extends Backbone.View
             blockXml = @Blockly.Xml.blockToDom_ @block
             blockXmlText = @Blockly.Xml.domToText blockXml
             @model.set "__Blockly_" + @name, blockXmlText
-            @model.setFunction @name, Function(code),
+            @model.set @name, Function(code),
                 listeners: listeners
                 silent: true
 

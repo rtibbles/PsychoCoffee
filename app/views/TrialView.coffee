@@ -103,5 +103,5 @@ module.exports = class TrialView extends HandlerView
         window.subViews = @subViews
 
     registerEvents: =>
-        if _.isFunction(@model.get("flow"))
-            @model.get("flow")()
+        if @model.has("flow")
+            @model.get("flow")
