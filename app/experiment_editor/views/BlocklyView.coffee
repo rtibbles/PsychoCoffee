@@ -743,7 +743,7 @@ module.exports = class BlocklyView extends DropableView
             (block) ->
                 name = block.getFieldValue("NAME")
                 method = JSON.parse(block.getFieldValue("METHODS"))
-                "window.subViews['#{name}'].#{method.name}"
+                "window.subViews['#{name}'].#{method.name}()"
         return type
 
     insertModelBlock: (model, y) =>
