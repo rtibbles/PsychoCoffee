@@ -62,7 +62,7 @@ register = (server) ->
         server.auth.strategy 'session', 'cookie',
             password: dataconfig.session.password
             cookie: dataconfig.session.cookie
-            ttl: 1000000
+            ttl: 31400000000
             keepAlive: true
             isSecure: false
 
