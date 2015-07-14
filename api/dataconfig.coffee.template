@@ -11,3 +11,12 @@ module.exports =
     session:
         "password": "password"
         "cookie": "cookie"
+    email:
+        "sender":
+            "address": "<address>"
+            "name": "Psyc.io Admin"
+        "service": "<servicename>"
+        "auth":
+            "user": "<username>"
+            "pass": "<password>"
+        "host": "<host>"
