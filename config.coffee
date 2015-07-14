@@ -1,6 +1,6 @@
 exports.config =
   paths:
-    watched: ['api', 'app', 'envs', 'vendor', 'test','server.coffee']
+    watched: ['app', 'envs', 'vendor']
   files:
     javascripts: 
       joinTo:

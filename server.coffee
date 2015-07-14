@@ -52,9 +52,10 @@ app.route
 # boot scripts mount components like REST API
 api app
 
-exports.startServer = (port, path, callback) ->
+module.exports = (port, path, callback) ->
     app.start ->
         console.log('Web server listening at: %s', app.info.uri);
+        callback();
 
 if require.main == module
     app.start ->
