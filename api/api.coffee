@@ -57,7 +57,7 @@ module.exports = (server) ->
 #{ dataconfig.config.database }"
     , (err) ->
         if err
-            console.log 'Failed to connect to database'
+            console.log 'Failed to connect to database', err
 
     auth.register(server)
     fileupload(server)
