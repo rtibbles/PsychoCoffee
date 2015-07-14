@@ -6,18 +6,12 @@ Random = require 'utils/random'
 class Model extends NestedBase.Model
 
     ###
-    Parameter attributes can be of three basic returnTypes:
+    Parameter attributes can be of two basic returnTypes:
     
-    fixedList       equivalent to a CSV or spreadsheet of parameters.
+    fixedList       equivalent to a simple list of parameters.
                     Each attribute defined in this way has an equal
                     length array of values which must be greater than
                     or equal to the requested number of trials.
-
-    generatedList   each parameter can take on one of a set of discrete
-                    values, ParameterSet will either return a repeating
-                    set (either randomized or not), or can be combined
-                    with other parameters to produce all possible
-                    combinations.
 
     generatorFn     Parameters are defined by mathematical functions. Requires
                     input value for functions (either single value or array of
@@ -42,10 +36,6 @@ class Model extends NestedBase.Model
                 "Boolean"
                 "File"
             ]
-        ,
-            name: "randomized"
-            default: false
-            type: "Boolean"
         ])
 
     fixedItems: ->
@@ -59,51 +49,22 @@ class Model extends NestedBase.Model
             type: "String"
         ])
 
-    returnParameterList: (user_id = "",\
-                            trials_wanted = null) ->
+    returnParameterList: (user_id = "") ->
         switch @get "returnType"
             when "fixedList"
-                data = @fixedList(user_id, trials_wanted)
-            when "generatedList"
-                data = @generatedList(user_id, trials_wanted)
+                data = @fixedList(user_id)
             when "generatorFn"
-                data = @generatorFn(user_id, trials_wanted)
+                data = @generatorFn(user_id)
             else console.log "ParameterSet returnType undefined!"
         if @get("dataType") == "Array"
             if @get "shuffled"
                 data = @shuffleListArrays(user_id, data)
         return data
 
-    fixedList: (user_id, trials_wanted) ->
-        parameterList = @get "parameters"
-        if parameterList.length < trials_wanted
-            console.warn "Trials wanted exceeds fixedList length"
-        if @get "randomized"
-            parameterList = Random.seeded_shuffle parameterList,
-                user_id + "fixedList" + @id
-        if trials_wanted?
-            parameterList = parameterList[0...trials_wanted]
-        return parameterList
+    fixedList: (user_id) ->
+        return @get "parameters"
 
-    generatedList: (user_id, trials_wanted) ->
-        parameterList = []
-        wholelists = Math.floor trials_wanted/@get("parameters").length
-        extra_count = trials_wanted % @get("parameters").length
-        for i in [0...wholelists]
-            parameterList.push.apply parameterList, @get("parameters")
-        if @get "randomized"
-            extras = Random.seeded_shuffle @get("parameters"),
-                user_id + "generatedListExtras" + @id
-            extras = extras[0...extra_count]
-            parameterList.push.apply parameterList, extras
-            parameterList = Random.seeded_shuffle parameterList,
-                user_id + "generatedList" + @id
-        else
-            parameterList.push.apply parameterList,
-                @get("parameters")[0...extra_count]
-        return parameterList
-
-    generatorFn: (user_id, trials_wanted) ->
+    generatorFn: (user_id) ->
         return {}
 
     shuffleListArrays: (user_id, list) ->
@@ -114,6 +75,79 @@ class Model extends NestedBase.Model
 
 class Collection extends NestedBase.Collection
     model: Model
+
+    ###
+    Parameter Collections can return parameters in two ways:
+
+    fixedRows       equivalent to a CSV or spreadsheet of parameters.
+                    Each parameter will be instantiated alongside the parameter
+                    in the same 'row' of the table.
+                    This is the default, set by fixed=true.
+
+    crossedRows     each parameter will be crossed with all other parameters to
+                    to give an exhaustive list of all possible combinations.
+                    Set by fixed=false.
+    ###
+
+    generateCombinations: (parameterSet) ->
+        # Modified from http://stackoverflow.com/a/15310051
+        r = []
+        arg = _.pairs(parameterSet)
+        max = arg.length-1
+
+        helper = (obj, i) ->
+            for j in [0...arg[i][1].length]
+                # clone obj
+                a = _.clone(obj)
+                a[arg[i][0]] = arg[i][1][j]
+                if i==max
+                    r.push(a)
+                else
+                    helper(a, i+1)
+        helper({}, 0)
+        return r
+
+    generateParameters: (user_id, fixed=true) ->
+        parameterObjectList = []
+        parameterNameList = []
+
+        # Collect trial parameters
+        parameterSet = {}
+        for model in @models
+            parameterList = model.returnParameterList(
+                user_id)
+            parameterSet[model.get("parameterName")] = parameterList
+            min_length = Math.min(min_length, parameterList.length) or
+                parameterList.length
+
+        # A parameterSet of at least length 1 needs to be returned in order for
+        # for any trials to be run.
+
+        if not min_length? or min_length==0 then min_length = 1
+
+        if fixed
+            # If returning fixedRows, we can only return as many parameter sets
+            # as the number of items in the parameter with the least items.
+
+            # Do some checking to make sure that the resultant trial lists are
+            # of equal length. If not, play it safe and reduce them all to the
+            # shortest one to allow the trials to go ahead. Warn of the issue.
+            for key, value of parameterSet
+                parameterSet[key] = value[0...min_length]
+                parameterNameList.push key
+
+            for i in [0...min_length]
+                parameters =
+                    _.object parameterNameList,
+                        (parameterSet[parameter][i] \
+                            for parameter in parameterNameList)
+                parameterObjectList.push parameters
+
+        else
+            parameterObjectList = @generateCombinations(parameterSet)
+            min_length = parameterObjectList.length
+
+        [min_length, parameterObjectList]
 
 module.exports =
     Model: Model

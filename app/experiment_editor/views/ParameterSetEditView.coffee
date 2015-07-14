@@ -51,13 +51,10 @@ module.exports = class ParameterSetEditView extends DropableView
     parseCSV: (file) =>
         Papa.parse(file,
             complete: (results) =>
-                # First three rows are reserved for variable name
-                # Randomization and Variable Type
+                # First row is reserved for variable name
                 data = results.data
                 headers = data[0]
-                randomized = data[1]
-                dataTypes = data[2]
-                parameters = data.slice(3)
+                parameters = data.slice(1)
                 @collection.reset()
                 parameters = parameters[0].map((col, i) ->
                     return parameters.map((row) ->
@@ -65,8 +62,6 @@ module.exports = class ParameterSetEditView extends DropableView
                 for i in [0...headers.length]
                     @collection.create
                         name: headers[i]
-                        randomized: Boolean(randomized[i])
-                        dataType: dataTypes[i]
                         parameters: parameters[i]
                 return @collection
         )

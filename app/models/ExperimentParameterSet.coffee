@@ -8,6 +8,7 @@ class Model extends Base.Model
 
     defaults:
         experimentParameters: []
+        fixedRows: true
 
     relations: [
         type: Backbone.Many
@@ -16,21 +17,16 @@ class Model extends Base.Model
     ]
 
     returnExperimentParameters: (user_id="") ->
-        experimentParameterSet = {}
-        
-        # Collect experiment parameters to inject
-        # into blockParameters at generation
-        for model in @get("experimentParameters").models
-            # Experiment Parameters are intended to be
-            # constant across an experiment.
-            # Experiment Parameters are always randomized.
-            experimentParameterSet[model.get("parameterName")] =
-                Random.seeded_shuffle(
-                    model.returnParameterList(user_id
-                        null)
-                    user_id + "experimentParameterSet" + @id)[0]
+        [min_length, parameterObjectList] =
+        @get("experimentParameters").generateParameters(
+            user_id, @get("fixedRows"))
+        # Experiment Parameters are intended to be
+        # constant across an experiment.
+        # Experiment Parameters are always randomized.
+        parameters = Random.seeded_shuffle(parameterObjectList,
+                user_id + "experimentParameterSet" + @id)[0]
 
-        return experimentParameterSet
+        return parameters
 
 class Collection extends Base.Collection
     model: Model
