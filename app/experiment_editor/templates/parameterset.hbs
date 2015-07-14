@@ -30,7 +30,7 @@
         {{#each this}}
           <th>
             <div class="form-inline">
-            {{#if this.randomizable}}<label class="parameterset-label">Randomized <input type="checkbox" class="form-input randomize" dataname="{{this.name}}"{{#if this.randomized}}checked{{/if}}></label>{{/if}}{{#if this.dataTypes}}<label class="parameterset-label">Data Type</label><select class="form-control datatype" dataname="{{this.name}}">{{#each this.dataTypes}}<option value="{{this.name}}"{{#if this.selected}} selected{{/if}}>{{this.name}}</option>{{/each}}</select>{{/if}}{{#if this.files }}<span class="file-menu" dataname="{{this.name}}"></span>{{/if}}
+            {{#if this.dataTypes}}<label class="parameterset-label">Data Type</label><select class="form-control datatype" dataname="{{this.name}}">{{#each this.dataTypes}}<option value="{{this.name}}"{{#if this.selected}} selected{{/if}}>{{this.name}}</option>{{/each}}</select>{{/if}}{{#if this.files }}<span class="file-menu" dataname="{{this.name}}"></span>{{/if}}
             </div>
           </th>
         {{/each}}

@@ -45,7 +45,6 @@ module.exports = class ParameterSetEditView extends DropableView
             @listenTo subViews[id], "closed", =>
                 model = @collection.get(id)
                 value = @$("span.fileinput").attr("value").split(",")
-                console.log value
                 model.set("parameters", value)
 
     parseCSV: (file) =>
@@ -60,9 +59,22 @@ module.exports = class ParameterSetEditView extends DropableView
                     return parameters.map((row) ->
                         return row[i]))
                 for i in [0...headers.length]
+                    for dataType in [
+                        "String"
+                        "Colour"
+                        "File"
+                        "Boolean"
+                        "Array"
+                        "Number"
+                    ]
+                        if _.every(parameters[i], (item) =>
+                            @validateData(item, dataType)[1])
+                            paramType = dataType
                     @collection.create
                         name: headers[i]
-                        parameters: parameters[i]
+                        dataType: paramType
+                        parameters: parameters[i].map((item) =>
+                            @validateData(item, paramType))
                 return @collection
         )
 
@@ -84,8 +96,7 @@ module.exports = class ParameterSetEditView extends DropableView
             model.collection.remove model
         @collection.add model
 
-    updateData: (event, newValue) =>
-        dataType = $(event.target).attr("datatype")
+    validateData: (newValue, dataType) ->
         switch dataType
             when "Number"
                 newValue = Number(newValue)
@@ -107,6 +118,11 @@ module.exports = class ParameterSetEditView extends DropableView
                 valid = _.isArray(newValue)
             when "File"
                 valid = PsychoEdit.files.get(newValue)?
+        [newValue, valid]
+
+    updateData: (event, newValue) =>
+        dataType = $(event.target).attr("datatype")
+        [newValue, valid] = @validateData(newValue, dataType)
         if not valid
             return false
         name = $(event.target).attr("dataname")
