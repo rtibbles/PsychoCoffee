@@ -474,7 +474,7 @@ module.exports = class BlocklyView extends DropableView
         @Blockly.JavaScript[type] =
             (block) ->
                 timername = block.getFieldValue("TIMER")
-                "window.clock.setTimer('#{timername}')"
+                "window.clock.setTimer('#{timername};\n')"
         @addToToolbox(type, "Data Logging")
 
         type = type_root + "get_timer"
@@ -517,7 +517,7 @@ module.exports = class BlocklyView extends DropableView
                 parameter = block.getFieldValue("PARAMETER")
                 input = Blockly.JavaScript.valueToCode(block, "INPUT",
                     Blockly.JavaScript.ORDER_ATOMIC) || '0'
-                "window.#{dataModelName}.set('#{parameter}', #{input})"
+                "window.#{dataModelName}.set('#{parameter}', #{input});\n"
         @addToToolbox(type, "Data Logging")
         @updateToolbox()
 
@@ -717,7 +717,7 @@ module.exports = class BlocklyView extends DropableView
                 value = Blockly.JavaScript.valueToCode(block, "VALUE",
                     Blockly.JavaScript.ORDER_ATOMIC) || '0'
                 "window.trialObjects['#{name}'].set(\
-                    '#{attr}', #{value})"
+                    '#{attr}', #{value});\n"
         return type
 
     instantiateModelMethodBlock: =>
@@ -743,7 +743,7 @@ module.exports = class BlocklyView extends DropableView
             (block) ->
                 name = block.getFieldValue("NAME")
                 method = JSON.parse(block.getFieldValue("METHODS"))
-                "window.subViews['#{name}'].#{method.name}()"
+                "window.subViews['#{name}'].#{method.name}();\n"
         return type
 
     insertModelBlock: (model, y) =>
