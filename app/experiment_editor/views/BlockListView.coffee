@@ -10,6 +10,12 @@ class BlockItemView extends View
 
     events:
         "click .block": "click"
+        "drop": "drop"
+
+    drop: (event, index) ->
+        collection = @model.collection
+        collection.remove @model, silent: true
+        collection.add @model, at: index
 
     click: (event) ->
         PsychoEdit.router.editSubItem @model.get("name")
@@ -41,3 +47,6 @@ module.exports = class BlockListView extends View
             view = new BlockItemView model: model, deleteable: true
             view.render()
             view.appendTo("#blocklist")
+        @$("#blocklist").sortable
+            stop: (event, ui) =>
+                ui.item.trigger("drop", ui.item.index())
