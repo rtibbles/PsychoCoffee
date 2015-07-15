@@ -1,11 +1,30 @@
 'use strict'
 
+View = require './View'
 ModelEditView = require './ModelEditView'
 DropableView = require './DropableView'
 Template = require '../templates/parameterset'
 FileManagerView = require './FileManagerView'
 
+FixedRowTemplate = require("../templates/fixedrowtoggle")
+
+class FixedRowToggleView extends View
+    template: FixedRowTemplate
+
+    events:
+        "click button": "toggleState"
+
+    initialize: ->
+        @listenTo @model, "change:fixedRows", @render
+        @render()
+
+    toggleState: ->
+        @model.set fixedRows: !@model.get("fixedRows")
+
 module.exports = class ParameterSetEditView extends DropableView
+
+    className: "well"
+
     template: Template
 
     events:
@@ -23,6 +42,9 @@ module.exports = class ParameterSetEditView extends DropableView
 
     render: ->
         super
+        toggleView = new FixedRowToggleView
+            model: @model.get("parameterSet")
+            el: @$(".fixed-row-toggle")[0]
         @dropzone = new Dropzone(@$("#parameters")[0],
             url: "/files"
             acceptedFiles: ".csv"
@@ -159,12 +181,11 @@ module.exports = class ParameterSetEditView extends DropableView
         modelEditView.render()
 
     getRenderData: ->
-        type: @type
         title: @type + " variables"
         description: @getDescription()
         rows: @generateData()
-        randomizable: @model.get("randomized")?
-        model: @model.attributes
+        randomizable: @model.get("parameterSet").get("randomized")?
+        model: @model.get("parameterSet").attributes
 
     generateData: ->
         if @collection.models.length == 0
@@ -203,10 +224,4 @@ module.exports = class ParameterSetEditView extends DropableView
         return rows
 
     getDescription: ->
-        switch @type
-            when "experiment"
-                "These variables will be randomized across participants - \
-                each participant will only see one of these possible values"
-            when "trial"
-                "These variables will be randomized within participants - \
-                each participant will see some or all of these possible values"
+        @model.get("parameterSet").description

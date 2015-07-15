@@ -3,18 +3,27 @@
     <h4 class="text-capitalize">
         {{title}}
     </h4>
-    {{#if randomizable}}
-    <br>
-    <label>
-      Randomized: <input type="checkbox" id="experiment_randomized"{{#if model.randomized}}checked{{/if}}>
-    </label>
-    {{/if}}
   </div>
   <div class="col-md-6">
     {{description}}
   </div>
 </div>
-<button class="btn btn-success add-variable">Upload CSV</button>
+<div class="row">
+  <div class="col-md-4">
+    <button class="btn btn-success add-variable">Upload CSV</button>
+  </div>
+  {{#if rows}}
+    <div class="col-md-4 fixed-row-toggle">
+    </div>
+    {{#if randomizable}}
+    <div class="col-md-4">
+      <label>
+        Randomized: <input type="checkbox" id="experiment_randomized"{{#if model.randomized}}checked{{/if}}>
+      </label>
+    </div>
+    {{/if}}
+  {{/if}}
+</div>
 {{#if rows}}
 <div class="parameterset">
   <table class="table table-bordered parameter-table">
@@ -23,7 +32,7 @@
       <thead>
       <tr>
         {{#each this}}
-          {{#if @first}}<th class="first"{{else}}<td dataname="{{this.name}}"{{/if}}>{{this.name}}</t{{#if @first}}h{{else}}d{{/if}}>
+          <th {{#if @first}}class="first"{{else}}dataname="{{this.name}}"{{/if}}>{{this.name}}</th>
         {{/each}}
       </tr>
       <tr>

@@ -29,6 +29,9 @@ class Model extends NestedBase.Model
             min_length: min_length
             parameterObjectList: parameterObjectList
 
+    description: "These variables will be randomized within participants - \
+        each participant will see some or all of these possible values"
+
 class Collection extends NestedBase.Collection
     model: Model
 

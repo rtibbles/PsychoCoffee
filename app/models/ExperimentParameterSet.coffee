@@ -28,6 +28,9 @@ class Model extends Base.Model
 
         return parameters
 
+    description: "These variables will be randomized across participants - \
+        each participant will only see one set of these possible values"
+
 class Collection extends Base.Collection
     model: Model
 
