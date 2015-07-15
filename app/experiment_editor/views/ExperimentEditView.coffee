@@ -61,15 +61,11 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
         else
             @listenToOnce @, "rendered", => @showEditBlock(model_id)
 
-    showEditBlock: (model_id) =>
+    showEditBlock: (block_id) =>
         for key, value of @tabViews
             value?.$el.hide()
-        model = @model.get("blocks").get(model_id)
-        new_model_check = model != @blockmodel
-        no_view_check = not @blockEditView?
-        if new_model_check or no_view_check
-            @blockmodel = model
-            @tabViews["blockEditView"]?.close()
+        @blockmodel = @model.get("blocks").get(block_id)
+        if not @tabViews["blockEditView"]?
             @tabViews["blockEditView"] = new BlockEditView
                 model: @blockmodel
                 experiment: @model
@@ -77,8 +73,9 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
             @tabViews["blockEditView"].render()
             @tabViews["blockEditView"].appendTo("#blockedit")
         else
+            @tabViews["blockEditView"].blockmodel = @blockmodel
+            @tabViews["blockEditView"].render()
             @tabViews["blockEditView"]?.$el.show()
-            @tabViews["experimentPreview"]?.$el.show()
         if not @$(".blocks-tab").hasClass("active")
             @$(".block-nav li").removeClass("active")
             @$(".blocks-tab").addClass("active")
@@ -106,18 +103,16 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
     showEditVariables: (block_id) =>
         for key, value of @tabViews
             value?.$el.hide()
-        model = @model.get("blocks").get(block_id)
-        new_model_check = model != @blockmodel
-        no_view_check = not @tabViews["variableEditView"]?
-        if new_model_check or no_view_check
-            @blockmodel = model
-            @tabViews["variableEditView"]?.close()
+        @blockmodel = @model.get("blocks").get(block_id)
+        if not @tabViews["variableEditView"]?
             @tabViews["variableEditView"] = new VariableEditView
                 model: @model
                 blockmodel: @blockmodel
             @tabViews["variableEditView"].render()
             @tabViews["variableEditView"].appendTo("#blockedit")
         else
+            @tabViews["variableEditView"].blockmodel = @blockmodel
+            @tabViews["variableEditView"].render()
             @tabViews["variableEditView"]?.$el.show()
         if not @$(".variables-tab").hasClass("active")
             @$(".block-nav li").removeClass("active")
@@ -132,18 +127,16 @@ module.exports = class ExperimentEditView extends CodeGeneratorView
     showEditFiles: (block_id) =>
         for key, value of @tabViews
             value?.$el.hide()
-        model = @model.get("blocks").get(block_id)
-        new_model_check = model != @blockmodel
-        no_view_check = not @tabViews["fileView"]?
-        if new_model_check or no_view_check
-            @blockmodel = model
-            @tabViews["fileView"]?.close()
+        @blockmodel = @model.get("blocks").get(block_id)
+        if not @tabViews["fileView"]?
             @tabViews["fileView"] = new FileManagerView
                 model: @model
                 blockmodel: @blockmodel
             @tabViews["fileView"].render()
             @tabViews["fileView"].appendTo("#blockedit")
         else
+            @tabViews["fileView"].blockmodel = @blockmodel
+            @tabViews["fileView"].render()
             @tabViews["fileView"]?.$el.show()
         if not @$(".files-tab").hasClass("active")
             @$(".block-nav li").removeClass("active")
