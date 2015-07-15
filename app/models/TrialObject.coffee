@@ -2,9 +2,9 @@
 
 nestedModules = require '../utils/nestedModules'
 
-NestedBase = require './NestedBase'
+FunctionNestedBase = require './FunctionNestedBase'
 
-class Model extends NestedBase.Model
+class Model extends FunctionNestedBase.Model
 
     fileAttr: "file"
 
@@ -51,7 +51,7 @@ class Model extends NestedBase.Model
         ])
 
 
-class Collection extends NestedBase.Collection
+class Collection extends FunctionNestedBase.Collection
     model: (attrs, options) ->
         try
             modelType = attrs["subModelTypeAttribute"] or

@@ -49,6 +49,8 @@ module.exports = class ParameterSetEditView extends DropableView
 
     parseCSV: (file) =>
         Papa.parse(file,
+            dynamicTyping: true
+            skipEmptyLines: true
             complete: (results) =>
                 # First row is reserved for variable name
                 data = results.data
@@ -74,7 +76,7 @@ module.exports = class ParameterSetEditView extends DropableView
                         name: headers[i]
                         dataType: paramType
                         parameters: parameters[i].map((item) =>
-                            @validateData(item, paramType))
+                            @validateData(item, paramType)[0])
                 return @collection
         )
 
@@ -97,27 +99,32 @@ module.exports = class ParameterSetEditView extends DropableView
         @collection.add model
 
     validateData: (newValue, dataType) ->
-        switch dataType
-            when "Number"
-                newValue = Number(newValue)
-                valid = not isNaN(newValue)
-            when "Boolean"
-                valid = true
-                if newValue == "true"
-                    newValue = true
-                else if newValue == "false"
-                    newValue = false
-                else
-                    valid = false
-            when "String"
-                valid = typeof newValue == "string"
-            when "Colour"
-                valid = /#[A-Fa-f0-9]{6}$/.test(newValue)
-            when "Array"
-                newValue = $.parseJSON(newValue)
-                valid = _.isArray(newValue)
-            when "File"
-                valid = PsychoEdit.files.get(newValue)?
+        try
+            switch dataType
+                when "Number"
+                    newValue = Number(newValue)
+                    valid = not isNaN(newValue)
+                when "Boolean"
+                    valid = true
+                    if typeof newValue == "boolean"
+                        valid = true
+                    else if newValue.toLowerCase().trim() == "true"
+                        newValue = true
+                    else if newValue.toLowerCase().trim() == "false"
+                        newValue = false
+                    else
+                        valid = false
+                when "String"
+                    valid = typeof newValue == "string"
+                when "Colour"
+                    valid = /#[A-Fa-f0-9]{6}$/.test(newValue)
+                when "Array"
+                    newValue = $.parseJSON(newValue)
+                    valid = _.isArray(newValue)
+                when "File"
+                    valid = PsychoEdit.files.get(newValue)?
+        catch
+            valid = false
         [newValue, valid]
 
     updateData: (event, newValue) =>
@@ -188,7 +195,7 @@ module.exports = class ParameterSetEditView extends DropableView
             for model in @collection.models
                 parameter = model.get("parameters")[i]
                 row.push
-                    value: parameter or ""
+                    value: parameter?.toString() or ""
                     index: i
                     name: model.get("name")
                     dataType: model.get("dataType")
